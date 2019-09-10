@@ -8,6 +8,9 @@
 - hit "Clone"
 - done!
 
+## JavaDoc Guideline Cheat-sheet
+Please follow the [cheat-sheet here](https://binfalse.de/2015/10/05/javadoc-cheats-sheet/) whilst commenting out your code
+
 ## Referance Material
 #### Please include any material you've used under here. This will be usefull whilst writing our report.
 - `Developing a New Java Algorithm for Playing Backgammon` : <http://naun.org/main/NAUN/computers/16-158.pdf>
