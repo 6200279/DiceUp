@@ -10,6 +10,7 @@
 
 ## JavaDoc Guideline Cheat-sheet
 Please follow the [cheat-sheet here](https://binfalse.de/2015/10/05/javadoc-cheats-sheet/) whilst commenting out your code
+Additionally, please make variable names self-explanatory (so we don't have to comment them out).
 
 ## Referance Material
 #### Please include any material you've used under here. This will be usefull whilst writing our report.
