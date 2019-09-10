@@ -1,0 +1,11 @@
+#Board {
+    -fx-background-color: rgb(212, 155, 90);
+}
+
+.Col {
+    -fx-border-color: black;
+}
+
+#MiddleSector {
+    -fx-background-color: brown;
+}

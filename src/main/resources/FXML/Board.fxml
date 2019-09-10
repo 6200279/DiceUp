@@ -1,20 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?language JavaScript?>
-<?import javafx.scene.image.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@/FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane minHeight="-Infinity" minWidth="-Infinity" prefWidth="0.0">
+      <HBox id="Board" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <VBox id="LeftView" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox id="TopLeftCols" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox id="Col12" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col13" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col14" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col15" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col16" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col17" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                     </children>
+                  </HBox>
+                  <VBox VBox.vgrow="ALWAYS" />
+                  <HBox id="BottomLeftCols" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="SOMETIMES">
+                     <children>
+                        <VBox id="Col11" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col10" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col9" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col8" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col7" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col6" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox id="MiddleSector" alignment="CENTER" HBox.hgrow="NEVER">
+               <children>
+                  <Label text="Middle" />
+               </children>
+            </VBox>
+            <VBox id="RightView" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox id="TopRightCols" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
+                     <children>
+                        <VBox id="Col18" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col19" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col20" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col21" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col22" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col23" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                     </children>
+                  </HBox>
+                  <VBox VBox.vgrow="ALWAYS" />
+                  <HBox id="BottomRightCols" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="SOMETIMES">
+                     <children>
+                        <VBox id="Col5" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col4" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col3" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col2" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col1" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox id="Col0" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
-      </Pane>
-      <VBox alignment="TOP_CENTER">
+      </HBox>
+      <VBox alignment="TOP_CENTER" HBox.hgrow="SOMETIMES">
          <children>
             <Label text="DiceUp Backgammon AI" textOverrun="WORD_ELLIPSIS">
                <padding>

@@ -23,7 +23,7 @@ public class DiceUp extends Application {
         String fxmlDocPath = "./src/main/resources/FXML/Board.fxml";
         FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
 
-        // Create the Pane and all Details
+        // Initialize the root entry (HBox)
         HBox root = loader.load(fxmlStream);
 
         // Create the Scene
