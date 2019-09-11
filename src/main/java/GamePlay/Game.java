@@ -58,4 +58,21 @@ public class Game {
     public Game(){
         board = new Board(p1, p2);
     }
+
+    /**
+     * Tries to move from Column A to Column B
+     * <p>
+     *  BEWARE! This method does not check whether this move is possible in terms of dices
+     *  but rather the columns follow the same players chips!
+     * </p>
+     *
+     * @param from  Starting Column index
+     * @param to    Final Column index
+     *
+     * @return <code>null</code>
+     * @throws IllegalAccessError if the selected chip is not available to move in that direction
+     */
+    public void move(int from, int to) throws IllegalAccessException {
+
+    }
 }
