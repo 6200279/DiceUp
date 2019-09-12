@@ -119,7 +119,8 @@ public class Game {
 
         if (toChipsNum == 1)
             hitChip();
-
+        
+        //move the chip
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum-1);
         toColumn.getChips().add(movingChip);
 
