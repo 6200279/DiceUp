@@ -50,8 +50,13 @@ public class Board {
     /**
      * Default constructor for the Board
      * initializes the board to initial state
+     * player a is blacks, player b is whites
      */
     public Board(Player a, Player b){
         init(columns, a, b);
+    }
+
+    public Column[] getColumns(){
+        return columns;
     }
 }

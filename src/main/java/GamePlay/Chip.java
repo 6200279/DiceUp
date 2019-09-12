@@ -29,5 +29,8 @@ public class Chip {
         taken = false;
         hit = false;
     }
+    public Player getOwner(){
+        return player;
+    }
 
 }
