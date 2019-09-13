@@ -117,8 +117,9 @@ public class Game {
         if ((ownerFromColumn.getID() != getTurn().getID()) || (ownerToColumn.getID() != getTurn().getID() && toChipsNum >= 2))
             throw new IllegalAccessException();
 
+        //If there is one chip, get this chip and hit it
         if (toChipsNum == 1)
-            hitChip();
+            hitChip(toColumn.getChips().get(0));
         
         //move the chip
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum-1);
@@ -127,7 +128,13 @@ public class Game {
 
 
      }
-    //TODO
-    private void hitChip() {
+
+    public void hitChip(Chip c) {
+        //Make boolean hit true for this chip
+        c.isHit();
+        //Move this chip to the middle
+        Column middle = getBoard().getColumns()[24];
+        middle.getChips().add(c);
+
     }
 }

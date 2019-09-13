@@ -15,7 +15,9 @@
 package GamePlay;
 
 public class Board {
-    private Column[] columns = new Column[24];
+
+    //indices 0-23 are the regular spots, index 24 is the middle
+    private Column[] columns = new Column[25];
 
     /**
      * Initializes the board as a new game

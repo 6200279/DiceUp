@@ -33,4 +33,11 @@ public class Chip {
         return player;
     }
 
+    public void isHit(){
+        this.hit = true;
+    }
+
+    public boolean getHitStatus(){
+        return this.hit;
+    }
 }
