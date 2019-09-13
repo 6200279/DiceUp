@@ -113,12 +113,12 @@ public class Game {
 
         /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
          *       the turn player                                 unless it has only one chip
-         */if ((ownerFromColumn.getID() != getTurn().getID()) || (ownerToColumn.getID() != getTurn().getID() && toChipsNum >= 2))
+         */
+        if ((ownerFromColumn.getID() != getTurn().getID()) || (ownerToColumn.getID() != getTurn().getID() && toChipsNum >= 2))
             throw new IllegalAccessException();
 
-         //if there is one chip, hit it.
         if (toChipsNum == 1)
-            toColumn.getChips().get(0).setHit(true);
+            hitChip();
 
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum-1);
         toColumn.getChips().add(movingChip);
@@ -126,5 +126,7 @@ public class Game {
 
 
      }
-
+    //TODO
+    private void hitChip() {
+    }
 }
