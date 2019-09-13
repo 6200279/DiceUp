@@ -33,4 +33,7 @@ public class Chip {
         return player;
     }
 
+    public void setHit(boolean hit) {
+        this.hit = hit;
+    }
 }

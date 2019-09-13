@@ -16,6 +16,7 @@ package GamePlay;
 
 public class Board {
     private Column[] columns = new Column[24];
+    private Column[] middleColumns = new Column[2];
 
     /**
      * Initializes the board as a new game
