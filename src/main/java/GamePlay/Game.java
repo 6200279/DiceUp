@@ -97,7 +97,7 @@ public class Game {
 
         //from column cannot be empty.
         if (fromChipsNum <= 0)
-            throw new IllegalAccessException();
+            throw new IllegalArgumentException();
 
         //get the owner of the chips in the "from" column:
         ownerFromColumn = fromColumn.getChips().get(0).getOwner();
@@ -124,17 +124,19 @@ public class Game {
         //move the chip
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum-1);
         toColumn.getChips().add(movingChip);
-
-
-
      }
 
     public void hitChip(Chip c) {
         //Make boolean hit true for this chip
         c.isHit();
-        //Move this chip to the middle
-        Column middle = getBoard().getColumns()[24];
-        middle.getChips().add(c);
 
+        //Move this chip to the middle
+        Column middle;
+        if (c.getOwner() == p1)
+            middle = getBoard().getMiddleColumns()[0];
+        else
+            middle = getBoard().getMiddleColumns()[0];
+
+        middle.getChips().add(c);
     }
 }
