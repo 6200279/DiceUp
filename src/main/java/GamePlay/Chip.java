@@ -33,4 +33,15 @@ public class Chip {
         return player;
     }
 
+    public void isHit(){
+        this.hit = true;
+    }
+
+    public void take(){
+        this.taken = true;
+        getOwner().chipIsTaken();
+    }
+    public boolean getHitStatus(){
+        return this.hit;
+    }
 }

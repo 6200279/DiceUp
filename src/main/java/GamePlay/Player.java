@@ -14,6 +14,7 @@
 package GamePlay;
 public class Player {
     private String name;
+    private int takenChips;
     private int ID;
     private static int lastID = 0;
     private int score;
@@ -45,9 +46,16 @@ public class Player {
     public int getScore(){
         return score;
     }
+    public void chipIsTaken(){
+        takenChips++;
+    }
+    public int getTakenChips(){
+        return takenChips;
+    }
 
     public Player() {
         score = 0;
+        takenChips = 0;
         ID = lastID++;
     }
 }

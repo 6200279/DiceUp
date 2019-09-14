@@ -16,8 +16,8 @@ package GamePlay;
 
 public class Board {
 
-    //indices 0-23 are the regular spots, index 24 is the middle
-    private Column[] columns = new Column[24];
+    //indices 0-23 are the regular spots, index 24 is the taken spot
+    private Column[] columns = new Column[25];
 
     //0 is p1, 1 is p2
     private Column[] middleColumns = new Column[2];
@@ -33,6 +33,9 @@ public class Board {
     private void init(Column[] columns, Player a, Player b) {
         for(int i=0; i<columns.length; i++)
             columns[i] = new Column();
+
+        middleColumns[0] = new Column();
+        middleColumns[1] = new Column();
 
         for (int j = 0; j < 2; j++)
             columns[0].getChips().add(new Chip(b));
