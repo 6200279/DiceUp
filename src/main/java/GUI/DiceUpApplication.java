@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class DiceUp extends Application {
+public class DiceUpApplication extends Application {
 
     public static void main(String[] args) {
         launch(args);
@@ -31,7 +31,7 @@ public class DiceUp extends Application {
         // Set the Scene to the Stage
         primaryStage.setScene(scene);
         // Set the Title to the Stage
-        primaryStage.setTitle("DiceUp Backgammon");
+        primaryStage.setTitle("DiceUpApplication Backgammon");
         // Display the Stage
         primaryStage.show();
     }

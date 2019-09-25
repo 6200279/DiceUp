@@ -17,6 +17,8 @@ public class Chip {
     private Player player;
     private boolean hit;
     private boolean taken;
+    private int id;
+    private static int lastId;
 
     /**
      * Default constructor for the Chip
@@ -28,9 +30,14 @@ public class Chip {
         player = a;
         taken = false;
         hit = false;
+        id = lastId++;
     }
     public Player getOwner(){
         return player;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public void isHit(){

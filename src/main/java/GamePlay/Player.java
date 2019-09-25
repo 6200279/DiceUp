@@ -58,4 +58,11 @@ public class Player {
         takenChips = 0;
         ID = lastID++;
     }
+
+    public Player(String name) {
+        score = 0;
+        ID = lastID++;
+        this.name = name;
+    }
+
 }

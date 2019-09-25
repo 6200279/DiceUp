@@ -15,7 +15,7 @@ package GamePlay;
 public class Game {
     private Player p1;
     private Player p2;
-    private Player turn;
+    public Player turn;
 
     private Board board;
 
@@ -32,13 +32,27 @@ public class Game {
         dice1.roll();
         dice2.roll();
     }
+    public int[] getDices(){
+        int[] res = new int[2];
+
+        res[0] = dice1.getNum();
+        res[1] = dice2.getNum();
+
+        return res;
+    }
 
     /**
      * Default constructor for the game
      * Also handles board initialization
      */
-    public Game(){
+    public Game(Player p1, Player p2){
+        this.p1 = p1;
+        this.p2 = p2;
+
         board = new Board(p1, p2);
+
+        dice1 = new Dice();
+        dice2 = new Dice();
     }
 
     /**
@@ -116,7 +130,7 @@ public class Game {
      }
 
      //temporary debug method for showing game state
-     private void printBoard(int from, int to){
+     public void printBoard(int from, int to){
         String moved;
         if(turn == p1)
             moved = "black";
@@ -132,7 +146,7 @@ public class Game {
                 if (p == p1)
                     color = "blacks";
                 else
-                    color = "withes";
+                    color = "whites";
             }
             else{
                 color = "";
