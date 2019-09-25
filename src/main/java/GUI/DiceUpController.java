@@ -119,22 +119,29 @@ public class DiceUpController {
             }
         }
     }
-
+    /*
+    This method is for the roll_it Button to roll dices
+     */
     public void rollDice(){
+        //create 2 Dices
         Dice dice1 = new Dice();
-        dice1.roll();
-        int num1 = dice1.getNum();
         Dice dice2 = new Dice();
-        dice1.roll();
-        int num2 = dice1.getNum();
 
+        dice1.roll();
+        dice2.roll();
+        //get the number from Dice.class
+        int num1 = dice1.getNum();
+        int num2 = dice2.getNum();
+
+        //create an array to store the result of rolling dices
         int[] diceResult = new int[]{num1, num2};
 
+        //show the result of rolling dices in the terminal
         for (int i = 0; i < diceResult.length; i++) {
             System.out.println("The " + i + " dice's result is: " + diceResult[i]);
         }
 
-
+        // create images of dice
         javafx.scene.image.Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
         javafx.scene.image.Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
         javafx.scene.image.Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
@@ -142,6 +149,8 @@ public class DiceUpController {
         javafx.scene.image.Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
         javafx.scene.image.Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
 
+
+        //according to the result of rolling dices, choose images to show in the imageViewer
         switch (diceResult[0]){
             case 1:
                 imageview_1.setImage(dice_1);
