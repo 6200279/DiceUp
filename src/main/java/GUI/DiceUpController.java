@@ -3,8 +3,11 @@ package GUI;
 import GamePlay.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class DiceUpController {
@@ -56,6 +59,10 @@ public class DiceUpController {
     private VBox Col22;
     @FXML
     private VBox Col23;
+    @FXML
+    private ImageView imageview_1;
+    @FXML
+    private ImageView imageview_2;
 
     private VBox[] columns;
 
@@ -110,6 +117,71 @@ public class DiceUpController {
 
                 ((VBox) columns[i]).getChildren().add(chipLabel);
             }
+        }
+    }
+
+    public void rollDice(){
+        Dice dice1 = new Dice();
+        dice1.roll();
+        int num1 = dice1.getNum();
+        Dice dice2 = new Dice();
+        dice1.roll();
+        int num2 = dice1.getNum();
+
+        int[] diceResult = new int[]{num1, num2};
+
+        for (int i = 0; i < diceResult.length; i++) {
+            System.out.println("The " + i + " dice's result is: " + diceResult[i]);
+        }
+
+
+        javafx.scene.image.Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
+        javafx.scene.image.Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
+        javafx.scene.image.Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
+        javafx.scene.image.Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
+        javafx.scene.image.Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
+        javafx.scene.image.Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
+
+        switch (diceResult[0]){
+            case 1:
+                imageview_1.setImage(dice_1);
+                break;
+            case 2:
+                imageview_1.setImage(dice_2);
+                break;
+            case 3:
+                imageview_1.setImage(dice_3);
+                break;
+            case 4:
+                imageview_1.setImage(dice_4);
+                break;
+            case 5:
+                imageview_1.setImage(dice_5);
+                break;
+            case 6:
+                imageview_1.setImage(dice_6);
+                break;
+        }
+
+        switch (diceResult[1]){
+            case 1:
+                imageview_2.setImage(dice_1);
+                break;
+            case 2:
+                imageview_2.setImage(dice_2);
+                break;
+            case 3:
+                imageview_2.setImage(dice_3);
+                break;
+            case 4:
+                imageview_2.setImage(dice_4);
+                break;
+            case 5:
+                imageview_2.setImage(dice_5);
+                break;
+            case 6:
+                imageview_2.setImage(dice_6);
+                break;
         }
     }
 }

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?language JavaScript?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
-<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@/FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
+<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@/FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
    <children>
       <HBox id="Board" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
          <children>
@@ -83,6 +84,9 @@
                </padding>
             </Label>
             <Button mnemonicParsing="false" onAction="#updateBoard" text="Update Columns" />
+            <ImageView fx:id="imageview_1" fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="imageview_2" fitHeight="41.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="roll_Dice" mnemonicParsing="false" onAction="#rollDice" text="roll it" />
          </children>
       </VBox>
    </children>
