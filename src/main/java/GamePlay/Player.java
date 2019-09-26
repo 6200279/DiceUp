@@ -12,12 +12,17 @@
  * @author pietro99, rdadrl
  */
 package GamePlay;
+
+import javafx.scene.paint.Color;
+
 public class Player {
     private String name;
     private int takenChips;
     private int ID;
     private static int lastID = 0;
     private int score;
+
+    private Color col;
 
     /**
      * Getter for the @name
@@ -65,4 +70,10 @@ public class Player {
         this.name = name;
     }
 
+    public void setColor(Color newCol) {
+        col = newCol;
+    }
+    public Color getColor() {
+        return col;
+    }
 }

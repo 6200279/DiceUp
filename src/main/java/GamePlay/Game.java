@@ -32,6 +32,7 @@ public class Game {
         dice1.roll();
         dice2.roll();
     }
+
     public int[] getDices(){
         int[] res = new int[2];
 
@@ -237,4 +238,7 @@ public class Game {
     public Player getTurn(){
         return turn;
     }
+
+    public Player getP1 () { return p1; }
+    public Player getP2 () { return p2; }
 }

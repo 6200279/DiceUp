@@ -2,10 +2,17 @@ package GUI;
 
 import GamePlay.*;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -97,11 +104,16 @@ public class DiceUpController {
         columns[23] = Col23;
 
         Player p1 = new Player("Player 1");
-        Player p2 = new Player("Player 1");
+        p1.setColor(Color.BROWN);
 
+        Player p2 = new Player("Player 2");
+        p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
         System.out.println("Col0 length: " + Col0.getChildren().size());
     }
+
+    private final String p1Color = "SaddleBrown";
+    private final String p2Color = "Ivory";
 
     public void updateBoard() {
         Board currBoard = currGame.getBoard();
@@ -110,12 +122,16 @@ public class DiceUpController {
 
         for (int i = 0; i < dataColumns.length; i++) {
             ArrayList<Chip> currDataChips = dataColumns[i].getChips();
-
+            columns[i].getChildren().removeAll(columns[i].getChildren());
             for (int j = 0; j < currDataChips.size(); j++) {
                 Chip currChipToAdd = currDataChips.get(j);
-                Label chipLabel = new Label("Chip " + currChipToAdd.getId());
+                ChipElement chipUI = new ChipElement();
 
-                ((VBox) columns[i]).getChildren().add(chipLabel);
+                //set color of chip
+                if (currChipToAdd.getOwner().equals(currGame.getP1())) chipUI.setStyle(chipUI.getStyle() + " -fx-background-color : " + p1Color+ ";");
+                else chipUI.setStyle(chipUI.getStyle() + " -fx-background-color : " + p2Color+ ";");
+
+                columns[i].getChildren().add(chipUI);
             }
         }
     }

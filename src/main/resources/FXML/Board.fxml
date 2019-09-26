@@ -7,9 +7,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 
-<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@/FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
+<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@/FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
    <children>
       <HBox id="Board" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
          <children>
@@ -17,23 +16,23 @@
                <children>
                   <HBox id="TopLeftCols" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
                      <children>
-                        <VBox fx:id="Col12" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col13" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col14" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col15" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col16" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col17" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col12" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col13" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col14" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col15" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col16" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col17" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                      </children>
                   </HBox>
                   <VBox VBox.vgrow="ALWAYS" />
                   <HBox id="BottomLeftCols" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="SOMETIMES">
                      <children>
-                        <VBox fx:id="Col11" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col10" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col9" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col8" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col7" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col6" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col11" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col10" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col9" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col8" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col7" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col6" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                      </children>
                   </HBox>
                </children>
@@ -47,29 +46,23 @@
                <children>
                   <HBox id="TopRightCols" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
                      <children>
-                        <VBox fx:id="Col18" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col19" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col20" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col21" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col22" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col23" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col18" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col19" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col20" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col21" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col22" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col23" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                      </children>
                   </HBox>
                   <VBox VBox.vgrow="ALWAYS" />
                   <HBox id="BottomRightCols" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="SOMETIMES">
                      <children>
-                        <VBox fx:id="Col5" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col4" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col3" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col2" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col1" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
-                        <VBox fx:id="Col0" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col">
-                           <children>
-                              <Circle fill="#661a1a" radius="15.0" stroke="BLACK" strokeType="INSIDE" VBox.vgrow="SOMETIMES" />
-                              <Circle fill="#661a1a" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Circle fill="#661a1a" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-                              <Circle fill="#661a1a" radius="15.0" stroke="BLACK" strokeType="INSIDE" />
-                           </children></VBox>
+                        <VBox fx:id="Col5" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col4" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col3" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col2" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col1" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
+                        <VBox fx:id="Col0" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                      </children>
                   </HBox>
                </children>
