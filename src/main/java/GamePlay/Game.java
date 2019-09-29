@@ -12,6 +12,8 @@
  */
 package GamePlay;
 
+import java.util.ArrayList;
+
 public class Game {
     private Player p1;
     private Player p2;
@@ -21,6 +23,7 @@ public class Game {
 
     private Dice dice1;
     private Dice dice2;
+    private ArrayList<Integer> moves = new ArrayList<Integer>();
 
     /**
      * Rolls both of the dices,
@@ -31,16 +34,15 @@ public class Game {
     public void rollDices(){
         dice1.roll();
         dice2.roll();
+
+        moves.add(dice1.getNum());
+        moves.add(dice2.getNum());
+        if(dice1.getNum()==dice2.getNum()) {
+            moves.add(dice1.getNum());
+            moves.add(dice2.getNum());
+        }
     }
 
-    public int[] getDices(){
-        int[] res = new int[2];
-
-        res[0] = dice1.getNum();
-        res[1] = dice2.getNum();
-
-        return res;
-    }
 
     /**
      * Default constructor for the game
@@ -123,6 +125,13 @@ public class Game {
         if (toChipsNum == 1 && toColumn.getChips().get(0).getOwner()!=turn)
             hitChip(toColumn);
 
+
+        if(!checkDiceLegality(moves, to-from)) {
+            System.out.println("dice Illegality accured");
+            throw new IllegalAccessException();
+        }
+
+
         //finally, move the chip
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
         toColumn.getChips().add(movingChip);
@@ -130,7 +139,33 @@ public class Game {
         printBoard(from, to);
      }
 
-     //temporary debug method for showing game state
+    private boolean checkDiceLegality(ArrayList<Integer> moves, int stepsNum) {
+        if(moves.size() == 4) {
+            if (stepsNum % moves.get(0) == 0 && stepsNum / moves.get(0) <= 4) {
+                int numberOfMovesUsed = stepsNum / moves.get(0);
+                for (int i = 0; i < numberOfMovesUsed; i++) {
+                    moves.remove(moves.size() - 1);
+                }
+                return true;
+            }
+        }
+        else if(moves.contains(stepsNum)){
+            for(int i=0; i<moves.size(); i++) {
+                if(moves.get(i)==stepsNum) {
+                    moves.remove(i);
+                    return true;
+                }
+            }
+        }
+        else if(stepsNum == moves.get(0)+moves.get(1)){
+            moves.clear();
+            return true;
+        }
+        return false;
+
+    }
+
+    //temporary debug method for showing game state
      public void printBoard(int from, int to){
         String moved;
         if(turn == p1)
@@ -138,7 +173,7 @@ public class Game {
         else
             moved = "white";
 
-        String gameState = moved+" moved from "+from+" to "+to+"\n\n";
+        String gameState =moved+" moved from "+from+" to "+to+"\n\n";
 
         for (int i=0; i<getBoard().getColumns().length; i++){
             String color;
@@ -169,10 +204,7 @@ public class Game {
         }
          gameState+="\n\n";
 
-        if(turn == p1)
-            turn = p2;
-        else
-            turn = p1;
+
 
         System.out.println(gameState);
      }
@@ -239,6 +271,31 @@ public class Game {
         return turn;
     }
 
+    public void changeTurn(){
+        if(getTurn() == p1)
+            this.turn = p2;
+        else
+            this.turn = p1;
+        moves.clear();
+    }
+    public int[] getDicesNum(){
+        int[] res = new int[2];
+
+        res[0] = dice1.getNum();
+        res[1] = dice2.getNum();
+
+        return res;
+    }
+    public Dice[] getDices(){
+        Dice[] dices = new Dice[2];
+        dices[0] = dice1;
+        dices[1]= dice2;
+        return dices;
+    }
+
+    public ArrayList<Integer> getMoves(){
+        return moves;
+    }
     public Player getP1 () { return p1; }
     public Player getP2 () { return p2; }
 }
