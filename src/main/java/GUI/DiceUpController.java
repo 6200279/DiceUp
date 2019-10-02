@@ -74,6 +74,10 @@ public class DiceUpController {
     private ImageView imageview_1;
     @FXML
     private ImageView imageview_2;
+    @FXML
+    private ImageView imageview_3;
+    @FXML
+    private ImageView imageview_4;
 
     private VBox[] columns;
 
@@ -218,6 +222,14 @@ public class DiceUpController {
             case 6:
                 imageview_2.setImage(dice_6);
                 break;
+        }
+        if(num1==num2){
+            imageview_3.setImage(imageview_1.getImage());
+            imageview_4.setImage(imageview_1.getImage());
+        }
+        else{
+            imageview_3.setImage(null);
+            imageview_4.setImage(null);
         }
     }
 }

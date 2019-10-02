@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@/FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
+<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="./CSS/Board.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
    <children>
       <HBox id="Board" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
          <children>
@@ -77,8 +77,14 @@
                </padding>
             </Label>
             <Button mnemonicParsing="false" onAction="#updateBoard" text="Update Columns" />
-            <ImageView fx:id="imageview_1" fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="imageview_2" fitHeight="41.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="imageview_3" fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imageview_2" fitHeight="41.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imageview_1" fitHeight="40.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imageview_4" fitHeight="41.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </HBox>
             <Button fx:id="roll_Dice" mnemonicParsing="false" onAction="#rollDice" text="roll it" />
          </children>
       </VBox>
