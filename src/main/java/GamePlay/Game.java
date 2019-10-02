@@ -51,6 +51,7 @@ public class Game {
     public Game(Player p1, Player p2){
         this.p1 = p1;
         this.p2 = p2;
+        turn = p1;
 
         board = new Board(p1, p2);
 
@@ -115,7 +116,7 @@ public class Game {
 
          /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
          * /      the turn player                                 unless it has only one chip*/
-        if ((ownerFromColumn.getID() != getTurn().getID()) || (ownerToColumn.getID() != getTurn().getID() && toChipsNum >= 2)) {
+        if ((!ownerFromColumn.equals(getTurn()) || !ownerToColumn.equals(getTurn()) && toChipsNum >= 2)) {
             System.out.println("not your chip");
             throw new IllegalAccessException();
         }

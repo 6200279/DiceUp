@@ -103,7 +103,7 @@ public class DiceUpController {
         for(int i = 0; i < columns.length; i++) {
             int columnId = i;
             columns[i].setOnMouseClicked(event -> {
-                System.out.println("Column " + columnId + " was clicked!");
+                System.out.println("Attempting to move from column " + selectedChipColumn + " to " + columnId + ".");
                 try {
                     currGame.move(selectedChipColumn, columnId);
                 } catch (IllegalAccessException e) {
