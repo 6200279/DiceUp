@@ -127,10 +127,12 @@ public class Game {
             hitChip(toColumn);
 
 
-        if(!checkDiceLegality(moves, to-from)) {
+        if(!checkDiceLegality(moves, Math.abs(to-from))) {
             System.out.println("dice Illegality accured");
             throw new IllegalAccessException();
         }
+        if(moves.size() == 0)
+            changeTurn();
 
 
         //finally, move the chip
@@ -141,6 +143,8 @@ public class Game {
      }
 
     private boolean checkDiceLegality(ArrayList<Integer> moves, int stepsNum) {
+        if(moves.size()==0)
+            return false;
         if(moves.size() == 4) {
             if (stepsNum % moves.get(0) == 0 && stepsNum / moves.get(0) <= 4) {
                 int numberOfMovesUsed = stepsNum / moves.get(0);
