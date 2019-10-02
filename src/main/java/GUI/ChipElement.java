@@ -18,12 +18,5 @@ public class ChipElement extends Button {
                 "-fx-padding: 2px;" +
                 "-fx-border-insets: 2px;" +
                 "-fx-background-insets: 2px;");
-
-        setOnAction(new EventHandler<ActionEvent>() {
-            private String toPrint = id + " has been clicked.";
-                public void handle(ActionEvent event) {
-                    System.out.println(toPrint);
-                }
-        });
     }
 }

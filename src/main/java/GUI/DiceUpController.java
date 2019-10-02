@@ -1,27 +1,16 @@
 package GUI;
 
 import GamePlay.*;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 public class DiceUpController {
+    private int selectedChipColumn = 0;
+
     @FXML
     private VBox Col0;
     @FXML
@@ -111,13 +100,17 @@ public class DiceUpController {
         columns[22] = Col22;
         columns[23] = Col23;
 
-        /*EventHandler<? super MouseEvent> colClickAction = new EventHandler() {
-            public void handle(Event event) {
-                currGame.getTurn().getSelectedChip().getColumn();
-            }
-        };
-        Col0.setOnMouseClicked(colClickAction);
-        */
+        for(int i = 0; i < columns.length; i++) {
+            int columnId = i;
+            columns[i].setOnMouseClicked(event -> {
+                System.out.println("Column " + columnId + " was clicked!");
+                try {
+                    currGame.move(selectedChipColumn, columnId);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
 
         Player p1 = new Player("Player 1");
         p1.setColor(Color.BROWN);
@@ -142,6 +135,13 @@ public class DiceUpController {
             for (int j = 0; j < currDataChips.size(); j++) {
                 Chip currChipToAdd = currDataChips.get(j);
                 ChipElement chipUI = new ChipElement(currChipToAdd.getId());
+                int ColumnId = i;
+                chipUI.setOnAction(event -> {
+                    int chipId = currChipToAdd.getId();
+                    int ColmId = ColumnId;
+                    System.out.println("Chip " + chipId + " on Column " + ColmId + " was clicked!");
+                    selectedChipColumn = ColmId;
+                });
 
                 //set color of chip
                 if (currChipToAdd.getOwner().equals(currGame.getP1())) chipUI.setStyle(chipUI.getStyle() + " -fx-background-color : " + p1Color+ ";");
