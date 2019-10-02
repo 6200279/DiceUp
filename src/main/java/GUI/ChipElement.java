@@ -11,10 +11,10 @@ public class ChipElement extends Button {
         id = ID;
         setStyle("-fx-focus-color: transparent;" +
                 "-fx-background-radius: 5em; " +
-                "-fx-min-width: 4em; " +
-                "-fx-min-height: 4em; " +
-                "-fx-max-width: 4em; " +
-                "-fx-max-height: 4em;" +
+                "-fx-min-width: 2.5em; " +
+                "-fx-min-height: 2.5em; " +
+                "-fx-max-width: 2.5em; " +
+                "-fx-max-height: 2.5em;" +
                 "-fx-padding: 2px;" +
                 "-fx-border-insets: 2px;" +
                 "-fx-background-insets: 2px;");

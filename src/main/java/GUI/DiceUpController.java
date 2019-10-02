@@ -106,6 +106,7 @@ public class DiceUpController {
                 System.out.println("Attempting to move from column " + selectedChipColumn + " to " + columnId + ".");
                 try {
                     currGame.move(selectedChipColumn, columnId);
+                    updateBoard();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
@@ -119,6 +120,8 @@ public class DiceUpController {
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
         System.out.println("Col0 length: " + Col0.getChildren().size());
+
+        updateBoard();
     }
 
     private final String p1Color = "SaddleBrown";
@@ -182,6 +185,7 @@ public class DiceUpController {
 
 
         //according to the result of rolling dices, choose images to show in the imageViewer
+
         switch (num1){
             case 1:
                 imageview_1.setImage(dice_1);
