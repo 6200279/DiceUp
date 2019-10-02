@@ -74,24 +74,27 @@ public class Board {
 
     public String toString() {
         int spaceAmount = 50;
-        System.out.println("≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+        System.out.println("≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
         for (int i = 0; i < 12; i++) {
+            System.out.printf("≠");
             char leftChipId = ' ';
             if (columns[23 - i].getChips().size() != 0) {
                 String name = columns[23 - i].getChips().get(0).getOwner().getName();
 
                 leftChipId = name.toCharArray()[0];
             }
-            String rightChipId = " ";
-            if (columns[i].getChips().size() != 0)
-                 rightChipId = "" + columns[i].getChips().get(0).getId();
+            char rightChipId = ' ';
+            if (columns[i].getChips().size() != 0) {
+                String name = columns[i].getChips().get(0).getOwner().getName();
 
+                rightChipId = name.toCharArray()[0];
+            }
             int leftChipNum = columns[23 - i].getChips().size();
             int rightChipNum = columns[i].getChips().size();
 
             int middleSpace = spaceAmount - leftChipNum - rightChipNum;
             System.out.printf("\n");
-            if (i == 6) System.out.println("≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+            if (i == 6) System.out.println("≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
             for (int j = 0; j < leftChipNum; j++) {
                 System.out.printf("" + leftChipId);
             }
@@ -102,8 +105,9 @@ public class Board {
                 System.out.printf("" + rightChipId);
             }
             System.out.printf("\n");
+            System.out.printf("≠");
         }
-        System.out.println("≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
+        System.out.println("≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
         return null;
     }
 }

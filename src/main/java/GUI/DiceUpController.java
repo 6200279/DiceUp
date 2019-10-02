@@ -1,11 +1,15 @@
 package GUI;
 
 import GamePlay.*;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -103,6 +107,14 @@ public class DiceUpController {
         columns[22] = Col22;
         columns[23] = Col23;
 
+        /*EventHandler<? super MouseEvent> colClickAction = new EventHandler() {
+            public void handle(Event event) {
+                currGame.getTurn().getSelectedChip().getColumn();
+            }
+        };
+        Col0.setOnMouseClicked(colClickAction);
+        */
+
         Player p1 = new Player("Player 1");
         p1.setColor(Color.BROWN);
 
@@ -122,10 +134,10 @@ public class DiceUpController {
 
         for (int i = 0; i < dataColumns.length; i++) {
             ArrayList<Chip> currDataChips = dataColumns[i].getChips();
-            columns[i].getChildren().removeAll(columns[i].getChildren());
+            if (i < 24) columns[i].getChildren().removeAll(columns[i].getChildren());
             for (int j = 0; j < currDataChips.size(); j++) {
                 Chip currChipToAdd = currDataChips.get(j);
-                ChipElement chipUI = new ChipElement();
+                ChipElement chipUI = new ChipElement(currChipToAdd.getId());
 
                 //set color of chip
                 if (currChipToAdd.getOwner().equals(currGame.getP1())) chipUI.setStyle(chipUI.getStyle() + " -fx-background-color : " + p1Color+ ";");

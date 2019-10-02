@@ -1,9 +1,14 @@
 package GUI;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
 public class ChipElement extends Button {
-    public ChipElement () {
+    private int id;
+
+    public ChipElement (int ID) {
+        id = ID;
         setStyle("-fx-focus-color: transparent;" +
                 "-fx-background-radius: 5em; " +
                 "-fx-min-width: 4em; " +
@@ -13,5 +18,12 @@ public class ChipElement extends Button {
                 "-fx-padding: 2px;" +
                 "-fx-border-insets: 2px;" +
                 "-fx-background-insets: 2px;");
+
+        setOnAction(new EventHandler<ActionEvent>() {
+            private String toPrint = id + " has been clicked.";
+                public void handle(ActionEvent event) {
+                    System.out.println(toPrint);
+                }
+        });
     }
 }
