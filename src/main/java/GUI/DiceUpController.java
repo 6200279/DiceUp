@@ -2,6 +2,7 @@ package GUI;
 
 import GamePlay.*;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -108,7 +109,7 @@ public class DiceUpController {
                     currGame.move(selectedChipColumn, columnId);
                     updateBoard();
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    System.out.println("Unable to move that chip");
                 }
             });
         }
@@ -154,38 +155,28 @@ public class DiceUpController {
             }
         }
     }
+
     /*
     This method is for the roll_it Button to roll dices
      */
+    private static final Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
+    private static final Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
+    private static final Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
+    private static final Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
+    private static final Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
+    private static final Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
     public void rollDice(){
-
-        //roll dices.
         currGame.rollDices();
-        //get Dices
-        Dice dice1 = currGame.getDices()[0];
-        Dice dice2 = currGame.getDices()[1];
-        //get the number from Dice.class
-        int num1 = dice1.getNum();
-        int num2 = dice2.getNum();
+        int num1 = currGame.getDices()[0].getNum();
+        int num2 = currGame.getDices()[1].getNum();
 
-
-
+        /*
         //show the result of rolling dices in the terminal
         for (int i = 0; i < currGame.getMoves().size(); i++) {
             System.out.println("The " + i + " dice's result is: " + currGame.getMoves().get(i));
-        }
-
-        // create images of
-        javafx.scene.image.Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
-        javafx.scene.image.Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
-        javafx.scene.image.Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
-        javafx.scene.image.Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
-        javafx.scene.image.Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
-        javafx.scene.image.Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
-
+        }*/
 
         //according to the result of rolling dices, choose images to show in the imageViewer
-
         switch (num1){
             case 1:
                 imageview_1.setImage(dice_1);
