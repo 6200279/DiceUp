@@ -17,6 +17,10 @@ import javafx.scene.paint.Color;
 
 public class Player {
     private String name;
+
+
+
+    private boolean hasChipsHit;
     private int takenChips;
     private int ID;
     private static int lastID = 0;
@@ -33,7 +37,12 @@ public class Player {
         if (name != null) return name;
         return "" + ID;
     }
-
+    public boolean hasChipHit() {
+        return hasChipsHit;
+    }
+    public void setHitChips(boolean b){
+        hasChipsHit = b;
+    }
     /**
      * Getter for @ID
      *

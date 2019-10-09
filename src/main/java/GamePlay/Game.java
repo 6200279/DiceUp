@@ -194,18 +194,11 @@ public class Game {
             }
             gameState += "column   "+i+"   has   "+getBoard().getColumns()[i].getChips().size()+ "     "+color+"\n";
         }
-        int middleChips = 0;
-        for(int i=0; i<getBoard().getMiddleColumns().length; i++){
-            middleChips = 0;
-            if(getBoard().getMiddleColumns()[i].getChips().size()>0) {
-                middleChips += getBoard().getMiddleColumns()[i].getChips().size();
-                String color;
-                if(i==1)
-                    color = "black";
-                else
-                    color = "white";
-                gameState +="\n"+ middleChips+"  chips captured by "+color ;
+        if(p1.hasChipHit()){
+                gameState +="\n"+ p1.getName()+" has captured chips ";
             }
+        else if(p1.hasChipHit()){
+            gameState +="\n"+ p2.getName()+" has captured chips ";
         }
          gameState+="\n\n";
 
@@ -243,14 +236,16 @@ public class Game {
 
     public void hitChip(Column c) {
         //Make boolean hit true for this chip
-        c.getChips().get(0).isHit();
+        c.getChips().get(0).hit();
 
         //Move this chip to the middle
-        Column middle;
-        if (c.getChips().get(0).getOwner() == p1)
-            middle = getBoard().getMiddleColumns()[0];
-        else
-            middle = getBoard().getMiddleColumns()[1];
+        Column middle = getBoard().getMiddleColumns();
+        if (c.getChips().get(0).getOwner() == p1) {
+            p1.setHitChips(true);
+        }
+        else {
+            p2.setHitChips(true);
+        }
 
         middle.getChips().add(c.getChips().get(0));
         c.getChips().remove(0);

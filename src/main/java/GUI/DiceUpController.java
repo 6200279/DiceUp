@@ -130,6 +130,7 @@ public class DiceUpController {
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
         System.out.println("Col0 length: " + Col0.getChildren().size());
+
         updateBoard();
     }
 
@@ -174,6 +175,8 @@ public class DiceUpController {
     private static final Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
     private static final Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
     public void rollDice(){
+
+        //roll dices.
         currGame.rollDices();
         int num1 = currGame.getDices()[0].getNum();
         int num2 = currGame.getDices()[1].getNum();
@@ -185,6 +188,7 @@ public class DiceUpController {
         }*/
 
         //according to the result of rolling dices, choose images to show in the imageViewer
+
         switch (num1){
             case 1:
                 imageview_1.setImage(dice_1);

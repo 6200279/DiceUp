@@ -40,7 +40,7 @@ public class Chip {
         return id;
     }
 
-    public void isHit(){
+    public void hit(){
         this.hit = true;
     }
 
