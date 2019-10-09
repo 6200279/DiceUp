@@ -1,11 +1,13 @@
 package GUI;
 
 import GamePlay.*;
+import GamePlay.Game;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.control.Label;
 
 import java.util.ArrayList;
 
@@ -68,6 +70,8 @@ public class DiceUpController {
     private ImageView imageview_3;
     @FXML
     private ImageView imageview_4;
+    @FXML
+    private Label user_Message;
 
     private VBox[] columns;
 
@@ -109,6 +113,7 @@ public class DiceUpController {
                     currGame.move(selectedChipColumn, columnId);
                     updateBoard();
                 } catch (IllegalAccessException e) {
+                    user_Message.setText("Not a valid move");
                     System.out.println("Unable to move that chip");
                 }
             });
@@ -121,7 +126,6 @@ public class DiceUpController {
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
         System.out.println("Col0 length: " + Col0.getChildren().size());
-
         updateBoard();
     }
 
@@ -154,8 +158,8 @@ public class DiceUpController {
                 columns[i].getChildren().add(chipUI);
             }
         }
+        user_Message.setText("");
     }
-
     /*
     This method is for the roll_it Button to roll dices
      */
