@@ -39,7 +39,9 @@
             </VBox>
             <VBox id="MiddleSector" alignment="CENTER" HBox.hgrow="NEVER">
                <children>
+                  <VBox fx:id="ColMidP1" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" VBox.vgrow="SOMETIMES" />
                   <Label text="Middle" />
+                  <VBox fx:id="ColMidP2" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" VBox.vgrow="SOMETIMES" />
                </children>
             </VBox>
 

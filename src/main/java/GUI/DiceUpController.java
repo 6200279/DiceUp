@@ -63,6 +63,10 @@ public class DiceUpController {
     @FXML
     private VBox Col23;
     @FXML
+    private VBox ColMidP1;
+    @FXML
+    private VBox ColMidP2;
+    @FXML
     private ImageView imageview_1;
     @FXML
     private ImageView imageview_2;
