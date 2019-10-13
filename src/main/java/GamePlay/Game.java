@@ -98,12 +98,30 @@ public class Game {
             ownerToColumn = toColumn.getChips().get(0).getOwner();
 
 
+        if(getTurn()==p1) {
+            if (board.getMiddleColumns()[0].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[0]) {
+                System.out.println("you have hitten chips");
+                throw new IllegalAccessException();
+            }
+        }
+        if(getTurn()==p2){
+            if(board.getMiddleColumns()[1].getChips().size()!=0 && fromColumn!=board.getMiddleColumns()[1]){
+                System.out.println("you have hitten chips");
+                throw new IllegalAccessException();
+            }
+        }
+
+
         /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
          * /      the turn player                                 unless it has only one chip*/
         if ((!ownerFromColumn.equals(getTurn()) || !ownerToColumn.equals(getTurn()) && toChipsNum >= 2)) {
             System.out.println("not your turn");
             throw new IllegalAccessException();
         }
+
+
+
+
 
         //make sure they move in the right direction
         else {
@@ -112,14 +130,20 @@ public class Game {
                 throw new IllegalAccessException();
             }
             if (getTurn() == p2 && from - to >= 0) {
-                System.out.println("cant't go backward");
-                throw new IllegalAccessException();
+                if(fromColumn != board.getMiddleColumns()[1]) {
+                    System.out.println("cant't go backward");
+                    throw new IllegalAccessException();
+                }
+                else if(to>=6){
+                    System.out.println("cant't go backward");
+                    throw new IllegalAccessException();
+                }
             }
         }
 
 
         //if a player moves to 24th column try to take the chip
-        if(to == 24) {
+        if(to == 26 || to == 27) {
             if (checkTake())
                 fromColumn.getChips().get(fromChipsNum - 1).take();
             else {
@@ -133,6 +157,8 @@ public class Game {
         if (toChipsNum == 1 && toColumn.getChips().get(0).getOwner()!=turn)
             hitChip(toColumn);
 
+        if(fromColumn==board.getMiddleColumns()[1])
+            from = -1;
 
         if(!checkDiceLegality(moves, Math.abs(to-from))) {
             System.out.println("dice Illegality accured");
