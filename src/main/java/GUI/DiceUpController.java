@@ -2,6 +2,8 @@ package GUI;
 
 import GamePlay.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -10,10 +12,14 @@ import java.util.ArrayList;
 
 public class DiceUpController {
     private int selectedChipColumn = 0;
+
+    //Middle Columns
     @FXML
     private VBox ColMidP1;
     @FXML
     private VBox ColMidP2;
+
+    //Game Columns
     @FXML
     private VBox Col0;
     @FXML
@@ -62,6 +68,8 @@ public class DiceUpController {
     private VBox Col22;
     @FXML
     private VBox Col23;
+
+    //Dice images
     @FXML
     private ImageView imageview_1;
     @FXML
@@ -70,18 +78,16 @@ public class DiceUpController {
     private ImageView imageview_3;
     @FXML
     private ImageView imageview_4;
+    @FXML
+    private Label user_Message;
 
     private VBox[] columns;
-    private VBox[] midColumns;
 
     private Game currGame;
     //public DiceUpController () {
     @FXML
     protected void initialize() {
-        midColumns = new VBox[2];
-        midColumns[0] = ColMidP1;
-        midColumns[1] = ColMidP2;
-        columns = new VBox[24];
+        columns = new VBox[26];
         columns[0] = Col0;
         columns[1] = Col1;
         columns[2] = Col2;
@@ -106,6 +112,8 @@ public class DiceUpController {
         columns[21] = Col21;
         columns[22] = Col22;
         columns[23] = Col23;
+        columns[24] = ColMidP1;
+        columns[25] = ColMidP2;
 
         for(int i = 0; i < columns.length; i++) {
             int columnId = i;
@@ -115,19 +123,8 @@ public class DiceUpController {
                     currGame.move(selectedChipColumn, columnId);
                     updateBoard();
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        for(int i = 0; i < midColumns.length; i++) {
-            int columnId = i;
-            midColumns[i].setOnMouseClicked(event -> {
-                System.out.println("Attempting to move from MIDDLE columns " + selectedChipColumn + " to " + columnId + ".");
-                try {
-                    currGame.move(selectedChipColumn, columnId);
-                    updateBoard();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    user_Message.setText("Not a valid move");
+                    System.out.println("Unable to move that chip");
                 }
             });
         }
@@ -151,9 +148,10 @@ public class DiceUpController {
         Column[] dataColumns = currBoard.getColumns();
         Column[] dataMidColumns = currBoard.getMiddleColumns();
 
+
         for (int i = 0; i < dataColumns.length; i++) {
             ArrayList<Chip> currDataChips = dataColumns[i].getChips();
-            if (i < 24) columns[i].getChildren().removeAll(columns[i].getChildren());
+            if (i < 26) columns[i].getChildren().removeAll(columns[i].getChildren());
             for (int j = 0; j < currDataChips.size(); j++) {
                 Chip currChipToAdd = currDataChips.get(j);
                 ChipElement chipUI = new ChipElement(currChipToAdd.getId());
@@ -172,42 +170,30 @@ public class DiceUpController {
                 columns[i].getChildren().add(chipUI);
             }
         }
-
-        //update chips from middle columns
-        for (int i = 0; i < dataMidColumns.length; i++) {
-            ArrayList<Chip> currMiddleDataChips = dataMidColumns[i].getChips();
-            if (i < 2) midColumns[i].getChildren().removeAll(columns[i].getChildren());
-        }
     }
+
+
     /*
     This method is for the roll_it Button to roll dices
      */
+    private static final Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
+    private static final Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
+    private static final Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
+    private static final Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
+    private static final Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
+    private static final Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
     public void rollDice(){
 
         //roll dices.
         currGame.rollDices();
-        //get Dices
-        Dice dice1 = currGame.getDices()[0];
-        Dice dice2 = currGame.getDices()[1];
-        //get the number from Dice.class
-        int num1 = dice1.getNum();
-        int num2 = dice2.getNum();
+        int num1 = currGame.getDices()[0].getNum();
+        int num2 = currGame.getDices()[1].getNum();
 
-
-
+        /*
         //show the result of rolling dices in the terminal
         for (int i = 0; i < currGame.getMoves().size(); i++) {
             System.out.println("The " + i + " dice's result is: " + currGame.getMoves().get(i));
-        }
-
-        // create images of
-        javafx.scene.image.Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
-        javafx.scene.image.Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
-        javafx.scene.image.Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
-        javafx.scene.image.Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
-        javafx.scene.image.Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
-        javafx.scene.image.Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
-
+        }*/
 
         //according to the result of rolling dices, choose images to show in the imageViewer
 

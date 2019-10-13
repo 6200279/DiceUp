@@ -286,6 +286,7 @@ public class Game {
             this.turn = p1;
         moves.clear();
     }
+
     public int[] getDicesNum(){
         int[] res = new int[2];
 
@@ -294,6 +295,7 @@ public class Game {
 
         return res;
     }
+
     public Dice[] getDices(){
         Dice[] dices = new Dice[2];
         dices[0] = dice1;

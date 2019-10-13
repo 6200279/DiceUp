@@ -16,11 +16,10 @@ package GamePlay;
 
 public class Board {
 
-    //indices 0-23 are the regular spots, index 24 is the taken spot
-    private Column[] columns = new Column[25];
-
-    //0 is p1, 1 is p2
-    private Column[] middleColumns = new Column[2];
+    //indices 0-23 are the regular spots;
+    //indice 24-25 being hit chips and
+    // 26-27 being taken chips with order p1-p2 respectively
+    private Column[] columns = new Column[28];
 
 
     /**
@@ -33,9 +32,6 @@ public class Board {
     private void init(Column[] columns, Player a, Player b) {
         for(int i=0; i<columns.length; i++)
             columns[i] = new Column();
-
-        middleColumns[0] = new Column();
-        middleColumns[1] = new Column();
 
         for (int j = 0; j < 2; j++)
             columns[0].getChips().add(new Chip(b));
@@ -69,9 +65,17 @@ public class Board {
         return columns;
     }
     public Column[] getMiddleColumns(){
-        return middleColumns;
+        Column[] a = new Column[2];
+        a[0] = columns[24];
+        a[1] = columns[25];
+        return a;
     }
-
+    public Column[] getTakenChips(){
+        Column[] a = new Column[2];
+        a[0] = columns[26];
+        a[1] = columns[27];
+        return a;
+    }
     public String toString() {
         int spaceAmount = 50;
         System.out.println("≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠");
