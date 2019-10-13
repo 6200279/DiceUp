@@ -1,14 +1,18 @@
 package GUI;
 
 import GamePlay.*;
+import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import sun.plugin2.message.Message;
 
 import java.util.ArrayList;
 
@@ -93,9 +97,19 @@ public class DiceUpController {
     private VBox[] columns;
 
     private Game currGame;
+    private GameState State = GameState.getInstance();
+
     //public DiceUpController () {
     @FXML
     protected void initialize() {
+        //to make items stay on bottom
+        LogBox.getItems().addListener(new ListChangeListener() {
+            @Override
+            public void onChanged(ListChangeListener.Change change) {
+               LogBox.scrollTo(change.getList().size()-1);
+            }
+        });
+
         columns = new VBox[26];
         columns[0] = Col0;
         columns[1] = Col1;
@@ -125,15 +139,22 @@ public class DiceUpController {
         columns[25] = ColMidP2;
 
         for(int i = 0; i < columns.length; i++) {
-            user_Message.setText("");
             int columnId = i;
             columns[i].setOnMouseClicked(event -> {
+                user_Message.setText("");
                 LogBox.getItems().add("Attempting to move from column " + selectedChipColumn + " to " + columnId + ".");
                 try {
                     currGame.move(selectedChipColumn, columnId);
                     LogBox.getItems().add("Move Valid");
 
                     int movePlayed = Math.abs(selectedChipColumn - columnId);
+
+                    //if column is hit columns
+                    if (selectedChipColumn == 24 || selectedChipColumn == 25) {
+                        if (selectedChipColumn > 6) movePlayed = Math.abs(6 - (columnId % 6));
+                        else movePlayed = selectedChipColumn + 1;
+                        LogBox.getItems().add("Hit chip is placed back on " + movePlayed);
+                    }
                     if (movePlayed == iv1Val) {
                         imageview_1.setOpacity(0.4);
                         iv1Val = 0;
@@ -172,14 +193,102 @@ public class DiceUpController {
                     LogBox.getItems().add("Move Invalid");
                 } catch (Exception e) {
                     LogBox.getItems().add("Unknown Error Occured");
+                    //e.printStackTrace();
                 }
             });
+
+            //alternating column background colors
+            if (i < 24) {
+                if ((6 - i % 6) % 2 == 0) columns[i].setStyle("-fx-background-color: BurlyWood;");
+                else columns[i].setStyle("-fx-background-color: Bisque;");
+            }
         }
 
-        Player p1 = new Player("Player 1");
+        //Add temporary fix to handle impossible moves
+        imageview_1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            ArrayList<Integer> moves = currGame.getMoves();
+            for (int i = 0; i < moves.size(); i++) {
+                if (moves.get(i) == iv1Val) {
+                    moves.remove(i);
+                    break;
+                }
+            }
+            iv1Val = 0;
+            imageview_1.setOpacity(0.4);
+
+            if (moves.size() == 0) {
+                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                else currGame.turn = currGame.getP1();
+
+                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                roll_Dice.setDisable(false);
+            }
+        });
+
+        imageview_2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            ArrayList<Integer> moves = currGame.getMoves();
+            for (int i = 0; i < moves.size(); i++) {
+                if (moves.get(i) == iv2Val) {
+                    moves.remove(i);
+                    break;
+                }
+            }
+            iv2Val = 0;
+            imageview_2.setOpacity(0.4);
+
+            if (moves.size() == 0) {
+                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                else currGame.turn = currGame.getP1();
+
+                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                roll_Dice.setDisable(false);
+            }
+        });
+
+        imageview_3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            ArrayList<Integer> moves = currGame.getMoves();
+            for (int i = 0; i < moves.size(); i++) {
+                if (moves.get(i) == iv3Val) {
+                    moves.remove(i);
+                    break;
+                }
+            }
+            iv3Val = 0;
+            imageview_3.setOpacity(0.4);
+
+            if (moves.size() == 0) {
+                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                else currGame.turn = currGame.getP1();
+
+                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                roll_Dice.setDisable(false);
+            }
+        });
+
+        imageview_4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            ArrayList<Integer> moves = currGame.getMoves();
+            for (int i = 0; i < moves.size(); i++) {
+                if (moves.get(i) == iv4Val) {
+                    moves.remove(i);
+                    break;
+                }
+            }
+            iv4Val = 0;
+            imageview_4.setOpacity(0.4);
+
+            if (moves.size() == 0) {
+                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                else currGame.turn = currGame.getP1();
+
+                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                roll_Dice.setDisable(false);
+            }
+        });
+
+        Player p1 = new Player(State.p1Name);
         p1.setColor(Color.BROWN);
 
-        Player p2 = new Player("Player 2");
+        Player p2 = new Player(State.p2Name);
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
         LogBox.getItems().add(" - - - New Game - - -");

@@ -15,7 +15,7 @@
          <children>
             <VBox id="LeftView" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox id="TopLeftCols" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
+                  <HBox id="TopLeftCols" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                      <children>
                         <VBox fx:id="Col12" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                         <VBox fx:id="Col13" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
@@ -25,8 +25,8 @@
                         <VBox fx:id="Col17" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                      </children>
                   </HBox>
-                  <VBox VBox.vgrow="ALWAYS" />
-                  <HBox id="BottomLeftCols" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="SOMETIMES">
+                  <VBox maxHeight="400.0" VBox.vgrow="ALWAYS" />
+                  <HBox id="BottomLeftCols" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                      <children>
                         <VBox fx:id="Col11" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                         <VBox fx:id="Col10" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
@@ -48,7 +48,7 @@
 
             <VBox id="RightView" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                <children>
-                  <HBox id="TopRightCols" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
+                  <HBox id="TopRightCols" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                      <children>
                         <VBox fx:id="Col18" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                         <VBox fx:id="Col19" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
@@ -58,8 +58,8 @@
                         <VBox fx:id="Col23" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                      </children>
                   </HBox>
-                  <VBox VBox.vgrow="ALWAYS" />
-                  <HBox id="BottomRightCols" alignment="BOTTOM_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" VBox.vgrow="SOMETIMES">
+                  <VBox maxHeight="400.0" VBox.vgrow="ALWAYS" />
+                  <HBox id="BottomRightCols" alignment="BOTTOM_CENTER" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                      <children>
                         <VBox fx:id="Col5" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />
                         <VBox fx:id="Col4" alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="Col" />

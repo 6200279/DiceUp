@@ -12,6 +12,9 @@ public class GameState {
 
     public static ListView LOG_BOX;
 
+    public static String p1Name;
+    public static String p2Name;
+
     private GameState() {
     }
 }

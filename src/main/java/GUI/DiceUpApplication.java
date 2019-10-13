@@ -53,12 +53,19 @@ public class DiceUpApplication extends Application {
     //changes the scene to the actual game when the play
     //button is pressed
     public void playGame() throws IOException{
-
-
         //get the primaryStage
         Scene mainScene = playButton.getScene();
         Window window = mainScene.getWindow();
         Stage primaryStage = (Stage)window;
+
+        String p1Name = ((TextField) mainScene.lookup("#player1Name")).getText();
+        String p2Name = ((TextField) mainScene.lookup("#player2Name")).getText();
+
+        if (p1Name == "") p1Name = "Player 1";
+        if (p2Name == "") p1Name = "Player 2";
+
+        GameState.getInstance().p1Name = p1Name;
+        GameState.getInstance().p2Name = p2Name;
 
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
@@ -73,12 +80,5 @@ public class DiceUpApplication extends Application {
 
         // Initialize the root entry (HBox)
          primaryStage.setScene(scene);
-    }
-
-    public void setPlayers1Name(){
-
-    }
-    public void setPlayers2Name(){
-
     }
 }
