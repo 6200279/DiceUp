@@ -2,7 +2,9 @@ package GUI;
 
 import GamePlay.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -12,6 +14,13 @@ import java.util.ArrayList;
 
 public class DiceUpController {
     private int selectedChipColumn = 0;
+
+    //List View for keeping logs of game
+    @FXML
+    private ListView LogBox;
+
+    @FXML
+    private Button roll_Dice;
 
     //Middle Columns
     @FXML
@@ -116,15 +125,53 @@ public class DiceUpController {
         columns[25] = ColMidP2;
 
         for(int i = 0; i < columns.length; i++) {
+            user_Message.setText("");
             int columnId = i;
             columns[i].setOnMouseClicked(event -> {
-                System.out.println("Attempting to move from column " + selectedChipColumn + " to " + columnId + ".");
+                LogBox.getItems().add("Attempting to move from column " + selectedChipColumn + " to " + columnId + ".");
                 try {
                     currGame.move(selectedChipColumn, columnId);
+                    LogBox.getItems().add("Move Valid");
+
+                    int movePlayed = Math.abs(selectedChipColumn - columnId);
+                    if (movePlayed == iv1Val) {
+                        imageview_1.setOpacity(0.4);
+                        iv1Val = 0;
+                    }
+                    else if (movePlayed == iv2Val) {
+                        imageview_2.setOpacity(0.4);
+                        iv2Val = 0;
+                    }
+                    else if (movePlayed == iv3Val) {
+                        imageview_3.setOpacity(0.4);
+                        iv3Val = 0;
+                    }
+                    else if (movePlayed == iv4Val) {
+                        imageview_4.setOpacity(0.4);
+                        iv4Val = 0;
+                    }
+
+                    //turn switched
+                    if (iv1Val == 0 && iv2Val == 0 && iv3Val == 0 && iv4Val == 0) {
+                        LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                        roll_Dice.setDisable(false);
+                    }
+
                     updateBoard();
-                } catch (IllegalAccessException e) {
-                    user_Message.setText("Not a valid move");
-                    System.out.println("Unable to move that chip");
+                }
+                catch (IllegalAccessException e) {
+                    user_Message.setText("Invalid Chip");
+                    LogBox.getItems().add("Attempted column is unavailable.");
+                }
+                catch (IllegalStateException e) {
+                    user_Message.setText("Invalid Game Phase");
+                    LogBox.getItems().add("Unable to take chips due remaining outer chips.");
+                }
+                catch (IllegalArgumentException e) {
+                    user_Message.setText("Invalid Move");
+                    LogBox.getItems().add("Move Invalid");
+                } catch (Exception e) {
+                    LogBox.getItems().add("Unknown Error Occured");
                 }
             });
         }
@@ -135,7 +182,9 @@ public class DiceUpController {
         Player p2 = new Player("Player 2");
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
-        System.out.println("Col0 length: " + Col0.getChildren().size());
+        LogBox.getItems().add(" - - - New Game - - -");
+        LogBox.getItems().add(p1.getName() + " vs " + p2.getName());
+        LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
 
         updateBoard();
     }
@@ -146,8 +195,6 @@ public class DiceUpController {
     public void updateBoard() {
         Board currBoard = currGame.getBoard();
         Column[] dataColumns = currBoard.getColumns();
-        Column[] dataMidColumns = currBoard.getMiddleColumns();
-
 
         for (int i = 0; i < dataColumns.length; i++) {
             ArrayList<Chip> currDataChips = dataColumns[i].getChips();
@@ -182,13 +229,22 @@ public class DiceUpController {
     private static final Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
     private static final Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
     private static final Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
+    private static int iv1Val = 0;
+    private static int iv2Val = 0;
+    private static int iv3Val = 0;
+    private static int iv4Val = 0;
     public void rollDice(){
-
-        //roll dices.
         currGame.rollDices();
+        //Dice values
         int num1 = currGame.getDices()[0].getNum();
         int num2 = currGame.getDices()[1].getNum();
+        iv1Val = num1;
+        iv2Val = num2;
 
+        LogBox.getItems().add("Rolled " + num1 + " and " + num2);
+        //reset opacities
+        imageview_1.setOpacity(1.0);
+        imageview_2.setOpacity(1.0);
         /*
         //show the result of rolling dices in the terminal
         for (int i = 0; i < currGame.getMoves().size(); i++) {
@@ -239,12 +295,19 @@ public class DiceUpController {
                 break;
         }
         if(num1==num2){
+            imageview_3.setOpacity(1.0);
             imageview_3.setImage(imageview_1.getImage());
+            imageview_4.setOpacity(1.0);
             imageview_4.setImage(imageview_1.getImage());
+            iv3Val = num1;
+            iv4Val = num1;
         }
         else{
             imageview_3.setImage(null);
             imageview_4.setImage(null);
+            iv3Val = 0;
+            iv3Val = 0;
         }
+        roll_Dice.setDisable(true);
     }
 }

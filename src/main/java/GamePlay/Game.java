@@ -72,7 +72,7 @@ public class Game {
      * @return <code>null</code>
      * @throws IllegalAccessError if the selected chip is not available to move in that direction
      */
-    public void move(int from, int to)throws IllegalAccessException {
+    public void move(int from, int to) throws Exception {
 
         Player ownerFromColumn;
         Player ownerToColumn;
@@ -127,7 +127,7 @@ public class Game {
         else {
             if (getTurn() == p1 && from - to <= 0) {
                 System.out.println("can't go backward");
-                throw new IllegalAccessException();
+                throw new IllegalArgumentException();
             }
             if (getTurn() == p2 && from - to >= 0) {
                 if(fromColumn != board.getMiddleColumns()[1]) {
@@ -148,7 +148,7 @@ public class Game {
                 fromColumn.getChips().get(fromChipsNum - 1).take();
             else {
                 System.out.println("can't take chips yet");
-                throw new IllegalAccessException();
+                throw new IllegalStateException();
             }
         }
 
