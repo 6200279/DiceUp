@@ -97,6 +97,27 @@ public class Game {
         else
             ownerToColumn = toColumn.getChips().get(0).getOwner();
 
+
+        /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
+         * /      the turn player                                 unless it has only one chip*/
+        if ((!ownerFromColumn.equals(getTurn()) || !ownerToColumn.equals(getTurn()) && toChipsNum >= 2)) {
+            System.out.println("not your turn");
+            throw new IllegalAccessException();
+        }
+
+        //make sure they move in the right direction
+        else {
+            if (getTurn() == p1 && from - to <= 0) {
+                System.out.println("can't go backward");
+                throw new IllegalAccessException();
+            }
+            if (getTurn() == p2 && from - to >= 0) {
+                System.out.println("cant't go backward");
+                throw new IllegalAccessException();
+            }
+        }
+
+
         //if a player moves to 24th column try to take the chip
         if(to == 24) {
             if (checkTake())
@@ -105,20 +126,6 @@ public class Game {
                 System.out.println("can't take chips yet");
                 throw new IllegalAccessException();
             }
-        }
-        //make sure they move in the right direction
-        else {
-            if (getTurn() == p1 && from - to <= 0)
-                System.out.println("can't go backward");
-            if (getTurn() == p2 && from - to >= 0)
-                System.out.println("cant't go backward");
-        }
-
-         /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
-         * /      the turn player                                 unless it has only one chip*/
-        if ((!ownerFromColumn.equals(getTurn()) || !ownerToColumn.equals(getTurn()) && toChipsNum >= 2)) {
-            System.out.println("not your chip");
-            throw new IllegalAccessException();
         }
 
 
@@ -139,7 +146,7 @@ public class Game {
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
         toColumn.getChips().add(movingChip);
         //debug
-        printBoard(from, to);
+        //printBoard(from, to);
      }
 
     private boolean checkDiceLegality(ArrayList<Integer> moves, int stepsNum) {
@@ -239,15 +246,16 @@ public class Game {
         c.getChips().get(0).hit();
 
         //Move this chip to the middle
-        Column middle = getBoard().getMiddleColumns();
+        Column[] middle = getBoard().getMiddleColumns();
         if (c.getChips().get(0).getOwner() == p1) {
             p1.setHitChips(true);
+            middle[0].getChips().add(c.getChips().get(0));
         }
         else {
             p2.setHitChips(true);
+            middle[1].getChips().add(c.getChips().get(0));
         }
 
-        middle.getChips().add(c.getChips().get(0));
         c.getChips().remove(0);
     }
 
