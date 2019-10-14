@@ -15,7 +15,14 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class DiceUpController {
+    //On chip clicked, this changes to the column that chip is in
     private int selectedChipColumn = 0;
+
+    //Dice values according to GUI Dice elements
+    private static int iv1Val = 0;
+    private static int iv2Val = 0;
+    private static int iv3Val = 0;
+    private static int iv4Val = 0;
 
     //List View for keeping logs of game
     @FXML
@@ -138,6 +145,8 @@ public class DiceUpController {
 
         for(int i = 0; i < columns.length; i++) {
             int columnId = i;
+
+            //On move is made, handle it through this function:
             columns[i].setOnMouseClicked(event -> {
                 user_Message.setText("");
                 LogBox.getItems().add("Attempting to move from column " + selectedChipColumn + " to " + columnId + ".");
@@ -299,13 +308,20 @@ public class DiceUpController {
     private final String p1Color = "SaddleBrown";
     private final String p2Color = "Ivory";
 
+    //TODO: Instead of removing all chips- only pop the chip from column and put back on updated column.
     public void updateBoard() {
         Board currBoard = currGame.getBoard();
         Column[] dataColumns = currBoard.getColumns();
 
+        //traverse through GamePlay.Board columns
         for (int i = 0; i < dataColumns.length; i++) {
+            //chips existing in current column
             ArrayList<Chip> currDataChips = dataColumns[i].getChips();
+
+            //remove all chips from GUI
             if (i < 26) columns[i].getChildren().removeAll(columns[i].getChildren());
+
+            //add updated chips back to GUI
             for (int j = 0; j < currDataChips.size(); j++) {
                 Chip currChipToAdd = currDataChips.get(j);
                 ChipElement chipUI = new ChipElement(currChipToAdd.getId());
@@ -313,8 +329,15 @@ public class DiceUpController {
                 chipUI.setOnAction(event -> {
                     int chipId = currChipToAdd.getId();
                     int ColmId = ColumnId;
-                    System.out.println("Chip " + chipId + " on Column " + ColmId + " was clicked!");
+
+                    //remove current active column gfx and add it to new col
+                    for (int q = 0; q < columns[selectedChipColumn].getStyleClass().size(); q++) {
+                        if (columns[selectedChipColumn].getStyleClass().get(q) == "active") {
+                            columns[selectedChipColumn].getStyleClass().remove(columns[selectedChipColumn].getStyleClass().get(q));
+                        }
+                    }
                     selectedChipColumn = ColmId;
+                    columns[selectedChipColumn].getStyleClass().add("active");
                 });
 
                 //set color of chip
@@ -336,10 +359,6 @@ public class DiceUpController {
     private static final Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
     private static final Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
     private static final Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
-    private static int iv1Val = 0;
-    private static int iv2Val = 0;
-    private static int iv3Val = 0;
-    private static int iv4Val = 0;
     public void rollDice(){
         currGame.rollDices();
         //Dice values

@@ -9,3 +9,7 @@
 #MiddleSector {
     -fx-background-color: brown;
 }
+
+.active {
+    -fx-border-color: green;
+}
