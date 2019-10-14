@@ -2,7 +2,6 @@ package GUI;
 
 import GamePlay.*;
 import javafx.collections.ListChangeListener;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,7 +11,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import sun.plugin2.message.Message;
 
 import java.util.ArrayList;
 
@@ -151,8 +149,8 @@ public class DiceUpController {
 
                     //if column is hit columns
                     if (selectedChipColumn == 24 || selectedChipColumn == 25) {
-                        if (selectedChipColumn > 6) movePlayed = Math.abs(6 - (columnId % 6));
-                        else movePlayed = selectedChipColumn + 1;
+                        if (columnId > 6) movePlayed = Math.abs(6 - (columnId % 6));
+                        else movePlayed = columnId + 1;
                         LogBox.getItems().add("Hit chip is placed back on " + movePlayed);
                     }
                     if (movePlayed == iv1Val) {
