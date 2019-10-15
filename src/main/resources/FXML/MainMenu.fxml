@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.Double?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
@@ -13,31 +19,26 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpApplication">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpApplication">
    <children>
-      <HBox alignment="CENTER" layoutX="135.0" layoutY="221.0" spacing="30.0">
+      <HBox alignment="CENTER" layoutX="347.0" layoutY="207.0" spacing="30.0">
          <children>
-            <TextField fx:id="player1Name" promptText="player 1">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
-            </TextField>
-            <TextField fx:id="player2Name" promptText="player 2 " />
             <Button fx:id="playButton" cacheHint="QUALITY" depthTest="DISABLE" ellipsisString="" graphicTextGap="1.0" mnemonicParsing="false" onAction="#playGame" prefHeight="29.0" prefWidth="126.0" text="Play" textOverrun="WORD_ELLIPSIS">
                <font>
                   <Font name="Gabriola" size="13.0" />
                </font>
             </Button>
+            <Button fx:id="rulesButton" layoutX="327.0" layoutY="270.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="126.0" text="Rules" onAction="#showRules" />
+
          </children>
       </HBox>
       <Group layoutX="335.0" layoutY="55.0">
          <children>
-            <Text boundsType="VISUAL" fontSmoothingType="LCD" layoutX="6.0" layoutY="-2.0" strokeWidth="0.0" text="Menu">
+            <Text boundsType="VISUAL" fontSmoothingType="LCD" layoutX="6.0" layoutY="-2.0" strokeWidth="0.0" text="Backgammon" wrappingWidth="464.26171875" x="-100.0">
                <font>
-                  <Font name="Gabriola" size="70.0" />
+                  <Font size="46.0" />
                </font>
             </Text>
-            <Line endX="84.5" layoutX="62.0" layoutY="15.2939453125" startX="-63.5" strokeWidth="0.5" />
          </children>
       </Group>
       <VBox prefHeight="200.0" prefWidth="100.0" />
@@ -209,5 +210,7 @@
             </Polygon>
          </children>
       </Group>
+      <TextField fx:id="player1Name" layoutX="142.0" layoutY="208.0" promptText="player 1" />
+      <TextField fx:id="player2Name" layoutX="142.0" layoutY="250.0" promptText="player 2 " />
    </children>
 </Pane>

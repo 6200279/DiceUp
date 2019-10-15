@@ -18,6 +18,8 @@ public class DiceUpApplication extends Application {
     @FXML
     private Button playButton;
     @FXML
+    private Button rulesButton;
+    @FXML
     private TextField player1Name;
     @FXML
     private TextField player2Name;
@@ -52,6 +54,30 @@ public class DiceUpApplication extends Application {
 
     //changes the scene to the actual game when the play
     //button is pressed
+
+    public void showRules() throws IOException
+    {
+        Scene mainScene = rulesButton.getScene();
+
+        Window window = mainScene.getWindow();
+        Stage primaryStage = (Stage)window;
+
+
+        // Create the FXMLLoader
+        FXMLLoader loader = new FXMLLoader();
+        // Path to the FXML File
+        String fxmlDocPath = "./src/main/resources/FXML/Rules.fxml";
+        FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
+        //load the new root
+        HBox root = loader.load(fxmlStream);
+        Scene scene = new Scene(root);
+
+
+        // Initialize the root entry (HBox)
+        primaryStage.setScene(scene);
+    }
+
+
     public void playGame() throws IOException{
         //get the primaryStage
         Scene mainScene = playButton.getScene();
