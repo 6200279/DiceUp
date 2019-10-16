@@ -1,64 +1,110 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpApplication">
    <children>
-      <ScrollPane prefHeight="1900" prefWidth="600.0">
+      <ScrollPane hvalue="0.25" prefHeight="500.0" prefWidth="1075.0">
          <content>
-            <Pane maxHeight="1.7976931348623157E308" prefHeight="1900.0" prefWidth="599.0">
+            <VBox spacing="65.0">
                <children>
-                  <Text fill="#830b0b" layoutX="130.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Backgammon rules" textAlignment="CENTER" wrappingWidth="345.4971923828125">
-                     <font>
-                        <Font name="Sana Regular" size="36.0" />
-                     </font>
+                  <VBox prefHeight="0.0" prefWidth="570.0">
+                     <children>
+                        <Text fill="#a12b2b" strokeType="OUTSIDE" strokeWidth="0.0" text="Game Rules">
+                           <font>
+                              <Font name="Georgia Bold" size="43.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SETUP" textAlignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <effect>
+                              <Bloom />
+                           </effect>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The points are numbered for either player starting in that player's home board. The outermost point is the twenty-four point, which is alsothe opponent's one point. Each player has fifteen checkers of his own color. The initial arrangement of checkers is: two on each player'stwenty-four point, five on each player's thirteen point, three on each player's eight point, and five on each player's six point.Both players have their own pair of dice and a dice cup used for shaking. A doubling cube, with the numerals 2, 4, 8, 16, 32, and 64 on itsfaces, is used to keep track of the current stake of the game. " wrappingWidth="570.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Backgammon is a game for two players, played on a board consisting of twenty-four narrow triangles called points. The triangles alternatein color and are grouped into four quadrants of six triangles each. The quadrants are referred to as a player's home board and outer board,and the opponent's home board and outer board. The home and outer boards are separated from each other by a ridge down the center ofthe board called the bar." wrappingWidth="570.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Object of the Game ">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="TextThe object of the game is for a player to move all of his checkers into his own home board and then bear them off. The first player to bear off all of his checkers wins the game. " wrappingWidth="570.0" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Movement of the Checkers" wrappingWidth="312.6781005859375">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="To start the game, each player throws a single die. This determines both the player to go first and the numbers to be played. If equal numbers come up, then both players roll again until they roll different numbers. The player throwing the higher number now moves his checkers according to the numbers showing on both dice. After the first roll, the players throw two dice and alternate turns. The roll of the dice indicates how many points, or pips, the player is to move his checkers. The checkers are always moved forward, to a lower-numbered point. The following rules apply: A checker may be moved only to an open point, one that is not occupied by two or more opposing checkers.  The numbers on the two dice constitute separate moves. For example, if a player rolls 5 and 3, he may move one checker five spaces to an open point and another checker three spaces to an open point, or he may move the one checker a total of eight spaces to an open point, but only if the intermediate point (either three or five spaces from the starting point) is also open. A player who rolls doubles plays the numbers shown on the dice twice. A roll of 6 and 6 means that the player has four sixes to use, and he may move any combination of checkers he feels appropriate to complete this requirement. A player must use both numbers of a roll if this is legally possible (or all four numbers of a double). When only one number can be played, the player must play that number. Or if either number can be played but not both, the player must play the larger one. When neither number can be used, the player loses his turn. In the case of doubles, when all four numbers cannot be played, the player must play as many numbers as he can. " wrappingWidth="570.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+            
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hitting and Entering" wrappingWidth="312.6781005859375">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A point occupied by a single checker of either color is called a blot. If an opposing checker lands on a blot, the blot is hit and placed on the bar. Any time a player has one or more checkers on the bar, his first obligation is to enter those checker(s) into the opposing home board. A checker is entered by moving it to an open point corresponding to one of the numbers on the rolled dice. For example, if a player rolls 4 and 6, he may enter a checker onto either the opponent's four point or six point, so long as the prospective point is not occupied by two or more of the opponent's checkers. If neither of the points is open, the player loses his turn. If a player is able to enter some but not all of his checkers, he must enter as many as he can and then forfeit the remainder of his turn. After the last of a player's checkers has been entered, any unused numbers on the dice must be played, by moving either the checker that was entered or a different checker. " wrappingWidth="312.6781005859375">
                   </Text>
-                  <Text layoutX="11.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SETUP">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
+                     </children>
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bearing off" wrappingWidth="312.6781005859375">
+                           <font>
+                              <Font name="System Bold" size="22.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Once a player has moved all of his fifteen checkers into his home board, he may commence bearing off. A player bears off a checker by rolling a number that corresponds to the point on which the checker resides, and then removing that checker from the board. Thus, rolling a 6 permits the player to remove a checker from the six point. If there is no checker on the point indicated by the roll, the player must make a legal move using a checker on a higher-numbered point. If there are no checkers on higher-numbered points, the player is permitted (and required) to remove a checker from the highest point on which one of his checkers resides. A player is under no obligation to bear off if he can make an otherwise legal move. A player must have all of his active checkers in his home board in order to bear off. If a checker is hit during the bear-off process, the player must bring that checker back to his home board before continuing to bear off. The first player to bear off all fifteen checkers wins the game." wrappingWidth="312.6781005859375">
                   </Text>
-                  <Text layoutX="11.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Backgammon is a game for two players, played on a board consisting of twenty-four narrow triangles called points. The triangles alternatein color and are grouped into four quadrants of six triangles each. The quadrants are referred to as a player's home board and outer board,and the opponent's home board and outer board. The home and outer boards are separated from each other by a ridge down the center ofthe board called the bar." wrappingWidth="568.805534362793" />
-                  <Text layoutX="11.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The points are numbered for either player starting in that player's home board. The outermost point is the twenty-four point, which is alsothe opponent's one point. Each player has fifteen checkers of his own color. The initial arrangement of checkers is: two on each player'stwenty-four point, five on each player's thirteen point, three on each player's eight point, and five on each player's six point.Both players have their own pair of dice and a dice cup used for shaking. A doubling cube, with the numerals 2, 4, 8, 16, 32, and 64 on itsfaces, is used to keep track of the current stake of the game. " wrappingWidth="557.5926132202148" />
-                  <Text layoutX="11.0" layoutY="328.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Object of the Game " wrappingWidth="246.51902770996094">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="11.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TextThe object of the game is for a player to move all of his checkers into his own home board and then bear them off. The first player to bear off all of his checkers wins the game. " wrappingWidth="566.5629615783691" />
-                  <Text layoutX="11.0" layoutY="429.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movement of the Checkers" wrappingWidth="312.6781005859375">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="11.0" layoutY="455.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To start the game, each player throws a single die. This determines both the player to go first and the numbers to be played. If equal numbers come up, then both players roll again until they roll different numbers. The player throwing the higher number now moves his checkers according to the numbers showing on both dice. After the first roll, the players throw two dice and alternate turns. The roll of the dice indicates how many points, or pips, the player is to move his checkers. The checkers are always moved forward, to a lower-numbered point. The following rules apply: A checker may be moved only to an open point, one that is not occupied by two or more opposing checkers.  The numbers on the two dice constitute separate moves. For example, if a player rolls 5 and 3, he may move one checker five spaces to an open point and another checker three spaces to an open point, or he may move the one checker a total of eight spaces to an open point, but only if the intermediate point (either three or five spaces from the starting point) is also open. A player who rolls doubles plays the numbers shown on the dice twice. A roll of 6 and 6 means that the player has four sixes to use, and he may move any combination of checkers he feels appropriate to complete this requirement. A player must use both numbers of a roll if this is legally possible (or all four numbers of a double). When only one number can be played, the player must play that number. Or if either number can be played but not both, the player must play the larger one. When neither number can be used, the player loses his turn. In the case of doubles, when all four numbers cannot be played, the player must play as many numbers as he can. " wrappingWidth="312.6781005859375">
-                  </Text>
-
-                  <Text layoutX="11.0" layoutY="1050.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hitting and Entering" wrappingWidth="312.6781005859375">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="11.0" layoutY="1100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="A point occupied by a single checker of either color is called a blot. If an opposing checker lands on a blot, the blot is hit and placed on the bar. Any time a player has one or more checkers on the bar, his first obligation is to enter those checker(s) into the opposing home board. A checker is entered by moving it to an open point corresponding to one of the numbers on the rolled dice. For example, if a player rolls 4 and 6, he may enter a checker onto either the opponent's four point or six point, so long as the prospective point is not occupied by two or more of the opponent's checkers. If neither of the points is open, the player loses his turn. If a player is able to enter some but not all of his checkers, he must enter as many as he can and then forfeit the remainder of his turn. After the last of a player's checkers has been entered, any unused numbers on the dice must be played, by moving either the checker that was entered or a different checker. " wrappingWidth="312.6781005859375">
-                  </Text>
-                  <Text layoutX="11.0" layoutY="1430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bearing off" wrappingWidth="312.6781005859375">
-                     <font>
-                        <Font size="22.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="11.0" layoutY="1480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Once a player has moved all of his fifteen checkers into his home board, he may commence bearing off. A player bears off a checker by rolling a number that corresponds to the point on which the checker resides, and then removing that checker from the board. Thus, rolling a 6 permits the player to remove a checker from the six point. If there is no checker on the point indicated by the roll, the player must make a legal move using a checker on a higher-numbered point. If there are no checkers on higher-numbered points, the player is permitted (and required) to remove a checker from the highest point on which one of his checkers resides. A player is under no obligation to bear off if he can make an otherwise legal move. A player must have all of his active checkers in his home board in order to bear off. If a checker is hit during the bear-off process, the player must bring that checker back to his home board before continuing to bear off. The first player to bear off all fifteen checkers wins the game." wrappingWidth="312.6781005859375">
-                  </Text>
-
+                        <Button fx:id="go_back" mnemonicParsing="false" onAction="#goBack" prefHeight="29.0" prefWidth="297.0" text="go back">
+                           <VBox.margin>
+                              <Insets top="40.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
                </children>
-            </Pane>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </VBox>
          </content>
       </ScrollPane>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </HBox>
-
-

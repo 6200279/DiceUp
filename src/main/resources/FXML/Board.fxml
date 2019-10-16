@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" stylesheets="FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
+<HBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" stylesheets="FXML/CSS/Board.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpController">
    <children>
       <HBox id="Board" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS">
          <children>
@@ -73,6 +73,7 @@
             </VBox>
          </children>
       </HBox>
+      <HBox fx:id="takeColumn" prefHeight="500.0" prefWidth="39.0" />
       <VBox alignment="TOP_CENTER" HBox.hgrow="SOMETIMES">
          <children>
             <Label text="DiceUp Backgammon AI" textOverrun="WORD_ELLIPSIS">

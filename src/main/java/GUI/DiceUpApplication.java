@@ -12,11 +12,14 @@ import javafx.scene.control.Button;
 import javafx.stage.Window;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class DiceUpApplication extends Application {
     @FXML
     private Button playButton;
+    @FXML
+    private Button go_back;
     @FXML
     private Button rulesButton;
     @FXML
@@ -106,5 +109,26 @@ public class DiceUpApplication extends Application {
 
         // Initialize the root entry (HBox)
          primaryStage.setScene(scene);
+    }
+    public void goBack() throws IOException {
+        Scene mainScene = go_back.getScene();
+
+        Window window = mainScene.getWindow();
+        Stage primaryStage = (Stage)window;
+
+
+        // Create the FXMLLoader
+        FXMLLoader loader = new FXMLLoader();
+        // Path to the FXML File
+        String fxmlDocPath = "./src/main/resources/FXML/MainMenu.fxml";
+
+        FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
+        //load the new root
+        Pane root = loader.load(fxmlStream);
+        Scene scene = new Scene(root);
+
+
+        // Initialize the root entry (HBox)
+        primaryStage.setScene(scene);
     }
 }

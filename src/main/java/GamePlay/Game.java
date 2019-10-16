@@ -142,15 +142,7 @@ public class Game {
         }
 
 
-        //if a player moves to 24th column try to take the chip
-        if(to == 26 || to == 27) {
-            if (checkTake())
-                fromColumn.getChips().get(fromChipsNum - 1).take();
-            else {
-                System.out.println("can't take chips yet");
-                throw new IllegalStateException();
-            }
-        }
+
 
 
         //If there is one chip, get this chip and hit it
@@ -166,6 +158,15 @@ public class Game {
         }
         if(moves.size() == 0)
             changeTurn();
+        //if a player moves to 24th column try to take the chip
+        if(to == 26 || to == 27) {
+            if (checkTake())
+                fromColumn.getChips().get(fromChipsNum - 1).take();
+            else {
+                System.out.println("can't take chips yet");
+                throw new IllegalStateException();
+            }
+        }
 
 
         //finally, move the chip
