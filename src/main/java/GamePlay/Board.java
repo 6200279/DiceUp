@@ -18,8 +18,8 @@ public class Board {
 
     //indices 0-23 are the regular spots;
     //indice 24-25 being hit chips and
-    // 26-27 being taken chips with order p1-p2 respectively
-    private Column[] columns = new Column[28];
+    // 26 being taken chips
+    private Column[] columns = new Column[27];
 
 
     /**
@@ -70,11 +70,8 @@ public class Board {
         a[1] = columns[25];
         return a;
     }
-    public Column[] getTakenChips(){
-        Column[] a = new Column[2];
-        a[0] = columns[26];
-        a[1] = columns[27];
-        return a;
+    public Column getTakenChips(){
+        return columns[26];
     }
 
 }

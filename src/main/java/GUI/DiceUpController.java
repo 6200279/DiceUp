@@ -37,6 +37,8 @@ public class DiceUpController {
     @FXML
     private VBox ColMidP2;
 
+    @FXML
+    private VBox takeColumn;
     //Game Columns
     @FXML
     private VBox Col0;
@@ -115,7 +117,7 @@ public class DiceUpController {
             }
         });
 
-        columns = new VBox[26];
+        columns = new VBox[27];
         columns[0] = Col0;
         columns[1] = Col1;
         columns[2] = Col2;
@@ -142,6 +144,7 @@ public class DiceUpController {
         columns[23] = Col23;
         columns[24] = ColMidP1;
         columns[25] = ColMidP2;
+        columns[26] = takeColumn;
 
         for(int i = 0; i < columns.length; i++) {
             int columnId = i;

@@ -66,6 +66,7 @@ public class Player {
     public int getTakenChips(){
         return takenChips;
     }
+    public void addNewTakenChip() { takenChips++; }
 
     public Player() {
         score = 0;
