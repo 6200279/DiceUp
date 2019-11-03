@@ -11,85 +11,37 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import sun.rmi.runtime.Log;
 
 import java.util.ArrayList;
 
 public class DiceUpController {
-    //On chip clicked, this changes to the column that chip is in
-    private int selectedChipColumn = 0;
 
-    //Dice values according to GUI Dice elements
-    private static int iv1Val = 0;
-    private static int iv2Val = 0;
-    private static int iv3Val = 0;
-    private static int iv4Val = 0;
+/*.............................FXML VARIABLES.......................*/
 
     //List View for keeping logs of game
     @FXML
     private ListView LogBox;
 
+    //Roll Button
     @FXML
     private Button roll_Dice;
 
     //Middle Columns
     @FXML
-    private VBox ColMidP1;
-    @FXML
-    private VBox ColMidP2;
+    private VBox ColMidP1, ColMidP2;
 
+    //take columns
     @FXML
     private VBox takeColumn;
+
     //Game Columns
     @FXML
-    private VBox Col0;
-    @FXML
-    private VBox Col1;
-    @FXML
-    private VBox Col2;
-    @FXML
-    private VBox Col3;
-    @FXML
-    private VBox Col4;
-    @FXML
-    private VBox Col5;
-    @FXML
-    private VBox Col6;
-    @FXML
-    private VBox Col7;
-    @FXML
-    private VBox Col8;
-    @FXML
-    private VBox Col9;
-    @FXML
-    private VBox Col10;
-    @FXML
-    private VBox Col11;
-    @FXML
-    private VBox Col12;
-    @FXML
-    private VBox Col13;
-    @FXML
-    private VBox Col14;
-    @FXML
-    private VBox Col15;
-    @FXML
-    private VBox Col16;
-    @FXML
-    private VBox Col17;
-    @FXML
-    private VBox Col18;
-    @FXML
-    private VBox Col19;
-    @FXML
-    private VBox Col20;
-    @FXML
-    private VBox Col21;
-    @FXML
-    private VBox Col22;
-    @FXML
-    private VBox Col23;
+    private VBox Col0,Col1,Col2,Col3,Col4,Col5,Col6,Col7,
+            Col8,Col9,Col10,Col11,Col12,Col13,Col14,Col15,
+            Col16,Col17,Col18,Col19,Col20,Col21,Col22,Col23;
 
-    //Dice images
+    //image views
     @FXML
     private ImageView imageview_1;
     @FXML
@@ -101,22 +53,74 @@ public class DiceUpController {
     @FXML
     private Label user_Message;
 
-    private VBox[] columns;
 
+    /*...............OTHER VARIABLES............................*/
+
+    //players colours
+    private final String p1Color = "SaddleBrown";
+    private final String p2Color = "Ivory";
+
+    //On chip clicked, this changes to the column that chip is in
+    private int selectedChipColumn = 0;
+
+    //Dice values according to GUI Dice elements
+    private static int iv1Val = 0;
+    private static int iv2Val = 0;
+    private static int iv3Val = 0;
+    private static int iv4Val = 0;
+
+    //Dice images
+    private static final Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
+    private static final Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
+    private static final Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
+    private static final Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
+    private static final Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
+    private static final Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
+
+
+    private VBox[] columns;
     private Game currGame;
     private GameState State = GameState.getInstance();
 
-    //public DiceUpController () {
+
+/*....................................METHODS.....................................................*/
     @FXML
     protected void initialize() {
         //to make items stay on bottom
+        logBoxListener(LogBox);
+
+        //initiate the columns
+        initiateColumns();
+
+        //move handler
+        moveHandler();
+
+        //Add temporary fix to handle impossible moves
+        removeMove(imageview_1);
+        removeMove(imageview_2);
+        removeMove(imageview_3);
+        removeMove(imageview_4);
+
+        //set the initial players, game, colors, and logbox.
+        setInitialPlayers();
+
+        //update the board
+        updateBoard();
+    }
+
+    /*.................................PRIVATE METHODS................................................. */
+
+    //initialization methods
+    private void logBoxListener(ListView LogBox){
         LogBox.getItems().addListener(new ListChangeListener() {
             @Override
             public void onChanged(ListChangeListener.Change change) {
-               LogBox.scrollTo(change.getList().size()-1);
+                LogBox.scrollTo(change.getList().size()-1);
             }
         });
 
+    }
+    private void initiateColumns(){
         columns = new VBox[27];
         columns[0] = Col0;
         columns[1] = Col1;
@@ -145,7 +149,8 @@ public class DiceUpController {
         columns[24] = ColMidP1;
         columns[25] = ColMidP2;
         columns[26] = takeColumn;
-
+    }
+    private void moveHandler(){
         for(int i = 0; i < columns.length; i++) {
             int columnId = i;
 
@@ -213,88 +218,95 @@ public class DiceUpController {
                 else columns[i].setStyle("-fx-background-color: Bisque;");
             }
         }
-
-        //Add temporary fix to handle impossible moves
-        imageview_1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            ArrayList<Integer> moves = currGame.getMoves();
-            for (int i = 0; i < moves.size(); i++) {
-                if (moves.get(i) == iv1Val) {
-                    moves.remove(i);
-                    break;
+    }
+    private void removeMove(ImageView imageview){
+        if(imageview == imageview_1){
+            imageview_1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                ArrayList<Integer> moves = currGame.getMoves();
+                for (int i = 0; i < moves.size(); i++) {
+                    if (moves.get(i) == iv1Val) {
+                        moves.remove(i);
+                        break;
+                    }
                 }
-            }
-            iv1Val = 0;
-            imageview_1.setOpacity(0.4);
+                iv1Val = 0;
+                imageview_1.setOpacity(0.4);
 
-            if (moves.size() == 0) {
-                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
-                else currGame.turn = currGame.getP1();
+                if (moves.size() == 0) {
+                    if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                    else currGame.turn = currGame.getP1();
 
-                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
-                roll_Dice.setDisable(false);
-            }
-        });
-
-        imageview_2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            ArrayList<Integer> moves = currGame.getMoves();
-            for (int i = 0; i < moves.size(); i++) {
-                if (moves.get(i) == iv2Val) {
-                    moves.remove(i);
-                    break;
+                    LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                    roll_Dice.setDisable(false);
                 }
-            }
-            iv2Val = 0;
-            imageview_2.setOpacity(0.4);
-
-            if (moves.size() == 0) {
-                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
-                else currGame.turn = currGame.getP1();
-
-                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
-                roll_Dice.setDisable(false);
-            }
-        });
-
-        imageview_3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            ArrayList<Integer> moves = currGame.getMoves();
-            for (int i = 0; i < moves.size(); i++) {
-                if (moves.get(i) == iv3Val) {
-                    moves.remove(i);
-                    break;
+            });
+        }
+        else if(imageview == imageview_2){
+            imageview_2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                ArrayList<Integer> moves = currGame.getMoves();
+                for (int i = 0; i < moves.size(); i++) {
+                    if (moves.get(i) == iv2Val) {
+                        moves.remove(i);
+                        break;
+                    }
                 }
-            }
-            iv3Val = 0;
-            imageview_3.setOpacity(0.4);
+                iv2Val = 0;
+                imageview_2.setOpacity(0.4);
 
-            if (moves.size() == 0) {
-                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
-                else currGame.turn = currGame.getP1();
+                if (moves.size() == 0) {
+                    if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                    else currGame.turn = currGame.getP1();
 
-                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
-                roll_Dice.setDisable(false);
-            }
-        });
-
-        imageview_4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            ArrayList<Integer> moves = currGame.getMoves();
-            for (int i = 0; i < moves.size(); i++) {
-                if (moves.get(i) == iv4Val) {
-                    moves.remove(i);
-                    break;
+                    LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                    roll_Dice.setDisable(false);
                 }
-            }
-            iv4Val = 0;
-            imageview_4.setOpacity(0.4);
+            });
+        }
+        else if(imageview == imageview_3){
+            imageview_3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                ArrayList<Integer> moves = currGame.getMoves();
+                for (int i = 0; i < moves.size(); i++) {
+                    if (moves.get(i) == iv3Val) {
+                        moves.remove(i);
+                        break;
+                    }
+                }
+                iv3Val = 0;
+                imageview_3.setOpacity(0.4);
 
-            if (moves.size() == 0) {
-                if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
-                else currGame.turn = currGame.getP1();
+                if (moves.size() == 0) {
+                    if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                    else currGame.turn = currGame.getP1();
 
-                LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
-                roll_Dice.setDisable(false);
-            }
-        });
+                    LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                    roll_Dice.setDisable(false);
+                }
+            });
+        }
+        else if(imageview == imageview_4){
+            imageview_4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                ArrayList<Integer> moves = currGame.getMoves();
+                for (int i = 0; i < moves.size(); i++) {
+                    if (moves.get(i) == iv2Val) {
+                        moves.remove(i);
+                        break;
+                    }
+                }
+                iv4Val = 0;
+                imageview_4.setOpacity(0.4);
 
+                if (moves.size() == 0) {
+                    if (currGame.turn.equals(currGame.getP1())) currGame.turn = currGame.getP2();
+                    else currGame.turn = currGame.getP1();
+
+                    LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
+                    roll_Dice.setDisable(false);
+                }
+            });
+        }
+
+    }
+    private void setInitialPlayers(){
         Player p1 = new Player(State.p1Name);
         p1.setColor(Color.BROWN);
 
@@ -304,15 +316,10 @@ public class DiceUpController {
         LogBox.getItems().add(" - - - New Game - - -");
         LogBox.getItems().add(p1.getName() + " vs " + p2.getName());
         LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
-
-        updateBoard();
     }
 
-    private final String p1Color = "SaddleBrown";
-    private final String p2Color = "Ivory";
-
     //TODO: Instead of removing all chips- only pop the chip from column and put back on updated column.
-    public void updateBoard() {
+    private void updateBoard() {
         Board currBoard = currGame.getBoard();
         Column[] dataColumns = currBoard.getColumns();
 
@@ -353,15 +360,12 @@ public class DiceUpController {
     }
 
 
-    /*
-    This method is for the roll_it Button to roll dices
-     */
-    private static final Image dice_1 = new javafx.scene.image.Image("/images/dice1.jpeg");
-    private static final Image dice_2 = new javafx.scene.image.Image("/images/dice2.jpeg");
-    private static final Image dice_3 = new javafx.scene.image.Image("/images/dice3.jpeg");
-    private static final Image dice_4 = new javafx.scene.image.Image("/images/dice4.jpeg");
-    private static final Image dice_5 = new javafx.scene.image.Image("/images/dice5.jpeg");
-    private static final Image dice_6 = new javafx.scene.image.Image("/images/dice6.jpeg");
+
+
+    /*.................................PUBLIC METHODS................................................. */
+
+
+  // This method is for the roll_it Button to roll dices
     public void rollDice(){
         currGame.rollDices();
         //Dice values
@@ -374,14 +378,8 @@ public class DiceUpController {
         //reset opacities
         imageview_1.setOpacity(1.0);
         imageview_2.setOpacity(1.0);
-        /*
-        //show the result of rolling dices in the terminal
-        for (int i = 0; i < currGame.getMoves().size(); i++) {
-            System.out.println("The " + i + " dice's result is: " + currGame.getMoves().get(i));
-        }*/
 
-        //according to the result of rolling dices, choose images to show in the imageViewer
-
+        //set dice images
         switch (num1){
             case 1:
                 imageview_1.setImage(dice_1);

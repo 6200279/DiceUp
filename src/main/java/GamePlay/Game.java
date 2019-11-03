@@ -15,33 +15,21 @@ package GamePlay;
 import java.util.ArrayList;
 
 public class Game {
+    //players
     private Player p1;
     private Player p2;
     public Player turn;
 
+    //board
     private Board board;
 
+    //dices
     private Dice dice1;
     private Dice dice2;
+
+    //moves
     private ArrayList<Integer> moves = new ArrayList<Integer>();
 
-    /**
-     * Rolls both of the dices,
-     * independent from whoevers turn it is
-     *
-     * @return <code>null</code>
-     */
-    public void rollDices(){
-        dice1.roll();
-        dice2.roll();
-
-        moves.add(dice1.getNum());
-        moves.add(dice2.getNum());
-        if(dice1.getNum()==dice2.getNum()) {
-            moves.add(dice1.getNum());
-            moves.add(dice2.getNum());
-        }
-    }
 
 
     /**
@@ -73,15 +61,17 @@ public class Game {
      * @throws IllegalAccessError if the selected chip is not available to move in that direction
      */
     public void move(int from, int to) throws Exception {
+
         Player ownerFromColumn;
         Player ownerToColumn;
+
 
         //get columns
         Column fromColumn = getBoard().getColumns()[from];
         Column toColumn = getBoard().getColumns()[to];
 
 
-        //get chip numb
+        //get chip's number
         int fromChipsNum = fromColumn.getChips().size();
         int toChipsNum = toColumn.getChips().size();
 
@@ -98,68 +88,103 @@ public class Game {
             ownerToColumn = toColumn.getChips().get(0).getOwner();
 
 
-        if (getTurn() == p1) {
-            if (board.getMiddleColumns()[0].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[0]) {
-                System.out.println("you have hitten chips");
-                throw new IllegalAccessException();
-            }
-        }
-        if (getTurn() == p2) {
-            if (board.getMiddleColumns()[1].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[1]) {
-                System.out.println("you have hitten chips");
-                throw new IllegalAccessException();
-            }
-        }
 
 
-        /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
-         * /      the turn player                                 unless it has only one chip*/
-        if ((!ownerFromColumn.equals(getTurn()) || !ownerToColumn.equals(getTurn()) && toChipsNum >= 2)) {
-            System.out.println("not your turn");
-            throw new IllegalAccessException();
+        //this check must return false for every valid move (move, take, hit)
+        if(checkUniversalConditions(ownerFromColumn, ownerToColumn, fromColumn, toColumn, fromChipsNum, toChipsNum))
+            throw new IllegalArgumentException();
+
+
+        //normal moves check
+        if(to>=0 && to<=23){
+           if(checkNormalMoveLegality(ownerFromColumn,ownerToColumn, toChipsNum, from, to, fromColumn, toColumn))
+               throw new IllegalArgumentException();
         }
-        else if(to == 26) { //try taking chips //TODO: It's broken, fix the methods.
-                if (true) {
-                    fromColumn.getChips().get(fromChipsNum - 1).take();
-                    ownerFromColumn.addNewTakenChip();
-                }
-                else {
-                    System.out.println("can't take chips yet");
-                    throw new IllegalStateException();
-                }
-        }
-        //make sure they move in the right direction
-        else {
-            if (getTurn() == p1 && from - to <= 0) {
-                System.out.println("can't go backward");
+        //take moves check
+        else if(to==26){
+            if(checkTakeLegality(from))
                 throw new IllegalArgumentException();
-            }
-            if (getTurn() == p2 && from - to >= 0) {
-                if (fromColumn != board.getMiddleColumns()[1]) {
-                    System.out.println("cant't go backward");
-                    throw new IllegalAccessException();
-                } else if (to >= 6) {
-                    System.out.println("cant't go backward");
-                    throw new IllegalAccessException();
-                }
-            }
-
-            //If there is one chip, get this chip and hit it
-            if (toChipsNum == 1 && toColumn.getChips().get(0).getOwner() != turn)
-                hitChip(toColumn);
-            if (fromColumn == board.getMiddleColumns()[1])
-                from = -1;
-            if (!checkDiceLegality(moves, Math.abs(to - from))) {
-                System.out.println("dice Illegality accured");
-                throw new IllegalAccessException();
-            }
         }
+
+
+
             if (moves.size() == 0)
                 changeTurn();
         //finally, move the chip
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
         toColumn.getChips().add(movingChip);
      }
+
+
+    private boolean checkTakeLegality(int from){
+        //check if you can start taking chips
+        if(checkTake()){
+
+            if(checkTakeDiceLegality(from))
+                return false;
+        }
+        return true;
+    }
+
+
+    private boolean checkTakeDiceLegality(int from){
+        Column[] columns = new Column[6];
+
+        if(getTurn()==p1) {
+            for (int i = 0; i < columns.length; i++) {
+                columns[i] = board.getColumns()[i];
+            }
+
+            for(int i=0; i<getMoves().size(); i++) {
+
+                if (from+1 == getMoves().get(i)) {
+                    moves.remove(i);
+                    columns[i].getChips().get(0).take();
+                    return true;
+                }
+                else if(from+1 < getMoves().get(i)){
+                    int sumChips = 0;
+                    for(int c=from; c<getMoves().get(i); c++){
+                       sumChips += columns[c].getChips().size();
+                    }
+                    if(sumChips==0){
+                        moves.remove(i);
+                        columns[i].getChips().get(0).take();
+                        return true;
+                    }
+                }
+            }
+        }
+
+       else if(getTurn()==p2) {
+            int j = 0;
+            for (int i = 18; i <= 23; i++) {
+                columns[j] = board.getColumns()[i];
+                j++;
+            }
+            for(int i=0; i<getMoves().size(); i++) {
+                if (24-from == getMoves().get(i)) {
+                    moves.remove(i);
+                    columns[i].getChips().get(0).take();
+                    return true;
+                }
+                else if(24-from < getMoves().get(i)){
+                    int sumChips = 0;
+                    for(int c=24-from; c<getMoves().get(i); c++){
+                        sumChips += columns[c].getChips().size();
+                    }
+                    if(sumChips==0){
+                        moves.remove(i);
+                        columns[i].getChips().get(0).take();
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+
+    }
 
     private boolean checkDiceLegality(ArrayList<Integer> moves, int stepsNum) {
         if(moves.size()==0)
@@ -185,6 +210,62 @@ public class Game {
             moves.clear();
             return true;
         }
+        return false;
+
+    }
+
+
+    private boolean checkNormalMoveLegality(Player ownerFromColumn, Player ownerToColumn,int toChipsNum, int from, int to, Column fromColumn, Column toColumn){
+        /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
+         * /      the turn player                                 unless it has only one chip*/
+        if ((!ownerFromColumn.equals(getTurn()) || !ownerToColumn.equals(getTurn()) && toChipsNum >= 2)) {
+            System.out.println("not your turn");
+            return true;
+        }
+        if (getTurn() == p1 && from - to <= 0) {
+            System.out.println("can't go backward");
+            throw new IllegalArgumentException();
+        }
+        if (getTurn() == p2 && from - to >= 0) {
+            if (fromColumn != board.getMiddleColumns()[1]) {
+                System.out.println("cant't go backward");
+                return true;
+            } else if (to >= 6) {
+                System.out.println("cant't go backward");
+                return true;
+            }
+        }
+        //If there is one chip, get this chip and hit it
+        if (toChipsNum == 1 && toColumn.getChips().get(0).getOwner() != turn)
+            hitChip(toColumn);
+        if (fromColumn == board.getMiddleColumns()[1])
+            from = -1;
+        if (!checkDiceLegality(moves, Math.abs(to - from))) {
+            System.out.println("dice Illegality accured");
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private boolean checkUniversalConditions(Player ownerFromColumn, Player ownerToColumn, Column fromColumn, Column toColumn, int fromChipsNum, int toChipsNum){
+
+
+
+        if (getTurn() == p1) {
+            if (board.getMiddleColumns()[0].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[0]) {
+                System.out.println("you have hitten chips");
+                return true;
+            }
+        }
+        if (getTurn() == p2) {
+            if (board.getMiddleColumns()[1].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[1]) {
+                System.out.println("you have hitten chips");
+                return true;
+            }
+        }
+
         return false;
 
     }
@@ -247,8 +328,10 @@ public class Game {
         }
         if(sumChips == (15-turn.getTakenChips()))
             return true;
-        else
+        else {
+            System.out.println("can't take yet");
             return false;
+        }
 
      }
 
@@ -271,7 +354,26 @@ public class Game {
         c.getChips().remove(0);
     }
 
-    //////////// getters and setters/////////////////////
+    /**
+     * Rolls both of the dices,
+     * independent from whoevers turn it is
+     *
+     * @return <code>null</code>
+     */
+    public void rollDices(){
+        dice1.roll();
+        dice2.roll();
+
+        moves.add(dice1.getNum());
+        moves.add(dice2.getNum());
+        if(dice1.getNum()==dice2.getNum()) {
+            moves.add(dice1.getNum());
+            moves.add(dice2.getNum());
+        }
+    }
+
+
+    /*......................GETTERS AND SETTERS...................................................*/
 
     /**
      * Getter for the @board instance

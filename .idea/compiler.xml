@@ -9,6 +9,7 @@
         <module name="DiceUp" />
         <module name="DiceUpLast" />
         <module name="DiceUpLast2" />
+        <module name="DiceUp2" />
       </profile>
     </annotationProcessing>
   </component>
