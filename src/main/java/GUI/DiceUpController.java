@@ -150,6 +150,7 @@ public class DiceUpController {
         columns[25] = ColMidP2;
         columns[26] = takeColumn;
     }
+
     private void moveHandler(){
         for(int i = 0; i < columns.length; i++) {
             int columnId = i;
@@ -219,6 +220,7 @@ public class DiceUpController {
             }
         }
     }
+
     private void removeMove(ImageView imageview){
         if(imageview == imageview_1){
             imageview_1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -317,6 +319,7 @@ public class DiceUpController {
         LogBox.getItems().add(p1.getName() + " vs " + p2.getName());
         LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
     }
+
 
     //TODO: Instead of removing all chips- only pop the chip from column and put back on updated column.
     private void updateBoard() {

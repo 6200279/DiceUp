@@ -15,12 +15,10 @@
 package GamePlay;
 
 public class Board {
-
     //indices 0-23 are the regular spots;
     //indice 24-25 being hit chips and
     // 26 being taken chips
     private Column[] columns = new Column[27];
-
 
     /**
      * Initializes the board as a new game
