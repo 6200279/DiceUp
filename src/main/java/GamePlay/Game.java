@@ -30,6 +30,8 @@ public class Game {
     //moves
     private ArrayList<Integer> moves = new ArrayList<Integer>();
 
+    //Game Tree
+    private GameTree tree = new GameTree();
 
 
     /**
@@ -113,6 +115,21 @@ public class Game {
         //finally, move the chip
         Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
         toColumn.getChips().add(movingChip);
+
+        //Valid move, add move to the game tree.
+        if (tree.getParent() != null) {
+            TreeNode leaf = new TreeNode(turn, from, to);
+
+            tree.getChild().addChild(leaf);
+            tree.setChild(leaf);
+            System.out.println("Added a new child to tree.");
+        }
+        else {
+            System.out.println("Tree has been initialized with a new parent.");
+            tree.setParent(new TreeNode(turn, from, to));
+        }
+
+        System.out.println(tree.toString());
      }
 
 
