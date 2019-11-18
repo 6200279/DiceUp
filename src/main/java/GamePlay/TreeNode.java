@@ -16,6 +16,9 @@
 
 package GamePlay;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TreeNode {
     //Player instance
     Player player;
@@ -27,12 +30,12 @@ public class TreeNode {
     //If the chip was used to hit an opponent chip- mark.
     boolean hitChip;
 
-    private List<Node> children = new ArrayList<>();
+    private List<TreeNode> children = new ArrayList<>();
 
-    private Node parent = null;
+    private TreeNode parent = null;
 
     //basic method of adding moves
-    public Node addChild(Node child){
+    public TreeNode addChild(TreeNode child){
 
         child.setParent(this);
         this.children.add(child);
@@ -40,11 +43,11 @@ public class TreeNode {
     }
 
     // some basic method we might need
-    private void setParent(Node parent) {
+    private void setParent(TreeNode parent) {
 
         this.parent = parent;
     }
-    public Node<T> getParent() {
+    public TreeNode getParent() {
 
         return parent;
     }
@@ -52,7 +55,7 @@ public class TreeNode {
     public int Depth(){
         int counter = 0;
 
-        Node node = this;
+        TreeNode node = this;
         while(node.parent != null){
             counter++;
             node = node.parent;
