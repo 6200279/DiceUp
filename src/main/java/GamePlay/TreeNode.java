@@ -42,6 +42,9 @@ public class TreeNode {
         return child;
     }
 
+    public List<TreeNode> getChildren() {
+        return children;
+    }
     // some basic method we might need
     private void setParent(TreeNode parent) {
 
@@ -52,16 +55,9 @@ public class TreeNode {
         return parent;
     }
 
-    public int Depth(){
-        int counter = 0;
-
-        TreeNode node = this;
-        while(node.parent != null){
-            counter++;
-            node = node.parent;
-
-        }
-
-        return counter;
+    public TreeNode(Player p, int f, int t) {
+        player = p;
+        from = f;
+        to = t;
     }
 }
