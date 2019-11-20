@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - DiceUpApplication",
+            "request": "launch",
+            "mainClass": "GUI.DiceUpApplication",
+            "projectName": "diceup"
+        }
+    ]
+}

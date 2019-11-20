@@ -225,6 +225,15 @@ public class DiceUpController {
         if(imageview == imageview_1){
             imageview_1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 ArrayList<Integer> moves = currGame.getMoves();
+
+                if (moves.size() == 4 || moves.size() == 3 || moves.size() == 1) { moves.clear(); roll_Dice.setDisable(true);}
+                if (moves.size()== 2) {
+                    if (moves.get(0) == moves.get(1)) {
+                        moves.clear();
+                        roll_Dice.setDisable(true);
+                    }
+                }
+
                 for (int i = 0; i < moves.size(); i++) {
                     if (moves.get(i) == iv1Val) {
                         moves.remove(i);
@@ -246,12 +255,22 @@ public class DiceUpController {
         else if(imageview == imageview_2){
             imageview_2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 ArrayList<Integer> moves = currGame.getMoves();
+
+                if (moves.size() == 4 || moves.size() == 3 || moves.size() == 1) { moves.clear(); roll_Dice.setDisable(true);}
+                if (moves.size()== 2) {
+                    if (moves.get(0) == moves.get(1)) {
+                        moves.clear();
+                        roll_Dice.setDisable(true);
+                    }
+                }
+
                 for (int i = 0; i < moves.size(); i++) {
                     if (moves.get(i) == iv2Val) {
                         moves.remove(i);
                         break;
                     }
                 }
+
                 iv2Val = 0;
                 imageview_2.setOpacity(0.4);
 
@@ -267,12 +286,22 @@ public class DiceUpController {
         else if(imageview == imageview_3){
             imageview_3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 ArrayList<Integer> moves = currGame.getMoves();
+
+                if (moves.size() == 4|| moves.size() == 3 || moves.size() == 1) { moves.clear(); roll_Dice.setDisable(true);}
+                if (moves.size()== 2) {
+                    if (moves.get(0) == moves.get(1)) {
+                        moves.clear();
+                        roll_Dice.setDisable(true);
+                    }
+                }
+
                 for (int i = 0; i < moves.size(); i++) {
                     if (moves.get(i) == iv3Val) {
                         moves.remove(i);
                         break;
                     }
                 }
+
                 iv3Val = 0;
                 imageview_3.setOpacity(0.4);
 
@@ -288,12 +317,23 @@ public class DiceUpController {
         else if(imageview == imageview_4){
             imageview_4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                 ArrayList<Integer> moves = currGame.getMoves();
+
+                if (moves.size() == 4|| moves.size() == 3 || moves.size() == 1) { moves.clear(); roll_Dice.setDisable(true);}
+                if (moves.size()== 2) {
+                    if (moves.get(0) == moves.get(1)) {
+                        moves.clear();
+                        roll_Dice.setDisable(true);
+                    }
+                }
+
+
                 for (int i = 0; i < moves.size(); i++) {
                     if (moves.get(i) == iv2Val) {
                         moves.remove(i);
                         break;
                     }
                 }
+
                 iv4Val = 0;
                 imageview_4.setOpacity(0.4);
 
