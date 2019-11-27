@@ -212,7 +212,7 @@ public class DiceUpController {
                     LogBox.getItems().add("Move Invalid");
                 } catch (Exception e) {
                     LogBox.getItems().add("Unknown Error Occured");
-                    //e.printStackTrace();
+                    e.printStackTrace();
                 }
             });
 
@@ -355,9 +355,10 @@ public class DiceUpController {
         Player p1 = new Player(State.p1Name);
         p1.setColor(Color.BROWN);
 
-        Player p2 = new AI(currGame);
+        Player p2 = new AI();
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
+        ((AI) p2).setGameInstance(currGame);
         LogBox.getItems().add(" - - - New Game - - -");
         LogBox.getItems().add(p1.getName() + " vs " + p2.getName());
         LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");

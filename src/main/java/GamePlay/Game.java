@@ -245,10 +245,10 @@ public class Game {
         }
         if (getTurn() == p2 && from - to >= 0) {
             if (fromColumn != board.getMiddleColumns()[1]) {
-                System.out.println("cant't go backward");
+                System.out.println("cant't go backward 1");
                 return true;
             } else if (to >= 6) {
-                System.out.println("cant't go backward");
+                System.out.println("cant't go backward 2");
                 return true;
             }
         }
