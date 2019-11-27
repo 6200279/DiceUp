@@ -18,6 +18,15 @@ public class AI extends Player {
     //chooseSignelBestMove -> int[2]:
     //  0: from
     //  1: to
+
+    private Game game;
+
+    public AI(Game game){
+        super("AA");
+        this.game = game;
+    }
+
+
     public int[] chooseSingleBestMove(Game g) {
         ArrayList<Column> possibleCols = new ArrayList<>();
         Board b = g.getBoard();
@@ -32,7 +41,18 @@ public class AI extends Player {
         return new int[2];
     }
 
-    public void executeMove(int from, int to) {
+    public void executeMoves() {
+
+     for(int i = 0; i<game.getMoves().size(); i++ ) {
+         int[] move = chooseSingleBestMove(game);
+         int from = move[0];
+         int to = move[1];
+         try {
+             game.move(from, to);
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
+     }
 
     }
 
