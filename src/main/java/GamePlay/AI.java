@@ -10,9 +10,31 @@
  */
 package GamePlay;
 
+import java.util.ArrayList;
+
 import static java.lang.Math.abs;
 
 public class AI extends Player {
+    //chooseSignelBestMove -> int[2]:
+    //  0: from
+    //  1: to
+    public int[] chooseSingleBestMove(Game g) {
+        ArrayList<Column> possibleCols = new ArrayList<>();
+        Board b = g.getBoard();
+
+        for (int i = 0; i < 24; i++) {
+            if (b.getColumns()[i].getChips().size() > 0) { //check if unempty col
+                if(b.getColumns()[i].getChips().get(i).getOwner() == g.getP2()) { //if AI owns the chips
+
+                }
+            }
+        }
+        return new int[2];
+    }
+
+    public void executeMove(int from, int to) {
+
+    }
 
     public static double evaluateMove(int from, int to, Game g1) {
         //Get the board of this game
