@@ -15,10 +15,12 @@
 package GamePlay;
 
 public class Board {
+
     //indices 0-23 are the regular spots;
     //indice 24-25 being hit chips and
     // 26 being taken chips
     private Column[] columns = new Column[27];
+
 
     /**
      * Initializes the board as a new game
@@ -62,6 +64,7 @@ public class Board {
     public Column[] getColumns(){
         return columns;
     }
+
     public Column[] getMiddleColumns(){
         Column[] a = new Column[2];
         a[0] = columns[24];
@@ -70,6 +73,27 @@ public class Board {
     }
     public Column getTakenChips(){
         return columns[26];
+    }
+
+    public void emptyBoard(){
+        for(int i=0; i<columns.length; i++)
+            columns[i] = new Column();
+    }
+
+    public Board copyBoard(Board b){
+        //Make sure the copied board has the same players as the original board
+        Player p1 = b.getColumns()[0].getChips().get(0).getOwner();
+        Player p2 = b.getColumns()[5].getChips().get(0).getOwner();
+        Board newBoard = new Board(p1,p2);
+        newBoard.emptyBoard();
+
+        //Fill the empty board with the correct number of chips and their owner.
+        for (int i=0;i<columns.length;i++){
+            while (b.getColumns()[i].getChips().size()>newBoard.getColumns()[i].getChips().size()){
+                newBoard.getColumns()[i].getChips().add(new Chip(b.getColumns()[i].getChips().get(0).getOwner()));
+            }
+        }
+        return newBoard;
     }
 
 }
