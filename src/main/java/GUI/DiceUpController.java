@@ -192,6 +192,9 @@ public class DiceUpController {
                     if (iv1Val == 0 && iv2Val == 0 && iv3Val == 0 && iv4Val == 0) {
                         LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
                         roll_Dice.setDisable(false);
+                        if (currGame.getTurn() instanceof AI) {
+                            ((AI) currGame.getTurn()).executeMoves();
+                        }
                     }
 
                     updateBoard();
@@ -352,7 +355,7 @@ public class DiceUpController {
         Player p1 = new Player(State.p1Name);
         p1.setColor(Color.BROWN);
 
-        Player p2 = new Player(State.p2Name);
+        Player p2 = new AI(currGame);
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
         LogBox.getItems().add(" - - - New Game - - -");

@@ -18,21 +18,72 @@ public class AI extends Player {
     //chooseSignelBestMove -> int[2]:
     //  0: from
     //  1: to
-    public int[] chooseSingleBestMove(Game g) {
-        ArrayList<Column> possibleCols = new ArrayList<>();
-        Board b = g.getBoard();
 
+    private Game game;
+
+    public AI(Game game){
+        super("AA");
+        this.game = game;
+    }
+
+
+    public int[] chooseSingleBestMove(Game g) {
+        ArrayList<int[]> possibleCols = new ArrayList<>();
+        Board b = g.getBoard();
+        System.out.println("AI is choosing best move.");
         for (int i = 0; i < 24; i++) {
             if (b.getColumns()[i].getChips().size() > 0) { //check if unempty col
-                if(b.getColumns()[i].getChips().get(i).getOwner() == g.getP2()) { //if AI owns the chips
+                if(b.getColumns()[i].getChips().get(0).getOwner() == g.getP2()) { //if AI owns the chips
 
+                    for (int j = 0; j < g.getMoves().size(); j++) {
+                        if (b.getColumns()[i + g.getMoves().get(j)].getChips().size() > 0) {//full column, check owner
+                            if (b.getColumns()[i + g.getMoves().get(j)].getChips().get(0).getOwner() == g.getP2()) {
+                                int[] move = {i, i+g.getMoves().get(j)};
+                                possibleCols.add(move);
+                            }
+                        }
+                        else { //if empty column
+                            int[] move = {i, i+g.getMoves().get(j)};
+                            possibleCols.add(move);
+                        }
+                    }
                 }
             }
+        }
+        System.out.println("There exists " + possibleCols.size() + " possible moves.");
+        if (possibleCols.size() > 0) {
+            int[] bestMove = possibleCols.get(0);
+            //possibleCols should be filled
+            for (int i = 0; i < possibleCols.size(); i++) {
+                System.out.println("Evaulating move from " + possibleCols.get(i)[0] + " to " + possibleCols.get(i)[1] + ".");
+                int[] currMove = possibleCols.get(i);
+                if (evaluateMove(bestMove[0], bestMove[1], g) > evaluateMove(currMove[0], currMove[1], g)) {//better move found
+                    bestMove = currMove;
+                }
+            }
+            System.out.println("Best move is from " + bestMove[0] + " to " + bestMove[1] + ".");
+        }
+        else {
+            System.out.println("There exists no possible moves for AI!");
+            g.getMoves().clear();
+            g.turn = g.getP1();
         }
         return new int[2];
     }
 
-    public void executeMove(int from, int to) {
+    public void executeMoves() {
+
+     for(int i = 0; i < game.getMoves().size(); i++ ) {
+         int[] move = chooseSingleBestMove(game);
+         int from = move[0];
+         int to = move[1];
+         try {
+             game.move(from, to);
+         } catch (Exception e) {
+             e.printStackTrace();
+             System.out.println("This is where it fucks up?");
+         }
+     }
 
     }
 
