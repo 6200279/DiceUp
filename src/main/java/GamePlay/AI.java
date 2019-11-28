@@ -127,7 +127,7 @@ public class AI extends Player {
         //TODO: finish computing this probability
 
         int [] threats = new int [24];
-        for (int i = 0; i <= 24; i++) {
+        for (int i = 0; i < 24; i++) {
             if (newBoard.getColumns()[i].getChips().size()>0) {
                 if (newBoard.getColumns()[i].getChips().get(0).getOwner() == currentPlayer &&
                         newBoard.getColumns()[i].getChips().size() == 1) {
