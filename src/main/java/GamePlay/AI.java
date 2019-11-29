@@ -118,8 +118,8 @@ public class AI extends Player {
         double distanceCovered = abs(from - to);
 
         //Identify the player making this move
-        Player currentPlayer = fromColumn.getChips().get(0).getOwner();
-
+        //Player currentPlayer = fromColumn.getChips().get(0).getOwner();
+        Player currentPlayer = g1.getTurn();
         int soloChips = 0;
 
         //Compute number of alone chips by looping trough all columns and checking if there are alone chips
@@ -154,7 +154,7 @@ public class AI extends Player {
 
         int hitChip = 0;
         //See if a chip is hit
-        if(fromColumn.getChips().get(0).getOwner() != currentPlayer
+        if(newBoard.getColumns()[to].getChips().get(0).getOwner() != currentPlayer
                 && newBoard.getColumns()[to].getChips().get(0).getOwner() != null
                 && newBoard.getColumns()[to].getChips().size() == 1){
             hitChip = 1;
