@@ -15,11 +15,32 @@ import java.util.ArrayList;
 import static java.lang.Math.abs;
 
 public class AI extends Player {
-    //chooseSignelBestMove -> int[2]:
-    //  0: from
-    //  1: to
-
     private Game game;
+
+    //Array with probabilities of chips being hit
+    //With probabilities[i] the prob. of a chip on i distance hitting
+    private static double[] probabilities= new double[25];
+    private static void initializeProbabilities(){
+        probabilities[0] = 0;
+        probabilities[1] = 11D/36;
+        probabilities[2] = 12D/36;
+        probabilities[3] = 14D/36;
+        probabilities[4] = 15D/36;
+        probabilities[5] = 15D/36;
+        probabilities[6] = 17D/36;
+        probabilities[7] = 6D/36;
+        probabilities[8] = 6D/36;
+        probabilities[9] = 5D/36;
+        probabilities[10] = 3D/36;
+        probabilities[11] = 2D/36;
+        probabilities[12] = 3D/36;
+        probabilities[15] = 1D/36;
+        probabilities[16] = 1D/36;
+        probabilities[18] = 1D/36;
+        probabilities[20] = 1D/36;
+        probabilities[24] = 1D/36;
+    }
+
 
     public AI(){
         super("AI");
@@ -54,7 +75,7 @@ public class AI extends Player {
         if (possibleCols.size() > 0) {
             int[] bestMove = possibleCols.get(0);
             //possibleCols should be filled
-            for (int i = 0; i < possibleCols.size(); i++) {
+            for (int i = 0; i < possibleCols.size()-1; i++) {
                 System.out.println("Evaulating move from " + possibleCols.get(i)[0] + " to " + possibleCols.get(i)[1] + ".");
                 int[] currMove = possibleCols.get(i);
                 double evalBest = evaluateMove(bestMove[0], bestMove[1], g);
@@ -95,6 +116,9 @@ public class AI extends Player {
     }
 
     public static double evaluateMove(int from, int to, Game g1) {
+        //Set the values of probabilities
+        initializeProbabilities();
+
         //Get the board of this game
         Board board = g1.getBoard();
 
@@ -141,6 +165,26 @@ public class AI extends Player {
             }
         }
 
+
+        double probability = 1;
+
+        //For the currentplayer, calculate the probability that the enemy is able to attack the column we are moving to
+        if (currentPlayer == g1.getP1()) {
+            for (int i = 0; i < threats.length; i++) {
+                if (threats[i] == 1 && to-i > 0) {
+                    probability = probability * (1D - probabilities[i]);
+                }
+            }
+        }
+
+        if (currentPlayer == g1.getP2()) {
+            for (int i = 0; i < threats.length; i++) {
+                if (threats[i] == 1 && i-to > 0) {
+                    probability = probability * (1D - probabilities[i]);
+                }
+            }
+        }
+
         double numGates = 0;
         //Compute number of gates by looping trough all columns and checking if there are gates
         //that belong to currentPlayer
@@ -167,7 +211,8 @@ public class AI extends Player {
         }
 
         //Compute actual evaluation
-        double evaluation = distanceCovered/6-soloChips+numGates/3 + hitChip + takenChip;
+        double evaluation = (distanceCovered/6)-(soloChips*probability)+(numGates/3) + hitChip + takenChip;
         return evaluation;
     }
+
 }
