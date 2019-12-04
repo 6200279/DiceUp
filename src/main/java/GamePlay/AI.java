@@ -178,7 +178,7 @@ public class AI extends Player {
         //For the currentplayer, calculate the probability that the enemy is able to attack the column we are moving to
         if (currentPlayer == g1.getP1()) {
             for (int i = 0; i < threats.length; i++) {
-                if (threats[i] == 1 && to-i > 0) {
+                if (threats[i] == 1 && to-i < 0) {
                     probability = probability * (1D - probabilities[i]);
                 }
             }
@@ -186,7 +186,7 @@ public class AI extends Player {
 
         if (currentPlayer == g1.getP2()) {
             for (int i = 0; i < threats.length; i++) {
-                if (threats[i] == 1 && i-to > 0) {
+                if (threats[i] == 1 && to-i > 0) {
                     probability = probability * (1D - probabilities[i]);
                 }
             }
@@ -220,8 +220,17 @@ public class AI extends Player {
         //Compute actual evaluation
         double evaluation = (distanceCovered/6)-(soloChips*probability)+(numGates/3) + hitChip + takenChip;
 
+        //Prevent from moving to middle
         if(to == 24 || (to==26 && g1.checkTake()))
             return -10;
+
+        //Moving in your home section is less important than getting chips that are not in there to your home
+        if (currentPlayer == g1.getP1() && to>=0 && to<=5 && from>=0 && from<=5)
+            return -10;
+
+        if (currentPlayer == g1.getP2() && to>=18 && to<=23 && from>=18 && from<=23)
+            return -10;
+
 
         return evaluation;
     }
