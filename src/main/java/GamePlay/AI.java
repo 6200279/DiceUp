@@ -107,9 +107,12 @@ public class AI extends Player {
     public void executeMoves() throws Exception {
 
 
+        game.rollDices();
+
         GameState aState=GameState.getInstance();
 
-        game.rollDices();
+
+        aState.LOG_BOX.getItems().add("AI rolled" + game.getMoves().get(0) + "and" +game.getMoves().get(1));
         
 
         System.out.printf("AI rolled");
@@ -127,7 +130,6 @@ public class AI extends Player {
             System.out.println("< - - Executed move " + (i + 1));
         }
         System.out.println("Execute Moves is done.");
-        aState.LOG_BOX.getItems().add("AI rolled" + game.getMoves().get(0) + "and" +game.getMoves().get(1));
     }
 
     public static double evaluateMove(int from, int to, Game g1) {
