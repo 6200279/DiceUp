@@ -105,14 +105,9 @@ public class AI extends Player {
     }
 
     public void executeMoves() throws Exception {
-
-
         game.rollDices();
-
         GameState aState=GameState.getInstance();
-
-
-        aState.LOG_BOX.getItems().add("AI rolled" + game.getMoves().get(0) + "and" +game.getMoves().get(1));
+        aState.LOG_BOX.getItems().add("AI rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));
         
 
         System.out.printf("AI rolled");
