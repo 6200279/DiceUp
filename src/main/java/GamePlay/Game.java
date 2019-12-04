@@ -206,6 +206,7 @@ public class Game {
     }
 
     private boolean checkDiceLegality(ArrayList<Integer> moves, int stepsNum) {
+
         if(moves.size()==0)
             return false;
         if(moves.size() == 4) {
@@ -225,10 +226,7 @@ public class Game {
                 }
             }
         }
-        else if(stepsNum == moves.get(0)+moves.get(1)){
-            moves.clear();
-            return true;
-        }
+
         return false;
 
     }

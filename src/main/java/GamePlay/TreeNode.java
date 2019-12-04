@@ -31,6 +31,8 @@ public class TreeNode {
     //If the chip was used to hit an opponent chip- mark.
     boolean hitChip;
 
+    int visitCoun;
+
     private List<TreeNode> children = new ArrayList<>();
 
     private TreeNode parent = null;

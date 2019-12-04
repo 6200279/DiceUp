@@ -18,6 +18,10 @@ import GUI.GameState;
 import static java.lang.Math.abs;
 
 public class AI extends Player {
+    //chooseSignelBestMove -> int[2]:
+    //  0: from
+    //  1: to
+
     private Game game;
 
     //Array with probabilities of chips being hit
@@ -79,7 +83,7 @@ public class AI extends Player {
         if (possibleCols.size() > 0) {
             int[] bestMove = possibleCols.get(0);
             //possibleCols should be filled
-            for (int i = 0; i < possibleCols.size()-1; i++) {
+            for (int i = 0; i < possibleCols.size(); i++) {
                 System.out.println("Evaulating move from " + possibleCols.get(i)[0] + " to " + possibleCols.get(i)[1] + ".");
                 int[] currMove = possibleCols.get(i);
                 double evalBest = evaluateMove(bestMove[0], bestMove[1], g);
@@ -223,7 +227,10 @@ public class AI extends Player {
 
         //Compute actual evaluation
         double evaluation = (distanceCovered/6)-(soloChips*probability)+(numGates/3) + hitChip + takenChip;
+
+        if(to == 24 || (to==26 && g1.checkTake()))
+            return -10;
+
         return evaluation;
     }
-
 }

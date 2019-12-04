@@ -353,6 +353,7 @@ public class DiceUpController {
         }
 
     }
+
     private void setInitialPlayers(){
         Player p1 = new Player(State.p1Name);
         p1.setColor(Color.BROWN);

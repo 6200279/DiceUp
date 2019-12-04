@@ -18,9 +18,11 @@ public class GameTree {
         parent = p;
         if (child == null) child = parent;
     }
+
     public TreeNode getParent() { return parent; }
 
     public TreeNode getChild() { return child; }
+
     public void setChild(TreeNode c) { child = c; }
 
     public String getTreeDocument() {
