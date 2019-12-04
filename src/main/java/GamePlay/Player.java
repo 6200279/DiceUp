@@ -18,8 +18,6 @@ import javafx.scene.paint.Color;
 public class Player {
     private String name;
 
-
-
     private boolean hasChipsHit;
     private int takenChips;
     private int ID;

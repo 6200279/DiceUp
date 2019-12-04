@@ -335,7 +335,7 @@ public class Game {
         if(turn == p1){
             for(int i=0; i<=5; i++){
                 if(getBoard().getColumns()[i].getChips().size()!=0 && getBoard().getColumns()[i].getChips().get(0).getOwner() == turn)
-                  sumChips += getBoard().getColumns()[i].getChips().size();
+                    sumChips += getBoard().getColumns()[i].getChips().size();
             }
         }
         else if(turn == p2){

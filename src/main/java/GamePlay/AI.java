@@ -12,6 +12,9 @@ package GamePlay;
 
 import java.util.ArrayList;
 
+import GUI.DiceUpController;
+import GUI.GameState;
+
 import static java.lang.Math.abs;
 
 public class AI extends Player {
@@ -44,6 +47,7 @@ public class AI extends Player {
 
     public AI(){
         super("AI");
+        
     }
 
     public void setGameInstance(Game g) { game = g; }
@@ -97,7 +101,13 @@ public class AI extends Player {
     }
 
     public void executeMoves() throws Exception {
+
+
+        GameState aState=GameState.getInstance();
+
         game.rollDices();
+        
+
         System.out.printf("AI rolled");
         for(int i = 0; i < game.getMoves().size(); i++) {
             System.out.printf(" " + game.getMoves().get(i));
@@ -113,6 +123,7 @@ public class AI extends Player {
             System.out.println("< - - Executed move " + (i + 1));
         }
         System.out.println("Execute Moves is done.");
+        aState.LOG_BOX.getItems().add("AI rolled" + game.getMoves().get(0) + "and" +game.getMoves().get(1));
     }
 
     public static double evaluateMove(int from, int to, Game g1) {
