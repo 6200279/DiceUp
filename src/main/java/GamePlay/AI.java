@@ -23,6 +23,7 @@ public class AI extends Player {
     //  1: to
 
     private Game game;
+    GameState aState=GameState.getInstance();
 
     //Array with probabilities of chips being hit
     //With probabilities[i] the prob. of a chip on i distance hitting
@@ -60,20 +61,43 @@ public class AI extends Player {
         ArrayList<int[]> possibleCols = new ArrayList<>();
         Board b = g.getBoard();
         System.out.println("AI is choosing best move.");
-        for (int i = 0; i < 24; i++) {
-            if (b.getColumns()[i].getChips().size() > 0) { //check if unempty col
-                if(b.getColumns()[i].getChips().get(0).getOwner() == g.getP2()) { //if AI owns the chips
 
-                    for (int j = 0; j < g.getMoves().size(); j++) {
-                        if (i + g.getMoves().get(j) < 24) { //if valid move in terms of moving to "to" col
-                            if (b.getColumns()[i + g.getMoves().get(j)].getChips().size() > 0) {//full column, check owner
-                                if (b.getColumns()[i + g.getMoves().get(j)].getChips().get(0).getOwner() == g.getP2() || b.getColumns()[i + g.getMoves().get(j)].getChips().size() == 1) {
+        if(b.getMiddleColumns()[1].getChips().size() > 0){
+            if(b.getColumns()[g.getMoves().get(0)].getChips().size() == 1 ){
+                int[] move = {0, g.getMoves().get(0)};
+                possibleCols.add(move);
+            }
+            if(b.getColumns()[g.getMoves().get(1)].getChips().size() == 1 ){
+                int[] move = {1, g.getMoves().get(1)};
+                possibleCols.add(move);
+            }
+            if(b.getColumns()[g.getMoves().get(0)].getChips().size() == 0 ){
+                int[] move = {0, g.getMoves().get(0)};
+                possibleCols.add(move);
+            }
+            if(b.getColumns()[g.getMoves().get(1)].getChips().size() == 0 ){
+                int[] move = {1, g.getMoves().get(1)};
+                possibleCols.add(move);
+            }
+
+        }
+        else {
+
+            for (int i = 0; i < 24; i++) {
+                if (b.getColumns()[i].getChips().size() > 0) { //check if unempty col
+                    if (b.getColumns()[i].getChips().get(0).getOwner() == g.getP2()) { //if AI owns the chips
+
+                        for (int j = 0; j < g.getMoves().size(); j++) {
+                            if (i + g.getMoves().get(j) < 24) { //if valid move in terms of moving to "to" col
+                                if (b.getColumns()[i + g.getMoves().get(j)].getChips().size() > 0) {//full column, check owner
+                                    if (b.getColumns()[i + g.getMoves().get(j)].getChips().get(0).getOwner() == g.getP2() || b.getColumns()[i + g.getMoves().get(j)].getChips().size() == 1) {
+                                        int[] move = {i, i + g.getMoves().get(j)};
+                                        possibleCols.add(move);
+                                    }
+                                } else { //if empty column
                                     int[] move = {i, i + g.getMoves().get(j)};
                                     possibleCols.add(move);
                                 }
-                            } else { //if empty column
-                                int[] move = {i, i + g.getMoves().get(j)};
-                                possibleCols.add(move);
                             }
                         }
                     }
@@ -98,7 +122,7 @@ public class AI extends Player {
             return bestMove;
         }
         else {
-            System.out.println("There exists no possible moves for AI!");
+            aState.LOG_BOX.getItems().add("There exists no possible moves for AI!");
             g.getMoves().clear();
             g.turn = g.getP1();
         }
@@ -106,7 +130,7 @@ public class AI extends Player {
     }
 
     public void executeMoves() throws Exception {
-        GameState aState=GameState.getInstance();
+
         game.rollDices();
 
         aState.LOG_BOX.getItems().add("Rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));
@@ -115,11 +139,11 @@ public class AI extends Player {
             System.out.println("- - > Executing move " + (i + 1));
             int[] move = chooseSingleBestMove(game);
 
-            System.out.println("Moving from " + move[0] + " to " + move[1]);
+            aState.LOG_BOX.getItems().add("Moving from " + move[0] + " to " + move[1]);
             game.move(move[0], move[1]);
             System.out.println("< - - Executed move " + (i + 1));
         }
-        System.out.println("Execute Moves is done.");
+        aState.LOG_BOX.getItems().add("Execute Moves is done.");
     }
 
     //love it- very clear & understandable code.
