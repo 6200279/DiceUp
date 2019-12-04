@@ -80,10 +80,10 @@ public class Board {
             columns[i] = new Column();
     }
 
-    public Board copyBoard(Board b){
+    public Board copyBoard(Board b, Game g1){
         //Make sure the copied board has the same players as the original board
-        Player p1 = b.getColumns()[0].getChips().get(0).getOwner();
-        Player p2 = b.getColumns()[5].getChips().get(0).getOwner();
+        Player p1 = g1.getP1();
+        Player p2 = g1.getP2();
         Board newBoard = new Board(p1,p2);
         newBoard.emptyBoard();
 
