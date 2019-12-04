@@ -54,6 +54,8 @@ public class Game {
      * <p>
      *  BEWARE! This method does not check whether this move is possible in terms of dices
      *  but rather the columns follow the same players chips!
+     *
+     *  This functionality is meant as a way for random sampling for AI to just decide upon the expected dices.
      * </p>
      *
      * @param from  Starting Column index

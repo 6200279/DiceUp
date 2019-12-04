@@ -23,6 +23,7 @@ public class TreeNode {
     //Player instance
     Player player;
 
+    double moveScore;
     //From-to column ID's
     int from;
     int to;

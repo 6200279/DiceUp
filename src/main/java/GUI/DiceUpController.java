@@ -106,6 +106,8 @@ public class DiceUpController {
 
         //update the board
         updateBoard();
+
+        State.LOG_BOX = LogBox;
     }
 
     /*.................................PRIVATE METHODS................................................. */
