@@ -140,7 +140,7 @@ public class AI extends Player {
         //Create a new board to evaluate the move on to prevent the current state from being changed while evaluating
         Board newBoard = new Board(g1.getP1(),g1.getP2());
         newBoard.emptyBoard();
-        newBoard = newBoard.copyBoard(board);
+        newBoard = newBoard.copyBoard(board, g1);
 
 
         //Save columns involved
@@ -163,7 +163,6 @@ public class AI extends Player {
 
         //Compute number of alone chips by looping trough all columns and checking if there are alone chips
         //that belong to currentPlayer. Array threats saves spots of enemy's chips to compute probability of being hit
-        //TODO: finish computing this probability
 
         int [] threats = new int [24];
         for (int i = 0; i < 24; i++) {
@@ -203,7 +202,7 @@ public class AI extends Player {
         double numGates = 0;
         //Compute number of gates by looping trough all columns and checking if there are gates
         //that belong to currentPlayer
-        for (int j = 0; j <= 24; j++) {
+        for (int j = 0; j < 24; j++) {
             if (newBoard.getColumns()[j].getChips().size()>0) {
                 if (newBoard.getColumns()[j].getChips().get(0).getOwner() == currentPlayer && newBoard.getColumns()[j].getChips().size() >= 2) {
                     numGates++;
