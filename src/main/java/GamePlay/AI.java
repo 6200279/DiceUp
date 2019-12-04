@@ -18,10 +18,6 @@ import GUI.GameState;
 import static java.lang.Math.abs;
 
 public class AI extends Player {
-    //chooseSignelBestMove -> int[2]:
-    //  0: from
-    //  1: to
-
     private Game game;
 
     //Array with probabilities of chips being hit
@@ -50,8 +46,8 @@ public class AI extends Player {
 
 
     public AI(){
-        super("AI");
-        
+        super("Mr. A.I.");
+
     }
 
     public void setGameInstance(Game g) { game = g; }
@@ -65,15 +61,16 @@ public class AI extends Player {
                 if(b.getColumns()[i].getChips().get(0).getOwner() == g.getP2()) { //if AI owns the chips
 
                     for (int j = 0; j < g.getMoves().size(); j++) {
-                        if (b.getColumns()[i + g.getMoves().get(j)].getChips().size() > 0) {//full column, check owner
-                            if (b.getColumns()[i + g.getMoves().get(j)].getChips().get(0).getOwner() == g.getP2() || b.getColumns()[i + g.getMoves().get(j)].getChips().size() == 1) {
-                                int[] move = {i, i+g.getMoves().get(j)};
+                        if (i + g.getMoves().get(j) < 24) { //if valid move in terms of moving to "to" col
+                            if (b.getColumns()[i + g.getMoves().get(j)].getChips().size() > 0) {//full column, check owner
+                                if (b.getColumns()[i + g.getMoves().get(j)].getChips().get(0).getOwner() == g.getP2() || b.getColumns()[i + g.getMoves().get(j)].getChips().size() == 1) {
+                                    int[] move = {i, i + g.getMoves().get(j)};
+                                    possibleCols.add(move);
+                                }
+                            } else { //if empty column
+                                int[] move = {i, i + g.getMoves().get(j)};
                                 possibleCols.add(move);
                             }
-                        }
-                        else { //if empty column
-                            int[] move = {i, i+g.getMoves().get(j)};
-                            possibleCols.add(move);
                         }
                     }
                 }
@@ -83,7 +80,7 @@ public class AI extends Player {
         if (possibleCols.size() > 0) {
             int[] bestMove = possibleCols.get(0);
             //possibleCols should be filled
-            for (int i = 0; i < possibleCols.size(); i++) {
+            for (int i = 0; i < possibleCols.size()-1; i++) {
                 System.out.println("Evaulating move from " + possibleCols.get(i)[0] + " to " + possibleCols.get(i)[1] + ".");
                 int[] currMove = possibleCols.get(i);
                 double evalBest = evaluateMove(bestMove[0], bestMove[1], g);
@@ -101,7 +98,7 @@ public class AI extends Player {
             g.getMoves().clear();
             g.turn = g.getP1();
         }
-        return new int[2];
+        return new int[2]; // there's no legal move to make- still crashes man!
     }
 
     public void executeMoves() throws Exception {
@@ -110,13 +107,8 @@ public class AI extends Player {
         GameState aState=GameState.getInstance();
 
         game.rollDices();
-        
 
-        System.out.printf("AI rolled");
-        for(int i = 0; i < game.getMoves().size(); i++) {
-            System.out.printf(" " + game.getMoves().get(i));
-        }
-        System.out.printf(" (" + game.getMoves().size() + " moves).\n");
+        aState.LOG_BOX.getItems().add("Rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));
 
         for(int i = 0; i < game.getMoves().size();) {
             System.out.println("- - > Executing move " + (i + 1));
@@ -127,9 +119,9 @@ public class AI extends Player {
             System.out.println("< - - Executed move " + (i + 1));
         }
         System.out.println("Execute Moves is done.");
-        aState.LOG_BOX.getItems().add("AI rolled" + game.getMoves().get(0) + "and" +game.getMoves().get(1));
     }
 
+    //love it- very clear & understandable code.
     public static double evaluateMove(int from, int to, Game g1) {
         //Set the values of probabilities
         initializeProbabilities();
@@ -163,6 +155,7 @@ public class AI extends Player {
 
         //Compute number of alone chips by looping trough all columns and checking if there are alone chips
         //that belong to currentPlayer. Array threats saves spots of enemy's chips to compute probability of being hit
+        //TODO: finish computing this probability
 
         int [] threats = new int [24];
         for (int i = 0; i < 24; i++) {
@@ -202,7 +195,7 @@ public class AI extends Player {
         double numGates = 0;
         //Compute number of gates by looping trough all columns and checking if there are gates
         //that belong to currentPlayer
-        for (int j = 0; j < 24; j++) {
+        for (int j = 0; j <= 24; j++) {
             if (newBoard.getColumns()[j].getChips().size()>0) {
                 if (newBoard.getColumns()[j].getChips().get(0).getOwner() == currentPlayer && newBoard.getColumns()[j].getChips().size() >= 2) {
                     numGates++;
@@ -226,10 +219,7 @@ public class AI extends Player {
 
         //Compute actual evaluation
         double evaluation = (distanceCovered/6)-(soloChips*probability)+(numGates/3) + hitChip + takenChip;
-
-        if(to == 24 || (to==26 && g1.checkTake()))
-            return -10;
-
         return evaluation;
     }
+
 }
