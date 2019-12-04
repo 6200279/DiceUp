@@ -23,6 +23,7 @@ public class AI extends Player {
     //  1: to
 
     private Game game;
+    GameState aState=GameState.getInstance();
 
     //Array with probabilities of chips being hit
     //With probabilities[i] the prob. of a chip on i distance hitting
@@ -60,6 +61,7 @@ public class AI extends Player {
         ArrayList<int[]> possibleCols = new ArrayList<>();
         Board b = g.getBoard();
         System.out.println("AI is choosing best move.");
+
         if(b.getMiddleColumns()[1].getChips().size() > 0){
             if(b.getColumns()[g.getMoves().get(0)].getChips().size() == 1 ){
                 int[] move = {0, g.getMoves().get(0)};
@@ -120,7 +122,7 @@ public class AI extends Player {
             return bestMove;
         }
         else {
-            System.out.println("There exists no possible moves for AI!");
+            aState.LOG_BOX.getItems().add("There exists no possible moves for AI!");
             g.getMoves().clear();
             g.turn = g.getP1();
         }
@@ -128,7 +130,7 @@ public class AI extends Player {
     }
 
     public void executeMoves() throws Exception {
-        GameState aState=GameState.getInstance();
+
         game.rollDices();
 
         aState.LOG_BOX.getItems().add("Rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));
@@ -137,11 +139,11 @@ public class AI extends Player {
             System.out.println("- - > Executing move " + (i + 1));
             int[] move = chooseSingleBestMove(game);
 
-            System.out.println("Moving from " + move[0] + " to " + move[1]);
+            aState.LOG_BOX.getItems().add("Moving from " + move[0] + " to " + move[1]);
             game.move(move[0], move[1]);
             System.out.println("< - - Executed move " + (i + 1));
         }
-        System.out.println("Execute Moves is done.");
+        aState.LOG_BOX.getItems().add("Execute Moves is done.");
     }
 
     //love it- very clear & understandable code.

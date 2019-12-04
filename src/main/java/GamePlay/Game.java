@@ -12,6 +12,8 @@
  */
 package GamePlay;
 
+import GUI.GameState;
+
 import java.util.ArrayList;
 
 public class Game {
@@ -32,6 +34,7 @@ public class Game {
 
     //Game Tree
     private GameTree tree = new GameTree();
+    GameState aState=GameState.getInstance();
 
 
     /**
@@ -236,19 +239,19 @@ public class Game {
         /**      the owner of the "from" column must be          the owner of the "to" column must be the turn player
          * /      the turn player                                 unless it has only one chip*/
         if ((!ownerFromColumn.equals(getTurn()) || !ownerToColumn.equals(getTurn()) && toChipsNum >= 2)) {
-            System.out.println("not your turn");
+            aState.LOG_BOX.getItems().add("not your turn");
             return true;
         }
         if (getTurn() == p1 && from - to <= 0) {
-            System.out.println("can't go backward");
+            aState.LOG_BOX.getItems().add("can't go backward");
             throw new IllegalArgumentException();
         }
         if (getTurn() == p2 && from - to >= 0) {
             if (fromColumn != board.getMiddleColumns()[1]) {
-                System.out.println("cant't go backward 1");
+                aState.LOG_BOX.getItems().add("cant't go backward 1");
                 return true;
             } else if (to >= 6) {
-                System.out.println("cant't go backward 2");
+                aState.LOG_BOX.getItems().add("cant't go backward 2");
                 return true;
             }
         }
@@ -258,7 +261,7 @@ public class Game {
         if (fromColumn == board.getMiddleColumns()[1])
             from = -1;
         if (!checkDiceLegality(moves, Math.abs(to - from))) {
-            System.out.println("dice Illegality accured");
+            aState.LOG_BOX.getItems().add("dice Illegality accured");
             return true;
         }
 
@@ -272,13 +275,13 @@ public class Game {
 
         if (getTurn() == p1) {
             if (board.getMiddleColumns()[0].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[0]) {
-                System.out.println("you have hitten chips");
+                aState.LOG_BOX.getItems().add("you have hitten chips");
                 return true;
             }
         }
         if (getTurn() == p2) {
             if (board.getMiddleColumns()[1].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[1]) {
-                System.out.println("you have hitten chips");
+                aState.LOG_BOX.getItems().add("you have hitten chips");
                 return true;
             }
         }
@@ -346,7 +349,7 @@ public class Game {
         if(sumChips == (15-turn.getTakenChips()))
             return true;
         else {
-            System.out.println("can't take yet");
+            aState.LOG_BOX.getItems().add("can't take yet");
             return false;
         }
 
