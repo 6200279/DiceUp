@@ -18,6 +18,10 @@ import GUI.GameState;
 import static java.lang.Math.abs;
 
 public class AI extends Player {
+    //chooseSignelBestMove -> int[2]:
+    //  0: from
+    //  1: to
+
     private Game game;
 
     //Array with probabilities of chips being hit
@@ -80,7 +84,7 @@ public class AI extends Player {
         if (possibleCols.size() > 0) {
             int[] bestMove = possibleCols.get(0);
             //possibleCols should be filled
-            for (int i = 0; i < possibleCols.size()-1; i++) {
+            for (int i = 0; i < possibleCols.size(); i++) {
                 System.out.println("Evaulating move from " + possibleCols.get(i)[0] + " to " + possibleCols.get(i)[1] + ".");
                 int[] currMove = possibleCols.get(i);
                 double evalBest = evaluateMove(bestMove[0], bestMove[1], g);
@@ -102,10 +106,7 @@ public class AI extends Player {
     }
 
     public void executeMoves() throws Exception {
-
-
         GameState aState=GameState.getInstance();
-
         game.rollDices();
 
         aState.LOG_BOX.getItems().add("Rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));
@@ -155,7 +156,6 @@ public class AI extends Player {
 
         //Compute number of alone chips by looping trough all columns and checking if there are alone chips
         //that belong to currentPlayer. Array threats saves spots of enemy's chips to compute probability of being hit
-        //TODO: finish computing this probability
 
         int [] threats = new int [24];
         for (int i = 0; i < 24; i++) {
@@ -195,7 +195,7 @@ public class AI extends Player {
         double numGates = 0;
         //Compute number of gates by looping trough all columns and checking if there are gates
         //that belong to currentPlayer
-        for (int j = 0; j <= 24; j++) {
+        for (int j = 0; j < 24; j++) {
             if (newBoard.getColumns()[j].getChips().size()>0) {
                 if (newBoard.getColumns()[j].getChips().get(0).getOwner() == currentPlayer && newBoard.getColumns()[j].getChips().size() >= 2) {
                     numGates++;
@@ -219,7 +219,10 @@ public class AI extends Player {
 
         //Compute actual evaluation
         double evaluation = (distanceCovered/6)-(soloChips*probability)+(numGates/3) + hitChip + takenChip;
+
+        if(to == 24 || (to==26 && g1.checkTake()))
+            return -10;
+
         return evaluation;
     }
-
 }
