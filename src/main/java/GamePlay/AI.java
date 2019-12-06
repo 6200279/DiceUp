@@ -63,21 +63,27 @@ public class AI extends Player {
         System.out.println("AI is choosing best move.");
 
         if(b.getMiddleColumns()[1].getChips().size() > 0){
+            Column fromColumn=b.getMiddleColumns()[1];
+            int fromChipsNum = fromColumn.getChips().size();
             if(b.getColumns()[g.getMoves().get(0)].getChips().size() == 1 ){
-                int[] move = {0, g.getMoves().get(0)};
-                possibleCols.add(move);
+                Column toColumn= b.getColumns()[g.getMoves().get(0)];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
             }
             if(b.getColumns()[g.getMoves().get(1)].getChips().size() == 1 ){
-                int[] move = {1, g.getMoves().get(1)};
-                possibleCols.add(move);
+                Column toColumn= b.getColumns()[g.getMoves().get(1)];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
             }
             if(b.getColumns()[g.getMoves().get(0)].getChips().size() == 0 ){
-                int[] move = {0, g.getMoves().get(0)};
-                possibleCols.add(move);
+                Column toColumn= b.getColumns()[g.getMoves().get(0)];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
             }
             if(b.getColumns()[g.getMoves().get(1)].getChips().size() == 0 ){
-                int[] move = {1, g.getMoves().get(1)};
-                possibleCols.add(move);
+                Column toColumn= b.getColumns()[g.getMoves().get(1)];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
             }
 
         }
@@ -167,9 +173,10 @@ public class AI extends Player {
         int fromChipsNum = fromColumn.getChips().size();
 
         //Make the respective move, without checking if it is a valid move.
-        Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-        toColumn.getChips().add(movingChip);
-
+        if (fromChipsNum>0) {
+            Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+            toColumn.getChips().add(movingChip);
+        }
         //Compute distance travelled in this move
         double distanceCovered = abs(from - to);
 
@@ -196,6 +203,9 @@ public class AI extends Player {
             }
         }
 
+        if (from == 23){
+            return 10;
+        }
 
         double probability = 1;
 

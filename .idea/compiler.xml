@@ -7,10 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="DiceUp" />
-        <module name="DiceUp2" />
         <module name="DiceUpLast" />
-        <module name="diceup" />
+        <module name="DiceUp2" />
         <module name="DiceUpLast2" />
+        <module name="diceup" />
       </profile>
     </annotationProcessing>
   </component>
