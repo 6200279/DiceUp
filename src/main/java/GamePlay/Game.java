@@ -123,7 +123,8 @@ public class Game {
 
         //Valid move, add move to the game tree.
         if (tree.getParent() != null) {
-            TreeNode leaf = new TreeNode(turn, from, to);
+            TreeNode leaf = new TreeNode(turn, from, to, AI.evaluateMove(from, to, this));
+            System.out.println("This is the move score: " + AI.evaluateMove(from, to , this));
 
             tree.getChild().addChild(leaf);
             tree.setChild(leaf);
@@ -131,7 +132,7 @@ public class Game {
         }
         else {
             System.out.println("Tree has been initialized with a new parent.");
-            tree.setParent(new TreeNode(turn, from, to));
+            tree.setParent(new TreeNode(turn, from, to, AI.evaluateMove(from, to, this)));
         }
 
         System.out.println(tree.toString());

@@ -23,10 +23,12 @@ public class TreeNode {
     //Player instance
     Player player;
 
-    double moveScore;
     //From-to column ID's
     int from;
     int to;
+
+    // stores the score assigned by the method evaluateMove
+    double moveScore;
 
     //If the chip was used to hit an opponent chip- mark.
     boolean hitChip;
@@ -45,9 +47,8 @@ public class TreeNode {
         return child;
     }
 
-    public List<TreeNode> getChildren() {
-        return children;
-    }
+    public List<TreeNode> getChildren() { return children; }
+
     // some basic method we might need
     private void setParent(TreeNode parent) {
 
@@ -58,11 +59,16 @@ public class TreeNode {
         return parent;
     }
 
-    public TreeNode(Player p, int f, int t) {
+    public void setMoveScore(double movescore){
+        this.moveScore = movescore;
+    }
+
+    public double getMoveScore(){ return moveScore; }
+
+    public TreeNode(Player p, int f, int t, double movescore) {
         player = p;
         from = f;
         to = t;
+        moveScore = movescore;
     }
-
-
 }
