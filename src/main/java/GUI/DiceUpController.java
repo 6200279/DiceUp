@@ -165,7 +165,15 @@ public class DiceUpController {
                     currGame.move(selectedChipColumn, columnId);
                     LogBox.getItems().add("Move Valid");
 
-                    int movePlayed = Math.abs(selectedChipColumn - columnId);
+                    int movePlayed = 0;
+                    if(columnId == 26){
+                        if(currGame.getBoard().getColumns()[columnId].getChips().get(0).getOwner()==currGame.getP1())
+                            movePlayed = selectedChipColumn+1;
+                        else
+                            movePlayed = Math.abs((columnId-2)-selectedChipColumn);
+                    }
+                    else
+                       movePlayed = Math.abs(selectedChipColumn - columnId);
 
                     //if column is hit columns
                     if (selectedChipColumn == 24 || selectedChipColumn == 25) {
@@ -173,6 +181,7 @@ public class DiceUpController {
                         else movePlayed = columnId + 1;
                         LogBox.getItems().add("Hit chip is placed back on " + movePlayed);
                     }
+
                     if (movePlayed == iv1Val) {
                         imageview_1.setOpacity(0.4);
                         iv1Val = 0;
@@ -379,7 +388,7 @@ public class DiceUpController {
             ArrayList<Chip> currDataChips = dataColumns[i].getChips();
 
             //remove all chips from GUI
-            if (i < 26) columns[i].getChildren().removeAll(columns[i].getChildren());
+            if (i < 27) columns[i].getChildren().removeAll(columns[i].getChildren());
 
             //add updated chips back to GUI
             for (int j = 0; j < currDataChips.size(); j++) {

@@ -162,17 +162,17 @@ public class Game {
 
                 if (from+1 == getMoves().get(i)) {
                     moves.remove(i);
-                    columns[i].getChips().get(0).take();
+                    columns[from].getChips().get(0).take();
                     return true;
                 }
                 else if(from+1 < getMoves().get(i)){
                     int sumChips = 0;
-                    for(int c=from; c<getMoves().get(i); c++){
+                    for(int c=from+1; c<getMoves().get(i); c++){
                        sumChips += columns[c].getChips().size();
                     }
                     if(sumChips==0){
                         moves.remove(i);
-                        columns[i].getChips().get(0).take();
+                        columns[from].getChips().get(0).take();
                         return true;
                     }
                 }
@@ -188,7 +188,7 @@ public class Game {
             for(int i=0; i<getMoves().size(); i++) {
                 if (24-from == getMoves().get(i)) {
                     moves.remove(i);
-                    columns[i].getChips().get(0).take();
+                    columns[from].getChips().get(0).take();
                     return true;
                 }
                 else if(24-from < getMoves().get(i)){
@@ -198,7 +198,7 @@ public class Game {
                     }
                     if(sumChips==0){
                         moves.remove(i);
-                        columns[i].getChips().get(0).take();
+                        columns[from].getChips().get(0).take();
                         return true;
                     }
                 }
