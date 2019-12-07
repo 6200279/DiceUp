@@ -62,30 +62,34 @@ public class AI extends Player {
         Board b = g.getBoard();
         System.out.println("AI is choosing best move.");
 
-        if(b.getMiddleColumns()[1].getChips().size() > 0){
-            Column fromColumn=b.getMiddleColumns()[1];
-            int fromChipsNum = fromColumn.getChips().size();
-            if(b.getColumns()[g.getMoves().get(0)].getChips().size() == 1 ){
-                Column toColumn= b.getColumns()[g.getMoves().get(0)];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                toColumn.getChips().add(movingChip);
-            }
-            if(b.getColumns()[g.getMoves().get(1)].getChips().size() == 1 ){
-                Column toColumn= b.getColumns()[g.getMoves().get(1)];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                toColumn.getChips().add(movingChip);
-            }
-            if(b.getColumns()[g.getMoves().get(0)].getChips().size() == 0 ){
-                Column toColumn= b.getColumns()[g.getMoves().get(0)];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                toColumn.getChips().add(movingChip);
-            }
-            if(b.getColumns()[g.getMoves().get(1)].getChips().size() == 0 ){
-                Column toColumn= b.getColumns()[g.getMoves().get(1)];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                toColumn.getChips().add(movingChip);
-            }
+        if (b.getMiddleColumns()[1].getChips().size() > 0){
 
+           // for (int i=0; i<b.getMiddleColumns()[1].getChips().size(); i++) {
+
+                Column fromColumn = b.getMiddleColumns()[1];
+                int fromChipsNum = fromColumn.getChips().size();
+                if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    toColumn.getChips().add(movingChip);
+                }
+                if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    toColumn.getChips().add(movingChip);
+                }
+                if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 0) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    toColumn.getChips().add(movingChip);
+                }
+                if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 0) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    toColumn.getChips().add(movingChip);
+             //   }
+            }
+            g.turn=g.getP1();
         }
         else {
 
