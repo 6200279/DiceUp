@@ -51,7 +51,7 @@ public class AI extends Player {
 
 
     public AI(){
-        super("Mr. A.I.");
+        super("A.I.");
 
     }
 
@@ -60,38 +60,65 @@ public class AI extends Player {
     public int[] chooseSingleBestMove(Game g) {
         ArrayList<int[]> possibleCols = new ArrayList<>();
         Board b = g.getBoard();
+        int[] movess=new int[4];
         System.out.println("AI is choosing best move.");
 
-        if (b.getMiddleColumns()[1].getChips().size() > 0){
-
-           // for (int i=0; i<b.getMiddleColumns()[1].getChips().size(); i++) {
-
-                Column fromColumn = b.getMiddleColumns()[1];
-                int fromChipsNum = fromColumn.getChips().size();
-                if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1) {
-                    Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
-                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                    toColumn.getChips().add(movingChip);
-                }
-                if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1) {
-                    Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
-                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                    toColumn.getChips().add(movingChip);
-                }
-                if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 0) {
-                    Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
-                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                    toColumn.getChips().add(movingChip);
-                }
-                if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 0) {
-                    Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
-                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                    toColumn.getChips().add(movingChip);
-             //   }
+        if (b.getMiddleColumns()[1].getChips().size() > 0) {
+            movess[0] = 24;
+            Column fromColumn = b.getMiddleColumns()[1];
+            Column midcol = b.getMiddleColumns()[0];
+            int fromChipsNum = fromColumn.getChips().size();
+            if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
+                Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+                movess[1] = g.getMoves().get(0);
+            } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(1) - 1].getChips().get(1).getOwner() == g.getP2()) {
+                Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+                movess[1] = g.getMoves().get(1);
+            } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP1()) {
+                Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                Chip takenchip = toColumn.getChips().remove(0);
+                toColumn.getChips().add(movingChip);
+                midcol.getChips().add(takenchip);
+                movess[1] = g.getMoves().get(0);
+            } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(1) - 1].getChips().get(1).getOwner() == g.getP1()) {
+                Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                Chip takenchip = toColumn.getChips().remove(0);
+                toColumn.getChips().add(movingChip);
+                midcol.getChips().add(takenchip);
+                movess[1] = g.getMoves().get(1);
+            } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 0) {
+                Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+                movess[1] = g.getMoves().get(0);
+            } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 0) {
+                Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+                movess[1] = g.getMoves().get(1);
+            } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() > 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
+                Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+                movess[1] = g.getMoves().get(1);
+            } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() > 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
+                Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+                movess[1] = g.getMoves().get(0);
+            } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() > 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP1()) {
+                movess[1] = 0;
+            } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() > 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
+                movess[1] = 0;
             }
-            g.turn=g.getP1();
         }
-        else {
+        else if (b.getMiddleColumns()[1].getChips().size() == 0){
 
             for (int i = 0; i < 24; i++) {
                 if (b.getColumns()[i].getChips().size() > 0) { //check if unempty col
@@ -132,9 +159,11 @@ public class AI extends Player {
             return bestMove;
         }
         else {
-            aState.LOG_BOX.getItems().add("There exists no possible moves for AI!");
+          //  aState.LOG_BOX.getItems().add("There exists no possible moves for AI!");
             g.getMoves().clear();
             g.turn = g.getP1();
+            if (movess.length>0)
+                return movess;
         }
         return new int[2]; // there's no legal move to make- still crashes man!
     }
