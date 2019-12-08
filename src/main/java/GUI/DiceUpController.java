@@ -367,7 +367,7 @@ public class DiceUpController {
         Player p1 = new Player(State.p1Name);
         p1.setColor(Color.BROWN);
 
-        Player p2 = new AI();
+        Player p2 = new StraightForward();
         p2.setColor(Color.WHITESMOKE);
         currGame = new Game(p1, p2);
         ((AI) p2).setGameInstance(currGame);
