@@ -49,7 +49,7 @@ public class DiceUpApplication extends Application {
         // Set the Scene to the Stage
         primaryStage.setScene(scene);
         // Set the Title to the Stage
-        primaryStage.setTitle("DiceUpApplication Backgammon");
+        primaryStage.setTitle("DiceUp - Backgammon Playing AI Systems");
         // Display the Stage
         primaryStage.show();
     }
