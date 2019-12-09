@@ -208,15 +208,15 @@ public abstract class AI extends Player {
                     if (currentColumn.getChips().size() >= 2) {
                         //If in home board +1.5, otherwise +1
                         if (currentPlayer == g1.getP1() && i >= 0 && i <= 5)
-                            evaluation = evaluation + 1.5;
+                            evaluation = evaluation + 1D;
                         else if (currentPlayer == g1.getP1())
-                            evaluation = evaluation + 1;
+                            evaluation = evaluation + 0.7;
 
                             //If in home board +1.5, otherwise +1
                         else if (currentPlayer == g1.getP2() && i >= 18 && i <= 23)
-                            evaluation = evaluation + 1.5;
+                            evaluation = evaluation + 1D;
                         else if (currentPlayer == g1.getP2())
-                            evaluation = evaluation + 1;
+                            evaluation = evaluation + 0.7;
                     }
                 }
             }
