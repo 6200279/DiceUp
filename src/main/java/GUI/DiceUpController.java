@@ -79,8 +79,8 @@ public class DiceUpController {
 
 
     private VBox[] columns;
-    private Game currGame;
     private GameState State = GameState.getInstance();
+    private Game currGame;
 
 
 /*....................................METHODS.....................................................*/
@@ -364,13 +364,12 @@ public class DiceUpController {
     }
 
     private void setInitialPlayers(){
-        Player p1 = new Player(State.p1Name);
+        Player p1 = GameState.p1;
         p1.setColor(Color.BROWN);
 
-        Player p2 = new StraightForward();
+        Player p2 = GameState.p2;
         p2.setColor(Color.WHITESMOKE);
-        currGame = new Game(p1, p2);
-        ((AI) p2).setGameInstance(currGame);
+        currGame = GameState.game;
         LogBox.getItems().add(" - - - New Game - - -");
         LogBox.getItems().add(p1.getName() + " vs " + p2.getName());
         LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");

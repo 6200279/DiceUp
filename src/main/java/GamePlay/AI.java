@@ -22,8 +22,9 @@ public abstract class AI extends Player {
     //  0: from
     //  1: to
 
-    private Game game;
+
     GameState aState=GameState.getInstance();
+    private Game game = GameState.game;
 
     //Array with probabilities of chips being hit
     //With probabilities[i] the prob. of a chip on i distance hitting
@@ -54,6 +55,7 @@ public abstract class AI extends Player {
     abstract int[] decisionAlgorithm(Game g);
 
     public void executeMoves() throws Exception {
+        game = GameState.game;
         game.rollDices();
 
         aState.LOG_BOX.getItems().add("Rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));

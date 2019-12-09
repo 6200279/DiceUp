@@ -33,7 +33,7 @@ public class Game {
     private ArrayList<Integer> moves = new ArrayList<Integer>();
 
     //Game Tree
-    private GameTree tree = new GameTree();
+    private TreeNode tree;
     GameState aState=GameState.getInstance();
 
 
@@ -50,6 +50,8 @@ public class Game {
 
         dice1 = new Dice();
         dice2 = new Dice();
+
+        tree = new TreeNode(true);
     }
 
     /**
@@ -123,18 +125,13 @@ public class Game {
 
         //Valid move, add move to the game tree.
         if (tree.getParent() != null) {
-            TreeNode leaf = new TreeNode(turn, from, to, AI.evaluateMove(from, to, this));
-            System.out.println("This is the move score: " + AI.evaluateMove(from, to , this));
+            TreeNode leaf = new TreeNode(from, to, AI.evaluateMove(from, to, this));
+            System.out.println("This is the move score: " + AI.evaluateMove(from, to, this));
 
-            tree.getChild().addChild(leaf);
-            tree.setChild(leaf);
+            tree.getChildren().add(leaf);
             System.out.println("Added a new child to tree.");
-        }
-        else {
-            System.out.println("Tree has been initialized with a new parent.");
-            tree.setParent(new TreeNode(turn, from, to, AI.evaluateMove(from, to, this)));
-        }
 
+        }
         System.out.println(tree.toString());
      }
 
@@ -443,4 +440,8 @@ public class Game {
     }
     public Player getP1 () { return p1; }
     public Player getP2 () { return p2; }
+
+    public TreeNode getTree() {
+        return tree;
+    }
 }

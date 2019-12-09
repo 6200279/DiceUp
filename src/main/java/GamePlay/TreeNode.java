@@ -16,6 +16,8 @@
 
 package GamePlay;
 
+import GUI.GameState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class TreeNode {
     int from;
     int to;
 
+    private boolean isRoot = false;
     // stores the score assigned by the method evaluateMove
     double moveScore;
 
@@ -47,6 +50,14 @@ public class TreeNode {
         return child;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean isRoot() {
+        return isRoot;
+    }
+
     public List<TreeNode> getChildren() { return children; }
 
     // some basic method we might need
@@ -65,10 +76,19 @@ public class TreeNode {
 
     public double getMoveScore(){ return moveScore; }
 
-    public TreeNode(Player p, int f, int t, double movescore) {
-        player = p;
-        from = f;
-        to = t;
+    public TreeNode(int from,int to, double movescore) {
+        if(this.getParent().isRoot){
+            player = GameState.p2;
+        }
+        player = this.getParent().getParent().getPlayer();
+        this.from = from;
+        this.to = to;
+
         moveScore = movescore;
     }
+    public TreeNode(boolean isRoot) {
+        this.isRoot = isRoot;
+        player = GameState.p1;
+    }
+
 }
