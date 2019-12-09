@@ -11,32 +11,32 @@ public class StraightForward extends AI {
         System.out.println("AI is choosing best move.");
 
         if (b.getMiddleColumns()[1].getChips().size() > 0) {
-            movess[0] = 24;
+            movess[0] = 25;
             Column fromColumn = b.getMiddleColumns()[1];
             Column midcol = b.getMiddleColumns()[0];
             int fromChipsNum = fromColumn.getChips().size();
-            if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
-                Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                toColumn.getChips().add(movingChip);
-                movess[1] = g.getMoves().get(0);
-            } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(1) - 1].getChips().get(1).getOwner() == g.getP2()) {
-                Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                toColumn.getChips().add(movingChip);
-                movess[1] = g.getMoves().get(1);
-            } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP1()) {
-                Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                Chip takenchip = toColumn.getChips().remove(0);
-                toColumn.getChips().add(movingChip);
-                midcol.getChips().add(takenchip);
-                movess[1] = g.getMoves().get(0);
-            } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(1) - 1].getChips().get(1).getOwner() == g.getP1()) {
-                Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
-                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                Chip takenchip = toColumn.getChips().remove(0);
-                toColumn.getChips().add(movingChip);
+             /*   if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    toColumn.getChips().add(movingChip);
+                    movess[1] = g.getMoves().get(0);
+                } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(1) - 1].getChips().get(1).getOwner() == g.getP2()) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    toColumn.getChips().add(movingChip);
+                    movess[1] = g.getMoves().get(1);
+                } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP1()) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    Chip takenchip = toColumn.getChips().remove(0);
+                    toColumn.getChips().add(movingChip);
+                    midcol.getChips().add(takenchip);
+                    movess[1] = g.getMoves().get(0);
+                } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(1) - 1].getChips().get(1).getOwner() == g.getP1()) {
+                    Column toColumn = b.getColumns()[g.getMoves().get(1) - 1];
+                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                    Chip takenchip = toColumn.getChips().remove(0);
+                    toColumn.getChips().add(movingChip);
                 midcol.getChips().add(takenchip);
                 movess[1] = g.getMoves().get(1);
             } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 0) {
@@ -61,9 +61,18 @@ public class StraightForward extends AI {
                 movess[1] = g.getMoves().get(0);
             } else if (b.getColumns()[g.getMoves().get(1) - 1].getChips().size() > 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP1()) {
                 movess[1] = 0;
+                Column toColumn = b.getMiddleColumns()[1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+
             } else if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() > 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
                 movess[1] = 0;
-            }
+                Column toColumn = b.getMiddleColumns()[1];
+                Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+                toColumn.getChips().add(movingChip);
+            }*/
+
+
         }
         else if (b.getMiddleColumns()[1].getChips().size() == 0){
 
