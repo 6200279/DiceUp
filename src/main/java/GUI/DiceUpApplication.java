@@ -1,19 +1,27 @@
 package GUI;
 
+import GamePlay.Game;
+import GamePlay.Player;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.stage.Window;
-
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import javafx.scene.control.ToggleGroup;
+
 
 public class DiceUpApplication extends Application {
     @FXML
@@ -26,6 +34,19 @@ public class DiceUpApplication extends Application {
     private TextField player1Name;
     @FXML
     private TextField player2Name;
+    @FXML
+    private RadioButton RB1 = new RadioButton();
+    @FXML
+    private RadioButton RB2 = new RadioButton();
+    @FXML
+    private RadioButton RB3 = new RadioButton();
+    @FXML
+    private ToggleGroup AISelection = new ToggleGroup();
+
+    private Game game;
+    private Player p1;
+    private Player p2;
+
 
 
     public static void main(String[] args) {
@@ -35,6 +56,18 @@ public class DiceUpApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        //RB
+        RB1.setToggleGroup(AISelection);
+        RB2.setToggleGroup(AISelection);
+        RB3.setToggleGroup(AISelection);
+
+        RB1.setUserData("Human");
+        RB2.setUserData("Monte Carlo");
+        RB3.setUserData("TD");
+
+
+
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
         // Path to the FXML File
@@ -82,19 +115,28 @@ public class DiceUpApplication extends Application {
 
 
     public void playGame() throws IOException{
+        //Radio Buttoms
+         String gameType = ((RadioButton)AISelection.getSelectedToggle()).getText();
+         System.out.println(gameType);
         //get the primaryStage
         Scene mainScene = playButton.getScene();
         Window window = mainScene.getWindow();
         Stage primaryStage = (Stage)window;
 
+
         String p1Name = ((TextField) mainScene.lookup("#player1Name")).getText();
         String p2Name = ((TextField) mainScene.lookup("#player2Name")).getText();
+        if(gameType == "Human"){
+            p1 = new Player(p1Name);
+            p2 = new Player(p2Name);
+        }
+        else{
+            p1 = new AI();
+        }
 
         if (p1Name == "") p1Name = "Player 1";
         if (p2Name == "") p1Name = "Player 2";
 
-        GameState.getInstance().p1Name = p1Name;
-        GameState.getInstance().p2Name = p2Name;
 
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();

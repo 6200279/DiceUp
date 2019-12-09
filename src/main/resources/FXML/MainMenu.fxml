@@ -3,42 +3,26 @@
 <?import java.lang.Double?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpApplication">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.DiceUpApplication">
    <children>
-      <HBox alignment="CENTER" layoutX="347.0" layoutY="207.0" spacing="30.0">
+      <HBox alignment="CENTER" layoutX="347.0" layoutY="207.0" spacing="30.0" />
+      <Group layoutX="335.0" layoutY="55.0">
          <children>
-            <Button fx:id="playButton" cacheHint="QUALITY" depthTest="DISABLE" ellipsisString="" graphicTextGap="1.0" mnemonicParsing="false" onAction="#playGame" prefHeight="29.0" prefWidth="126.0" text="Play" textOverrun="WORD_ELLIPSIS">
+            <Text boundsType="VISUAL" fontSmoothingType="LCD" layoutX="6.0" layoutY="-2.0" strokeWidth="0.0" text="Backgammon" wrappingWidth="464.26171875" x="-100.0">
                <font>
-                  <Font name="Gabriola" size="13.0" />
+                  <Font size="46.0" />
                </font>
-            </Button>
-            <Button fx:id="rulesButton" layoutX="327.0" layoutY="270.0" mnemonicParsing="false" onAction="#showRules" prefHeight="29.0" prefWidth="126.0" text="Rules">
-               <font>
-                  <Font name="Gabriola" size="13.0" />
-               </font></Button>
-
-         </children>
-      </HBox>
-      <Group layoutX="335.0" layoutY="20.0">
-         <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="/images/logo.png" />
-               </image>
-               <effect>
-                  <DropShadow blurType="GAUSSIAN" radius="10.76" width="24.04" />
-               </effect>
-            </ImageView>
+            </Text>
          </children>
       </Group>
       <VBox prefHeight="200.0" prefWidth="100.0" />
@@ -210,7 +194,24 @@
             </Polygon>
          </children>
       </Group>
-      <TextField fx:id="player1Name" layoutX="142.0" layoutY="208.0" promptText="player 1" />
-      <TextField fx:id="player2Name" layoutX="142.0" layoutY="250.0" promptText="player 2 " />
+      <TextField fx:id="player1Name" layoutX="110.0" layoutY="186.0" promptText="player 1" />
+      <TextField fx:id="player2Name" layoutX="110.0" layoutY="231.0" promptText="player 2 " />
+      <Button fx:id="playButton" cacheHint="QUALITY" depthTest="DISABLE" ellipsisString="" graphicTextGap="1.0" layoutX="317.0" layoutY="186.0" mnemonicParsing="false" onAction="#playGame" prefHeight="29.0" prefWidth="126.0" text="Play" textOverrun="WORD_ELLIPSIS">
+         <font>
+            <Font name="Gabriola" size="13.0" />
+         </font>
+      </Button>
+      <Button fx:id="rulesButton" layoutX="317.0" layoutY="231.0" mnemonicParsing="false" onAction="#showRules" prefHeight="29.0" prefWidth="126.0" text="Rules">
+         <font>
+            <Font name="Gabriola" size="13.0" />
+         </font>
+      </Button>
+      <RadioButton id="RB1" accessibleText="Human" layoutX="514.0" layoutY="177.0" mnemonicParsing="false" selected="true" text="Human Player">
+         <toggleGroup>
+            <ToggleGroup fx:id="AISelection" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton id="RB2" accessibleText="MonteCarlo" layoutX="514.0" layoutY="215.0" mnemonicParsing="false" text="Monte Carlo AI" toggleGroup="$AISelection" />
+      <RadioButton id="RB3" accessibleText="TD" layoutX="514.0" layoutY="251.0" mnemonicParsing="false" text="TD AI" toggleGroup="$AISelection" />
    </children>
 </Pane>
