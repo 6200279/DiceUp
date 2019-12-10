@@ -15,7 +15,7 @@ public class StraightForward extends AI {
             Column fromColumn = b.getMiddleColumns()[1];
             Column midcol = b.getMiddleColumns()[0];
             int fromChipsNum = fromColumn.getChips().size();
-             /*   if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
+                if (b.getColumns()[g.getMoves().get(0) - 1].getChips().size() == 1 && b.getColumns()[g.getMoves().get(0) - 1].getChips().get(0).getOwner() == g.getP2()) {
                     Column toColumn = b.getColumns()[g.getMoves().get(0) - 1];
                     Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
                     toColumn.getChips().add(movingChip);
@@ -70,7 +70,7 @@ public class StraightForward extends AI {
                 Column toColumn = b.getMiddleColumns()[1];
                 Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
                 toColumn.getChips().add(movingChip);
-            }*/
+            }
 
 
         }

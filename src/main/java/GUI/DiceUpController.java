@@ -245,6 +245,7 @@ public class DiceUpController {
                     if (moves.get(0) == moves.get(1)) {
                         moves.clear();
                         roll_Dice.setDisable(true);
+                        currGame.turn = currGame.getP1();
                     }
                 }
 
@@ -275,6 +276,7 @@ public class DiceUpController {
                     if (moves.get(0) == moves.get(1)) {
                         moves.clear();
                         roll_Dice.setDisable(true);
+                        currGame.turn = currGame.getP1();
                     }
                 }
 
@@ -305,6 +307,7 @@ public class DiceUpController {
                 if (moves.size()== 2) {
                     if (moves.get(0) == moves.get(1)) {
                         moves.clear();
+                        currGame.turn = currGame.getP1();
                         roll_Dice.setDisable(true);
                     }
                 }
@@ -336,6 +339,7 @@ public class DiceUpController {
                 if (moves.size()== 2) {
                     if (moves.get(0) == moves.get(1)) {
                         moves.clear();
+                        currGame.turn = currGame.getP1();
                         roll_Dice.setDisable(true);
                     }
                 }
@@ -371,6 +375,8 @@ public class DiceUpController {
         p2.setColor(Color.WHITESMOKE);
         currGame = GameState.game;
         LogBox.getItems().add(" - - - New Game - - -");
+        LogBox.getItems().add("If the game is against AI and you choose to");
+        LogBox.getItems().add(" skip a move please press on the dices once more");
         LogBox.getItems().add(p1.getName() + " vs " + p2.getName());
         LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
     }
