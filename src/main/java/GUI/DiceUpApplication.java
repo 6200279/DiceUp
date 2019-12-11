@@ -1,8 +1,6 @@
 package GUI;
 
-import GamePlay.AI;
-import GamePlay.Game;
-import GamePlay.Player;
+import GamePlay.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -45,6 +43,7 @@ public class DiceUpApplication extends Application {
     private ToggleGroup AISelection = new ToggleGroup();
 
     private Game game;
+    private GameState gameState;
     private Player p1;
     private Player p2;
 
@@ -123,23 +122,32 @@ public class DiceUpApplication extends Application {
         Scene mainScene = playButton.getScene();
         Window window = mainScene.getWindow();
         Stage primaryStage = (Stage)window;
-
-
         String p1Name = ((TextField) mainScene.lookup("#player1Name")).getText();
         String p2Name = ((TextField) mainScene.lookup("#player2Name")).getText();
-        if(gameType == "Human"){
+        if(gameType.equals("Human Player")){
             p1 = new Player(p1Name);
             p2 = new Player(p2Name);
         }
+        else if(gameType.equals("AI: Difficult")){
+            p1 = new MCSTwCN();
+            p2 = new Player(p2Name);
 
-        else{
-            p1 = new AI();
         }
 
+        else if(gameType.equals("AI: Medium")){
+            p1 = new Player(p1Name);
+            p2 = new StraightForward();
+        }
+        else{
+            p1 = new Player(p1Name);
+            p2 = new RandomAI();
+        }
 
         if (p1Name == "") p1Name = "Player 1";
         if (p2Name == "") p1Name = "Player 2";
-
+        game = new Game(p1, p2);
+        gameState = GameState.getInstance();
+        gameState.initGameState(game);
 
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
