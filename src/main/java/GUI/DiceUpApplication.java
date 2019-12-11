@@ -128,15 +128,19 @@ public class DiceUpApplication extends Application {
             p1 = new Player(p1Name);
             p2 = new Player(p2Name);
         }
-        else if(gameType.equals("Monte Carlo AI")){
+        else if(gameType.equals("AI: Difficult")){
             p1 = new MCSTwCN();
             p2 = new Player(p2Name);
 
         }
-        else{
+
+        else if(gameType.equals("AI: Medium")){
             p1 = new Player(p1Name);
             p2 = new StraightForward();
-
+        }
+        else{
+            p1 = new Player(p1Name);
+            p2 = new RandomAI();
         }
 
         if (p1Name == "") p1Name = "Player 1";

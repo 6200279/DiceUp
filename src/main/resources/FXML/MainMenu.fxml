@@ -211,7 +211,8 @@
             <ToggleGroup fx:id="AISelection" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton id="RB2" accessibleText="MonteCarlo" layoutX="514.0" layoutY="215.0" mnemonicParsing="false" text="Monte Carlo AI" toggleGroup="$AISelection" />
-      <RadioButton id="RB3" accessibleText="simple AI" layoutX="514.0" layoutY="251.0" mnemonicParsing="false" text="simple AI" toggleGroup="$AISelection" />
+      <RadioButton id="RB2" accessibleText="AI: Difficult" layoutX="514.0" layoutY="215.0" mnemonicParsing="false" text="AI: Difficult" toggleGroup="$AISelection" />
+      <RadioButton id="RB3" accessibleText="AI: Medium" layoutX="514.0" layoutY="251.0" mnemonicParsing="false" text="AI: Medium" toggleGroup="$AISelection" />
+      <RadioButton id="RB4" accessibleText="AI: Simple" layoutX="514.0" layoutY="287.0" mnemonicParsing="false" text="AI: Simple" toggleGroup="$AISelection" />
    </children>
 </Pane>
