@@ -16,3 +16,4 @@ Remember! Comment before you code, makes everything easier!
 ## Referance Material
 #### Please include any material you've used under here. This will be usefull whilst writing our report.
 - `Developing a New Java Algorithm for Playing Backgammon` : <http://naun.org/main/NAUN/computers/16-158.pdf>
+- `Monte Carlo Tree Search in a Modern Board Game Framework` : <https://project.dke.maastrichtuniversity.nl/games/files/bsc/Roelofs_Bsc-paper.pdf>
