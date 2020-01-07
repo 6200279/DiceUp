@@ -29,6 +29,7 @@ package GamePlay;
     Now: Hit is done.
 
     !!!!!In this phase, don't consider take actions. The condition that one win is it move all the chips into its place
+    Now, I am doing take actions
 
     TODO: double dice. Finished
     TODO: make a whole match. Finished
@@ -37,10 +38,13 @@ package GamePlay;
 
 
 import com.sun.deploy.util.StringUtils;
+import com.sun.tools.javac.util.ArrayUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+
 
 public class TD {
 
@@ -68,7 +72,7 @@ public class TD {
     The 29th column is the reward value;
      */
 
-    protected double[][] database = new double[1000000][29];
+    protected double[][] database = new double[2000][29];
 
     //method to change turn
 
@@ -77,6 +81,15 @@ public class TD {
     private final double whiteChip = Math.PI-2;
 
     private final double blackChip = Math.PI-3;
+
+
+    //check whether the player can take their chips
+    public boolean whiteCanTake = false;
+
+    public boolean blackCantake = false;
+
+    //Neural network act as evaluation function
+    NeuralNetwork nn;
 
 
     //Constructor
@@ -129,26 +142,353 @@ public class TD {
                 System.out.println("White chips' number: " + whiteChipsNumber(currState));
                 System.out.println("Black chips' number: " + blackChipsNumber(currState));
             }
-            //remember to delete
-            if (getStatesNumber()>400) break;
+
         }
-        System.out.println("Finished");
-        if (someoneWon(database[getStatesNumber()-1])==true){
-            if (whoWon(database[getStatesNumber()-1])==0) System.out.println("White won");
-            if (whoWon(database[getStatesNumber()-1])==1) System.out.println("Black won");
+
+        System.out.println("Finished gjhghjbhjbjhvjhvhjvhhjvjhvhjvhjjhjhbjhkjjkbkjbjk");
+
+        while (!someOneWonEventually()){
+
+            if (whiteCanTake&&database[getStatesNumber()-1][25] != 0){
+                System.out.println("White lose");
+                break;
+            }
+            if (blackCantake&&database[getStatesNumber()-1][26] != 0){
+                System.out.println("Black lose");
+                break;
+            }
+
+            whoseTurn();
+            take();
+            changeTurn();
+            System.out.println("There are " + getStatesNumber() + " states have been stored");
+            System.out.println("----------------------------------------------");
+            printBoard(database[getStatesNumber()-1]);
+            System.out.println("----------------------------------------------");
+            System.out.println("White chips' number: " + whiteChipsNumber(database[getStatesNumber()-1]));
+            System.out.println("Black chips' number: " + blackChipsNumber(database[getStatesNumber()-1]));
+            System.out.println("----------------------------------------------");
+        }
+
+
+    }
+
+    public void whoseTurn(){
+        if (turn==0) System.out.println("It is white turn  ");
+        if (turn==1) System.out.println("It is black turn  ");
+    }
+
+    //someone took all the chips
+    public boolean someOneWonEventually(){
+        boolean val = false;
+        double[] currState = database[getStatesNumber()-1];
+        if (whiteChipsNumber(currState)==0){
+            val = true;
+            System.out.println("White won");
+        }else if(blackChipsNumber(currState) == 0){
+            val = true;
+            System.out.println("Black won");
+        }
+        return val;
+    }
+
+    /**
+     * make a whole take action for one
+     */
+
+    public void take(){
+        double[] newState = database[getStatesNumber()-1].clone();
+
+        if (whiteChipsNumber(newState)>3 && blackChipsNumber(newState)>3) {
+            dice1.roll();
+            dice2.roll();
+
+
+            int num1 = dice1.getNum();
+            int num2 = dice2.getNum();
+            System.out.println("The first dice num is: " + num1);
+            System.out.println("The second dice num is: " + num2);
+            System.out.println("----------------------------");
+
+            if (num1 == num2) {
+                double[] newState1 = playATake(newState, num1);
+                double[] newState2 = playATake(newState1, num1);
+                double[] newState3 = playATake(newState2, num1);
+                double[] newState4 = playATake(newState3, num1);
+
+                insertIntoQ_Table(database, newState1);
+                insertIntoQ_Table(database, newState2);
+                insertIntoQ_Table(database, newState3);
+                insertIntoQ_Table(database, newState4);
+
+
+            } else {
+                double[] newState1 = playATake(newState, num1);
+                double[] newState2 = playATake(newState1, num2);
+
+                insertIntoQ_Table(database, newState1);
+                insertIntoQ_Table(database, newState2);
+            }
+        }else{
+            double steps = Math.min(whiteChipsNumber(newState),blackChipsNumber(newState));
+
+            if (steps > 1){
+                dice1.roll();
+                dice2.roll();
+
+
+                int num1 = dice1.getNum();
+                int num2 = dice2.getNum();
+                System.out.println("The first dice num is: " + num1);
+                System.out.println("The second dice num is: " + num2);
+                System.out.println("----------------------------");
+                double[] newState1 = playATake(newState, num1);
+                double[] newState2 = playATake(newState1, num2);
+
+                insertIntoQ_Table(database, newState1);
+                insertIntoQ_Table(database, newState2);
+            }else {
+
+                dice1.roll();
+                int num1 = dice1.getNum();
+                System.out.println("The first dice num is: " + num1);
+                System.out.println("----------------------------");
+                double[] newState1 = playATake(newState, num1);
+                insertIntoQ_Table(database, newState1);
+            }
+        }
+    }
+
+    /**
+     * finished! make a take action
+     * @param currState
+     * @param diceNum
+     * @return a new state after take
+     */
+    public double[] playATake(double[] currState, int diceNum){
+
+        double[] newState = currState.clone();
+        if (turn == 0 && whiteCanTake == false) {
+            whiteCanTake();
+           if (whiteCanTake == false) {
+
+               newState = move(database,newState,diceNum);
+
+               return newState;
+           }
+
+
+        }
+
+
+        if (turn == 1 && blackCantake == false) {
+
+            blackCanTake();
+
+            if (blackCantake == false) {
+
+                newState = move(database,newState,diceNum);
+
+                return newState;
+            }
+
+        }
+
+
+
+        if (turn == 0){
+
+            if (whiteCanTake) {
+                //case 1. take directly
+                if (hasWhiteChip(newState, diceNum - 1)) {
+                    newState[diceNum - 1] = newState[diceNum - 1] - whiteChip;
+                    //case 2. make a move
+                } else if (!hasWhiteChip(currState, diceNum - 1) && !canTakeSmaller(newState, diceNum)) {
+                    int[] possibleMoves = chooseColumnToMoveWhiteChips(newState, diceNum);
+
+                    newState = simpleMoves(newState, possibleMoves[0], possibleMoves[1]).clone();
+
+                    //case 3. take next
+                } else if (canTakeSmaller(newState, diceNum)) {
+                    newState[takeNext(newState, diceNum)] = newState[takeNext(newState, diceNum)] - whiteChip;
+                }
+            }else{
+                return newState;
+            }
+
+
+        }else if (turn == 1){
+
+
+            if (blackCantake) {
+
+
+                //case 1. take directly
+                if (hasBlackChip(newState, 24 - diceNum)) {
+                    newState[24 - diceNum] = newState[24 - diceNum] - blackChip;
+                    //case 2. make a move
+                } else if (!hasBlackChip(newState, 24 - diceNum) && !canTakeSmaller(newState, diceNum)) {
+                    int[] possibleMoves = chooseColumnToMoveBlackChips(newState, diceNum);
+
+                    newState = simpleMoves(newState, possibleMoves[0], possibleMoves[1]).clone();
+                    //case 3. take next
+                } else if (canTakeSmaller(newState, diceNum)) {
+                    newState[takeNext(newState, diceNum)] = newState[takeNext(newState, diceNum)] - blackChip;
+                }
+            }else {
+                return newState;
+            }
+        }
+
+        return newState;
+
+    }
+
+
+
+    /**
+     * finished! to take next available chip
+     * @param currState
+     * @param diceNumber
+     * @return
+     */
+    public int takeNext(double[] currState,int diceNumber){
+        int val = 0;
+        if (!someOneWonEventually()) {
+            if (canTakeSmaller(currState, diceNumber)) {
+
+                if (turn == 0) {
+                    int index = diceNumber - 1;
+                    while (!hasWhiteChip(currState,index)){
+                        if (index>0) index--;
+                    }
+                    val = index;
+
+                } else if (turn == 1) {
+
+                    int index = 24 - diceNumber;
+                    while (!hasBlackChip(currState,index)) {
+                        if (index<23) index++;
+                    }
+                    val = index;
+                }
+            }
+        }
+        return val;
+    }
+
+
+    /**
+     * Finished, see if you can take a chip less than the dice number
+     * @param currState
+     * @param diceNum
+     * @return
+     */
+    public boolean canTakeSmaller(double[] currState,int diceNum){
+        boolean val = false;
+
+        if (turn == 0){
+            double sum = 0;
+
+            for (int i = diceNum -1 ;i<6;i++){
+                if (hasBlackChip(currState,i)){
+                    sum = sum;
+                }else {
+                    sum = currState[i] + sum;
+                }
+           }
+             if (sum == 0) val = true;
+
+        }else if (turn == 1){
+
+            double sum = 0;
+
+            for (int i = 24 - diceNum;i>17;i--){
+                if (hasWhiteChip(currState,i)){
+                    sum = sum;
+                }else {
+                    sum = currState[i] + sum;
+                }
+            }
+                if (sum == 0) val = true;
+        }
+
+
+
+        return val;
+    }
+
+
+
+    //check if white can take
+    public void whiteCanTake(){
+        double[] currState = database[getStatesNumber()-1].clone();
+
+        if (whiteChipsNumber(currState) == 15){
+            double sum = 0;
+
+            for (int i = 0;i<6;i++){
+               sum = sum + whiteChipsNumberInCertainColumn(currState,i);
+            }
+            if (sum == 15) {
+                whiteCanTake = true;
+            }
         }
 
     }
 
+    public double whiteChipsNumberInCertainColumn(double[] currState, int index){
+        double val = 0;
+
+        if (hasWhiteChip(currState,index)){
+            val = currState[index]/whiteChip;
+        }
+        return  val;
+
+    }
+    public double blackChipsNumberInCertainColumn(double[] currState, int index){
+        double val = 0;
+
+        if (hasBlackChip(currState,index)){
+            val = currState[index]/blackChip;
+        }
+        return  val;
+
+    }
+
+
+    //check if black can take
+    public void blackCanTake(){
+        double[] currState = database[getStatesNumber()-1].clone();
+
+        if (blackChipsNumber(currState) == 15){
+            double sum = 0;
+
+            for (int i = 23;i>17;i--){
+                sum = sum + blackChipsNumberInCertainColumn(currState,i);
+            }
+            if (sum == 15) {
+                blackCantake = true;
+            }
+        }
+
+    }
+
+
+
+
+
     /**
      * a method to check if someone won the game in this stage.
+     * don't consider take
+     * after won, begin to take.
      * @param currState Current state
      * @return if someone won, return true
      */
     public boolean someoneWon(double[] currState){
         boolean won = false;
-        int numberOfWhiteChip = 0;
-        int numberOfBlackChip = 0;
+        double numberOfWhiteChip = 0;
+        double numberOfBlackChip = 0;
 //        if (currState[0]+currState[1]+currState[2]+currState[3]+currState[4]+currState[5] == 15*whiteChip||currState[23]+currState[22]+currState[21]+currState[20]+currState[19]+currState[18] == 15*blackChip){
 //
 //            won = true;
@@ -156,13 +496,13 @@ public class TD {
 
         for (int i = 0;i<6;i++) {
             if (hasWhiteChip(currState, i)) {
-                numberOfWhiteChip=(int)countNumberOfChip(currState, i)+numberOfWhiteChip;
+                numberOfWhiteChip=whiteChipsNumberInCertainColumn(currState, i)+numberOfWhiteChip;
             }
         }
 
         for (int i = 23;i>17;i--) {
             if (hasBlackChip(currState, i)) {
-                numberOfBlackChip=(int)countNumberOfChip(currState, i)+numberOfBlackChip;
+                numberOfBlackChip=blackChipsNumberInCertainColumn(currState, i)+numberOfBlackChip;
             }
         }
 
@@ -173,37 +513,11 @@ public class TD {
         return won;
     }
 
-    /**
-     * a method to see who won the game.
-     * @param currState Current state
-     * @return if white chip won, return 0. if black chip won, return 1
-     */
-    public int whoWon(double[] currState){
-        int val = -1;
-        int numberOfWhiteChip = 0;
-        int numberOfBlackChip = 0;
-
-        for (int i = 0;i<6;i++) {
-            if (hasWhiteChip(currState, i)) {
-                numberOfWhiteChip=(int)countNumberOfChip(currState, i)+numberOfWhiteChip;
-            }
-        }
-
-        for (int i = 23;i>17;i--) {
-            if (hasBlackChip(currState, i)) {
-                numberOfBlackChip=(int)countNumberOfChip(currState, i)+numberOfBlackChip;
-            }
-        }
 
 
-        if (numberOfWhiteChip>=15){
-            val = 0;
-        }else if(numberOfBlackChip >=15){
-            val = 1;
-        }
 
-        return val;
-    }
+
+
 
     //Every time you .roll the dice, the number will change.
 
@@ -227,18 +541,18 @@ public class TD {
             double[] newState_4 = move(database, newState_3, dice2.getNum());
 
             //if it is not there, insert it.
-            if (!isInQ_Table(database, newState_1)) {
+
                 insertIntoQ_Table(database, newState_1);
-            }
-            if (!isInQ_Table(database, newState_2)) {
+
+
                 insertIntoQ_Table(database, newState_2);
-            }
-            if (!isInQ_Table(database, newState_3)) {
+
+
                 insertIntoQ_Table(database, newState_3);
-            }
-            if (!isInQ_Table(database, newState_4)) {
+
+
                 insertIntoQ_Table(database, newState_4);
-            }
+
 
 
         }else {
@@ -246,12 +560,11 @@ public class TD {
             double[] newState_2 = move(database, newState_1, dice2.getNum());
 
             //if it is not there, insert it.
-            if (!isInQ_Table(database, newState_1)) {
+
                 insertIntoQ_Table(database, newState_1);
-            }
-            if (!isInQ_Table(database, newState_2)) {
+
                 insertIntoQ_Table(database, newState_2);
-            }
+
         }
     }
 
@@ -290,9 +603,9 @@ public class TD {
     public void insertIntoQ_Table(double[][] database,double[] state){
         int numberOfStateAlreadyThere = getStatesNumber();
 
-        if (!isInQ_Table(database,state)){
+
             database[numberOfStateAlreadyThere] = state;
-        }
+
         numberOfStateAlreadyThere++;
         setStatesNumber(numberOfStateAlreadyThere);
     }
@@ -314,11 +627,14 @@ public class TD {
         int toColumn;
         double[] newState = new double[29];
 
-
             if (getTurn() == 0) {
             int[] temp = chooseColumnToMoveWhiteChips(currState,diceNumber).clone();
             fromColumn = temp[0];
             toColumn = temp[1];
+//                if (fromColumn == toColumn){
+////                    return newState;
+////                }
+
             System.out.println("It move from "+fromColumn+" column to "+toColumn);
             newState = currState.clone();
 
@@ -336,6 +652,9 @@ public class TD {
             int[] temp = chooseColumnToMoveBlackChips(currState,diceNumber).clone();
             fromColumn = temp[0];
             toColumn = temp[1];
+//                if (fromColumn == toColumn){
+//                    return newState;
+//                }
             System.out.println("It move from "+fromColumn+" column to "+toColumn);
 
             newState = currState.clone();
@@ -366,6 +685,7 @@ public class TD {
      * @return  an array with size 2.  index 0 for from column, index 1 for to column.
      */
     public int[] chooseColumnToMoveWhiteChips(double[] stateCurr, int diceNumber) {
+
         int[] movesFromAndTo = new int[2];
 
         if(stateCurr[25]!=0){
@@ -407,21 +727,84 @@ public class TD {
             }
 
 
+
+
             int[] possibleChoice = cutArray(possibleColumnForWhite);
             int numOfChoices = cutArray(possibleColumnForWhite).length;
-            Random randomGenerator = new Random();
+//            Random randomGenerator = new Random();
             if (numOfChoices == 0) {
                 movesFromAndTo[0] = 0;
                 movesFromAndTo[1] = 0;
 
             } else {
-                int num = randomGenerator.nextInt(numOfChoices);
+//                int num = randomGenerator.nextInt(numOfChoices);
 
-                movesFromAndTo[0] = possibleChoice[num];
-                movesFromAndTo[1] = possibleChoice[num] - diceNumber;
+//                movesFromAndTo[0] = possibleChoice[num];
+//                movesFromAndTo[1] = possibleChoice[num] - diceNumber;
+
+                //use neural network
+                //put all possible states together
+                double[][] possibleMoves = new double[possibleChoice.length][29];
+                double[] evaluationVal = new double[possibleChoice.length];
+                for (int i = 0;i<possibleChoice.length;i++){
+                    possibleMoves[i] = simpleMoves(stateCurr,possibleChoice[i],possibleChoice[i] - diceNumber);
+                    nn = new NeuralNetwork(possibleMoves[i]);
+                    evaluationVal[i] = nn.forward();
+                }
+                int index = findHighestNumber(evaluationVal);
+                movesFromAndTo[0] = possibleChoice[index];
+                movesFromAndTo[1] = possibleChoice[index] - diceNumber;
             }
+
+
+
+
+
         }
         return movesFromAndTo;
+    }
+
+    public int findHighestNumber(double[] array){
+        int index = 0;
+        int temp = 0;
+        for (int i = 0;i< array.length;i++){
+
+            if (array[i] > array[temp]){
+                temp = i;
+            }
+
+
+
+        }
+
+        return temp;
+
+
+    }
+
+    /**
+     * don't care about the rules
+     * @param currState
+     * @param from
+     * @param to
+     * @return
+     */
+    public double[] simpleMoves(double[] currState, int from, int to){
+        double[] val = currState.clone();
+        if (turn == 0){
+
+            val[from] = val[from] - whiteChip;
+            val[to] = val[to] + whiteChip;
+
+        }else if(turn == 1){
+
+            val[from] = val[from] - blackChip;
+            val[to] = val[to] + blackChip;
+
+        }
+
+        return val;
+
     }
 
 
@@ -473,16 +856,31 @@ public class TD {
 
             int[] possibleChoice = cutArray(possibleColumnForBlack);
             int numOfChoices = cutArray(possibleColumnForBlack).length;
-            Random randomGenerator = new Random();
+//            Random randomGenerator = new Random();
             if (numOfChoices == 0) {
                 movesFromAndTo[0] = 0;
                 movesFromAndTo[1] = 0;
             } else {
-                int num = randomGenerator.nextInt(numOfChoices);
-
-                movesFromAndTo[0] = possibleChoice[num];
-                movesFromAndTo[1] = possibleChoice[num] + diceNumber;
+//                int num = randomGenerator.nextInt(numOfChoices);
+//
+//                movesFromAndTo[0] = possibleChoice[num];
+//                movesFromAndTo[1] = possibleChoice[num] + diceNumber;
+                //use neural network
+                //put all possible states together
+                double[][] possibleMoves = new double[possibleChoice.length][29];
+                double[] evaluationVal = new double[possibleChoice.length];
+                for (int i = 0;i<possibleChoice.length;i++){
+                    possibleMoves[i] = simpleMoves(stateCurr,possibleChoice[i],possibleChoice[i] + diceNumber);
+                    nn = new NeuralNetwork(possibleMoves[i]);
+                    evaluationVal[i] = nn.forward();
+                }
+                int index = findHighestNumber(evaluationVal);
+                movesFromAndTo[0] = possibleChoice[index];
+                movesFromAndTo[1] = possibleChoice[index] + diceNumber;
             }
+
+
+
         }
         return movesFromAndTo;
     }
@@ -730,7 +1128,7 @@ public class TD {
 
         for (int i = 0;i<state.length-2;i++){
             if (hasWhiteChip(state,i)){
-                ctr = countNumberOfChip(state,i)+ctr;
+                ctr = whiteChipsNumberInCertainColumn(state,i)+ctr;
             }
         }
         return ctr;
@@ -741,19 +1139,91 @@ public class TD {
 
         for (int i = 0;i<state.length-2;i++){
             if (hasBlackChip(state,i)){
-                ctr = countNumberOfChip(state,i)+ctr;
+                ctr = blackChipsNumberInCertainColumn(state,i)+ctr;
             }
         }
         return ctr;
+    }
+
+    public double[] changeIntoInputVector(double[] currState){
+        double[] input = new double[198];
+        double[][] temp = new double[24][8];
+        for (int i = 0;i<24;i++){
+            temp[i] = changeOneColumnIntoInput(currState,i);
+        }
+
+        for (int i = 0;i<24;i++){
+            for (int j = 0;j<8;j++){
+                input[i*8+j] = temp[i][j];
+            }
+        }
+        if (turn == 0) input[196] = 1;
+        else input[197] = 1;
+
+        input[192] = countNumberOfChip(currState,25)/2;
+        input[193] = countNumberOfChip(currState,26)/2;
+
+
+
+        return input;
+    }
+
+    public double[] changeOneColumnIntoInput(double[] currState,int column){
+        double[] val = new double[8];
+
+        if (hasWhiteChip(currState,column)){
+            int number = (int)countNumberOfChip(currState,column);
+            if (number == 1){
+                val[0] = 1;
+            }else if(number == 2){
+                val[0] = 1;
+                val[1] = 1;
+            }else if(number == 3){
+                val[0] = 1;
+                val[1] = 1;
+                val[2] = 1;
+            }else if(number > 3){
+                int more = number - 3;
+                val[0] = 1;
+                val[1] = 1;
+                val[2] = 1;
+                val[3] = more;
+            }
+        }
+
+        else if(hasBlackChip(currState,column)){
+            int number = (int)countNumberOfChip(currState,column);
+            if (number == 1){
+                val[4] = 1;
+            }else if(number == 2){
+                val[4] = 1;
+                val[5] = 1;
+            }else if(number == 3){
+                val[4] = 1;
+                val[5] = 1;
+                val[6] = 1;
+            }else if(number > 3){
+                int more = number - 3;
+                val[4] = 1;
+                val[5] = 1;
+                val[6] = 1;
+                val[7] = more;
+            }
+        }
+
+
+
+        return val;
+
     }
 
 
 }
 
 class Test{
-    private static final double whiteChip = Math.PI-2;
+    private static final double w = Math.PI-2;
 
-    private static final double blackChip = Math.PI -3;
+    private static final double b = Math.PI -3;
 
     static Map<String, String>  map;
 
@@ -761,9 +1231,59 @@ class Test{
 
         TD td = new TD();
 
+        double[] testArray = new double[29];
+       //td.playAgainstItself();
+
+       testArray[0] =3*w;
+       testArray[1] =4*b;
+       testArray[2] =2*w;
+       testArray[3] =4*w;
+       testArray[4] =0*b;
+       testArray[5] =6*b;
+        testArray[6] =1*b;
+        testArray[7] =0*b;
+        testArray[8] =0;
+        testArray[9] =0;
+        testArray[10] =0*b;
+        testArray[11] =1;
+        testArray[12] =0;
+        testArray[13] =0;
+        testArray[14] =0;
+        testArray[15] =0*b;
+        testArray[16] =0;
+        testArray[17] =0;
+        testArray[18] =2*b;
+        testArray[19] =0*w;
+        testArray[20] =1;
+        testArray[21] =0;
+        testArray[22] =0*b;
+        testArray[23] =0*b;
+
+//        td.changeTurn();
+////
+////       td.take();
+////       System.out.println(td.database[td.getStatesNumber()-1]);
+//        td.printBoard(testArray);
+//        System.out.println(td.canTakeSmaller(testArray,3));
+//        System.out.println(td.whiteCanTake);
+////        System.out.println(td.takeNext(testArray,4));
+ //       printArray(td.chooseColumnToMoveWhiteChips(testArray,5));
+  //      td.printBoard(td.playATake(testArray,2));
+////        int[] possibleMoves = td.chooseColumnToMoveWhiteChips(testArray,5);
+////        printArray(possibleMoves);
+//            td.database[0] = testArray;
+//            td.take();
+
+//
+//            td.whiteCanTake = true;
+//            System.out.println(td.takeNext(testArray,6));
+//            td.printBoard(td.playATake(testArray,6));
 
         td.playAgainstItself();
-        
+
+//        System.out.println(td.countNumberOfChip(testArray,19));
+
+
 
 }
 
@@ -773,21 +1293,19 @@ class Test{
             int length = array.length;
 
             for (int i = 0;i<length;i++){
-                System.out.println(array[i]);
+                System.out.println("  "+array[i]);
             }
 
 
         }
 
-        public void change(){
 
-        }
 
         public static void printArray(double[] array){
         int length = array.length;
 
         for (int i = 0;i<length;i++){
-            System.out.println(array[i]);
+            System.out.println("the "+(i+1)+" element is "+array[i]);
         }
 
 
@@ -800,3 +1318,4 @@ class Test{
     }
 
 }
+
