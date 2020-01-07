@@ -11,10 +11,25 @@ public class RandomAI extends AI{
     public int[] decisionAlgorithm(Game game){
 
         ArrayList<int[]> possibleCols = new ArrayList<>();
-        Board b = game.getBoard();
-        int[] moveAI;
         System.out.println("AI is choosing random move.");
 
+        possibleCols = possibleMoves(game);
+        Random random = new Random();
+
+        int randomMove = random.nextInt(possibleCols.size());
+        System.out.println("Random number: " + randomMove);
+        System.out.println("Size of possible cols: " + possibleCols.size());
+
+
+
+    return possibleCols.get(randomMove);
+    }
+
+    public ArrayList<int[]> possibleMoves(Game game){
+
+        ArrayList<int[]> possibleCols = new ArrayList<>();
+
+        Board b = game.getBoard();
         // gets all possible moves
         for (int i = 0; i < 24; i++) {
             if (b.getColumns()[i].getChips().size() > 0) { //check if unempty col
@@ -36,17 +51,7 @@ public class RandomAI extends AI{
                 }
             }
         }
-
-        Random random = new Random();
-
-        int randomMove = random.nextInt(possibleCols.size());
-        System.out.println("Random number: " + randomMove);
-        System.out.println("Size of possible cols: " + possibleCols.size());
-
-        moveAI = possibleCols.get(randomMove);
-
-
-    return possibleCols.get(randomMove);
+        return possibleCols;
     }
 
     public RandomAI(){ super(); }
