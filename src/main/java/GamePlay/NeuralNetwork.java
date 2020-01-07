@@ -396,27 +396,24 @@ class Test1{
 }
 
 /**
- * You have to down set the path of 3 weight .txt documents
+ * You have to set the path of 3 weight .txt documents
  */
 class Files {
 
 
-    public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight.txt";
-    public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight.txt";
-    public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight.txt";
-    public static String sampleForTrainPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/sampleForTrain.txt";
-    public static String initial_InputWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_InputWeight.txt";
-    public static String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
-    public static String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
+    public static String hiddenWeightPath= "hiddenWeight.txt";
+    public static String biasWeightPath = "biasWeight.txt";
+    public static String inputWeightPath = "inputWeight.txt";
+    public static String sampleForTrainPath = "sampleForTrain.txt";
+    public static String initial_InputWeight = "initial_InputWeight.txt";
+    public static String initial_HiddenWeight = "initial_HiddenWeight.txt";
+    public static String initial_BiasWeight = "initial_BiasWeight.txt";
 
     public static int trainingTimes = 1000;
 
 
     public static void main(String[] args) {
 
-
-
-            trainNN();
 
 
     }
@@ -470,14 +467,6 @@ class Files {
 
     //example of one train
     public static void trainNN(){
-        String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight.txt";
-        String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight.txt";
-        String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight.txt";
-        String sampleForTrainPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/sampleForTrain.txt";
-        String initial_InputWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_InputWeight.txt";
-        String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
-        String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
-
 
         TD td = new TD();
 
@@ -488,21 +477,21 @@ class Files {
         writeInputWeightOrSample(sampleForTrainPath,database);
 
         //set the sample to be trained
-        double[] sample = td.changeIntoInputVector(database[16]);
+        double[] sample = td.changeIntoInputVector(database[0]);
 
 
-        NeuralNetwork nn = new NeuralNetwork(sample,0.7);
+        NeuralNetwork nn = new NeuralNetwork(sample,0.5);
 
 
 
         //read the weight result from the previous train
         nn.setWeightOfBias(readBiasWeight(biasWeightPath));
         nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
-        nn.setWeightOfInputVector(readInputWeight(initial_HiddenWeight));
+        nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
 
 
 
-        nn.train(1000);
+        nn.train(100);
 
         //copy the weight after one train
         double[] weightOfHiddenLayer = nn.getWeightOfHiddenLayer().clone();
