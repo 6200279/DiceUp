@@ -106,7 +106,6 @@ public abstract class AI extends Player {
 
         //Compute number of alone chips by looping trough all columns and checking if there are alone chips
         //that belong to currentPlayer. Array threats saves spots of enemy's chips to compute probability of being hit
-
         int [] threats = new int [24];
         for (int i = 0; i < 24; i++) {
             if (newBoard.getColumns()[i].getChips().size()>0) {
@@ -126,13 +125,16 @@ public abstract class AI extends Player {
             return 10;
         }
 
-        double probability = 1;
+        double probability = 0;
 
         //For the currentplayer, calculate the probability that the enemy is able to attack the column we are moving to
+        //Remark: calculating the probability here is not completely correct. Adding up the probabilities is only allowed
+        //when the events are exclusive (cannot happen at the same time). However, this is not the case and therefore
+        //this should be changed if it is important
         if (currentPlayer == g1.getP1()) {
             for (int i = 0; i < threats.length; i++) {
                 if (threats[i] == 1 && to-i < 0) {
-                    probability = probability * (1D - probabilities[i]);
+                    probability = probability + probabilities[i];
                 }
             }
         }
