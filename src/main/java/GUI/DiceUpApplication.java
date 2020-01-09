@@ -146,6 +146,7 @@ public class DiceUpApplication extends Application {
         if (p1Name == "") p1Name = "Player 1";
         if (p2Name == "") p1Name = "Player 2";
         game = new Game(p1, p2);
+        if (p2 instanceof RandomSampleBFS) ((RandomSampleBFS) p2).init(game);
         gameState = GameState.getInstance();
         gameState.initGameState(game);
 
