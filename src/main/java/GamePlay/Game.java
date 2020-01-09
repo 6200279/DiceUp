@@ -51,8 +51,10 @@ public class Game {
         dice1 = new Dice();
         dice2 = new Dice();
 
-        tree = new TreeNode(true);
+        tree = new TreeNode(true, board);
     }
+
+
 
     /**
      * Tries to move from Column A to Column B
@@ -125,7 +127,7 @@ public class Game {
 
         //Valid move, add move to the game tree.
         if (tree.getParent() != null) {
-            TreeNode leaf = new TreeNode(from, to);
+            TreeNode leaf = new TreeNode(from, to, this.getBoard());
             System.out.println("This is the move score: " + AI.evaluateMove(from, to, this));
 
             tree.getChildren().add(leaf);
@@ -134,6 +136,7 @@ public class Game {
 
         }
         System.out.println(tree.toString());
+        System.out.println("Move success");
      }
 
 
@@ -383,6 +386,9 @@ public class Game {
         dice1.roll();
         dice2.roll();
 
+        System.out.println(dice1.getNum());
+        System.out.println(dice2.getNum());
+
         moves.add(dice1.getNum());
         moves.add(dice2.getNum());
         if(dice1.getNum()==dice2.getNum()) {
@@ -403,6 +409,7 @@ public class Game {
         return board;
     }
 
+    public void setBoard(Board board){ this.board = board; }
     /**
      * Getter for the @turn instance
      *

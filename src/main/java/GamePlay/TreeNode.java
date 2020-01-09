@@ -29,8 +29,8 @@ public class TreeNode {
     //Player instance
     Player player;
 
-    private int dice1;
-    private int dice2;
+    private int die1;
+    private int die2;
 
     //From-to column ID's
     int from;
@@ -45,49 +45,51 @@ public class TreeNode {
 
     int visitCoun;
 
-    private List<TreeNode> children = new ArrayList<>();
+    public List<TreeNode> children = new ArrayList<>();
 
     private ArrayList<TreeNode> allLeafs = new ArrayList<>();
 
     private TreeNode parent = null;
 
-    private double prob = 0;
+    private double prob;
+
+    private Board board;
+
+    String test = "TEST";
 
 // constructors
 
 
     //chance Tree node
-    public TreeNode(int[] diceCombination){
+    public TreeNode(int[] diceCombination, Board aBoard){
 
-        this.dice1 = diceCombination[0];
-        this.dice2 = diceCombination[1];
 
-        // probability we want to add if dice are equal
-        if(dice1 == dice2){
-            prob = 1/36;
-        }
-        else{
-            prob = 1/18;
-        }
+        this.die1 = diceCombination[0];
+        this.die2 = diceCombination[1];
 
+        this.board = aBoard;
+        //this.prob = prob;
     }
 
 
-    public TreeNode(int from, int to) {
-        if(this.getParent().isRoot){
-            player = GameState.p2;
-        }
-        player = this.getParent().getParent().getPlayer();
+    public TreeNode(int from, int to, Board aBoard) {
+
+       // if(this.getParent().isRoot){
+        //    player = GameState.p2;
+       // }
+      //  player = this.getParent().getParent().getPlayer();
         this.from = from;
-        System.out.println("from: " + from);
+        //System.out.println("from: " + from);
         this.to = to;
-        System.out.println("to: " + to);
+        //System.out.println("to: " + to);
+        this.board  = aBoard;
 
     }
 
     // constructor that is called when root is created
-    public TreeNode(boolean isRoot) {
+    public TreeNode(boolean isRoot, Board aBoard) {
         this.isRoot = isRoot;
+        this.board = aBoard;
         player = GameState.p1;
     }
 
@@ -133,7 +135,11 @@ public class TreeNode {
 
     public Double getProb(){ return prob; }
 
+    public void setProb(double prob){ this.prob = prob; }
 
+    public Board getBoard(){ return board; }
+
+    public void setBoard(Board aBoard){ this.board = aBoard; }
 
 
     // returns depth of the tree
