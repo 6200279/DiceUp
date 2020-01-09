@@ -15,13 +15,13 @@ import java.util.ArrayList;
 import GUI.DiceUpController;
 import GUI.GameState;
 
+
 import static java.lang.Math.abs;
 
 public abstract class AI extends Player {
     //chooseSignelBestMove -> int[2]:
     //  0: from
     //  1: to
-
 
     GameState aState=GameState.getInstance();
     private Game game = GameState.game;
@@ -106,7 +106,6 @@ public abstract class AI extends Player {
 
         //Compute number of alone chips by looping trough all columns and checking if there are alone chips
         //that belong to currentPlayer. Array threats saves spots of enemy's chips to compute probability of being hit
-
         int [] threats = new int [24];
         for (int i = 0; i < 24; i++) {
             if (newBoard.getColumns()[i].getChips().size()>0) {
@@ -126,13 +125,16 @@ public abstract class AI extends Player {
             return 10;
         }
 
-        double probability = 1;
+        double probability = 0;
 
         //For the currentplayer, calculate the probability that the enemy is able to attack the column we are moving to
+        //Remark: calculating the probability here is not completely correct. Adding up the probabilities is only allowed
+        //when the events are exclusive (cannot happen at the same time). However, this is not the case and therefore
+        //this should be changed if it is important
         if (currentPlayer == g1.getP1()) {
             for (int i = 0; i < threats.length; i++) {
                 if (threats[i] == 1 && to-i < 0) {
-                    probability = probability * (1D - probabilities[i]);
+                    probability = probability + probabilities[i];
                 }
             }
         }
@@ -197,29 +199,53 @@ public abstract class AI extends Player {
         for (int i=0;i<24;i++){
             //Save the current column
             Column currentColumn = currentBoard.getColumns()[i];
-            //Check if there are chips of the respective player in this column
+            //Check if there are chips in this column
             if (currentColumn.getChips().size()>0) {
+                //check if the chips belong to the respective player
                 if (currentPlayer == currentColumn.getChips().get(0).getOwner()) {
                     //For every alone chip, decrease evaluation
                     if (currentColumn.getChips().size() == 1) {
                         evaluation = evaluation - 1D;
-                        soloChips.add(i);
                     }
 
                     //If it is a gate:
                     if (currentColumn.getChips().size() >= 2) {
-                        //If in home board +1.5, otherwise +1
+                        //If in home board +1, otherwise +0.7
                         if (currentPlayer == g1.getP1() && i >= 0 && i <= 5)
                             evaluation = evaluation + 1D;
                         else if (currentPlayer == g1.getP1())
                             evaluation = evaluation + 0.7;
 
-                            //If in home board +1.5, otherwise +1
+                            //If in home board +1, otherwise +0.7
                         else if (currentPlayer == g1.getP2() && i >= 18 && i <= 23)
                             evaluation = evaluation + 1D;
                         else if (currentPlayer == g1.getP2())
                             evaluation = evaluation + 0.7;
                     }
+                }
+                //else if the chips belong to the opponent
+                else if (currentColumn.getChips().get(0).getOwner()!= null){
+                    Player opponent = currentColumn.getChips().get(0).getOwner();
+                    //For every alone chip of the opponent, decrease evaluation
+                    if (currentColumn.getChips().size() == 1) {
+                        evaluation = evaluation + 1D;
+                    }
+                    //If it is a gate:
+                    if (currentColumn.getChips().size() >= 2) {
+                        //If in home board +1, otherwise +0.7
+                        if (opponent == g1.getP1() && i >= 0 && i <= 5)
+                            evaluation = evaluation - 1D;
+                        else if (opponent == g1.getP1())
+                            evaluation = evaluation - 0.7;
+
+                            //If in home board +1, otherwise +0.7
+                        else if (opponent == g1.getP2() && i >= 18 && i <= 23)
+                            evaluation = evaluation - 1D;
+                        else if (opponent == g1.getP2())
+                            evaluation = evaluation - 0.7;
+                    }
+
+
                 }
             }
         }

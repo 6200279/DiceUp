@@ -125,10 +125,11 @@ public class Game {
 
         //Valid move, add move to the game tree.
         if (tree.getParent() != null) {
-            TreeNode leaf = new TreeNode(from, to, AI.evaluateMove(from, to, this));
+            TreeNode leaf = new TreeNode(from, to);
             System.out.println("This is the move score: " + AI.evaluateMove(from, to, this));
 
             tree.getChildren().add(leaf);
+            System.out.println(tree.getChildren().size());
             System.out.println("Added a new child to tree.");
 
         }

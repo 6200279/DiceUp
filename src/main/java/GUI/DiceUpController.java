@@ -159,6 +159,11 @@ public class DiceUpController {
 
             //On move is made, handle it through this function:
             columns[i].setOnMouseClicked(event -> {
+                ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(currGame.getBoard(), currGame.getMoves(), currGame.turn);
+                for(int ma = 0; ma < possibleMoves.length; ma++) {
+                    System.out.println("-- MOVES FOR DICE " + ma + " --");
+                    for (int mk = 0; mk < possibleMoves[ma].size(); mk++) System.out.println("\tFrom: " + possibleMoves[ma].get(mk)[0] + ", To: " + possibleMoves[ma].get(mk)[1]);
+                }
                 user_Message.setText("");
                 LogBox.getItems().add("Attempting to move from column " + selectedChipColumn + " to " + columnId + ".");
                 try {
@@ -377,7 +382,7 @@ public class DiceUpController {
         LogBox.getItems().add(" - - - New Game - - -");
         LogBox.getItems().add("If the game is against AI and you choose to");
         LogBox.getItems().add(" skip a move please press on the dices once more");
-        LogBox.getItems().add(p1.getName() + " vs " + p2.getName());
+        LogBox.getItems().add(p1.getName() + " (" + p1.getID() + ") vs " + p2.getName() + " (" + p2.getID() + ")");
         LogBox.getItems().add(" - - " + currGame.getTurn().getName() + "'s Move - -");
     }
 

@@ -32,4 +32,8 @@ public class Column {
         chips = new ArrayList<Chip>();
 
     }
+    public boolean empty() {
+        if (chips.size() > 0) return false;
+        return true;
+    }
 }

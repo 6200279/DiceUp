@@ -49,6 +49,37 @@ public class Board {
             columns[18].getChips().add(new Chip(b));
         for (int j = 0; j < 2; j++)
             columns[23].getChips().add(new Chip(a));
+
+    }
+
+    public void takeinit(Column[] columns, Player a, Player b) {
+        for(int i=0; i<columns.length; i++)
+            columns[i] = new Column();
+
+        for (int j = 0; j < 2; j++)
+            columns[23].getChips().add(new Chip(b));
+        for (int j = 0; j < 2; j++)
+            columns[22].getChips().add(new Chip(b));
+        for (int j = 0; j < 3; j++)
+            columns[21].getChips().add(new Chip(b));
+        for (int j = 0; j < 3; j++)
+            columns[20].getChips().add(new Chip(b));
+        for (int j = 0; j < 4; j++)
+            columns[19].getChips().add(new Chip(b));
+        for (int j = 0; j <1 ; j++)
+            columns[18].getChips().add(new Chip(b));
+        for (int j = 0; j < 2; j++)
+            columns[0].getChips().add(new Chip(a));
+        for (int j = 0; j < 2; j++)
+            columns[1].getChips().add(new Chip(a));
+        for (int j = 0; j < 3; j++)
+            columns[2].getChips().add(new Chip(a));
+        for (int j = 0; j < 3; j++)
+            columns[3].getChips().add(new Chip(a));
+        for (int j = 0; j < 1; j++)
+            columns[4].getChips().add(new Chip(a));
+        for (int j = 0; j <4 ; j++)
+            columns[5].getChips().add(new Chip(a));
     }
 
 
@@ -95,5 +126,4 @@ public class Board {
         }
         return newBoard;
     }
-
 }
