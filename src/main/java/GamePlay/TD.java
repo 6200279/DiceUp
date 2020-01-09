@@ -10,7 +10,7 @@ package GamePlay;
     25 is hit place for white chips.
     26 is hit place for black chips.
     27,28 is the take place for a and b.
-    29 is the reward value of this state.
+    29 is the reward value of this state. Ignore
 
     The basic idea of this implement is let the computer play with computer.
     Record every state during a game and add it into the recording matrix(database).
@@ -33,7 +33,7 @@ package GamePlay;
 
     TODO: double dice. Finished
     TODO: make a whole match. Finished
-    TODO: implement neural network. Unfinished
+    TODO: implement neural network. Finished
  */
 
 
@@ -121,7 +121,6 @@ public class TD {
     reward values when finishing one game.
 
     Here is just some random move, aiming at generating more data
-    TODO: Try to implement simple strategy like: hit as much as possible
      */
 
     public void playAgainstItself() {
@@ -726,11 +725,10 @@ public class TD {
                 }
             }
 
-
-
-
             int[] possibleChoice = cutArray(possibleColumnForWhite);
+
             int numOfChoices = cutArray(possibleColumnForWhite).length;
+
 //            Random randomGenerator = new Random();
             if (numOfChoices == 0) {
                 movesFromAndTo[0] = 0;
@@ -745,12 +743,15 @@ public class TD {
                 //use neural network
                 //put all possible states together
                 double[][] possibleMoves = new double[possibleChoice.length][29];
+
                 double[] evaluationVal = new double[possibleChoice.length];
+
                 for (int i = 0;i<possibleChoice.length;i++){
                     possibleMoves[i] = simpleMoves(stateCurr,possibleChoice[i],possibleChoice[i] - diceNumber);
                     nn = new NeuralNetwork(possibleMoves[i]);
                     evaluationVal[i] = nn.forward();
                 }
+
                 int index = findHighestNumber(evaluationVal);
                 movesFromAndTo[0] = possibleChoice[index];
                 movesFromAndTo[1] = possibleChoice[index] - diceNumber;
@@ -765,21 +766,34 @@ public class TD {
     }
 
     public int findHighestNumber(double[] array){
-        int index = 0;
+
         int temp = 0;
+
         for (int i = 0;i< array.length;i++){
 
             if (array[i] > array[temp]){
                 temp = i;
             }
 
-
-
         }
 
         return temp;
 
+    }
 
+    public int findLowestNumber(double[] array){
+
+        int temp = 0;
+
+        for (int i = 0;i< array.length;i++){
+
+            if (array[i] < array[temp]){
+                temp = i;
+            }
+
+        }
+
+        return temp;
     }
 
     /**
@@ -874,7 +888,8 @@ public class TD {
                     nn = new NeuralNetwork(possibleMoves[i]);
                     evaluationVal[i] = nn.forward();
                 }
-                int index = findHighestNumber(evaluationVal);
+                //black choose the move with lowest probability
+                int index = findLowestNumber(evaluationVal);
                 movesFromAndTo[0] = possibleChoice[index];
                 movesFromAndTo[1] = possibleChoice[index] + diceNumber;
             }
@@ -1218,6 +1233,99 @@ public class TD {
     }
 
 
+    public boolean validData(double[] finalState) {
+        boolean val = true;
+
+        if (whiteChipsNumber(finalState) != 0){
+
+            val = false;
+
+        }
+
+        if (whiteChipsNumber(finalState)>15 ||blackChipsNumber(finalState)>15){
+
+            val = false;
+
+        }
+            return val;
+
+    }
+
+
+
+    //length is the number of statements in a game
+    public double[] targetGivenByQLearning(int length){
+        double learningRate = 0.5;
+
+        double discountValue = 1;
+
+        double[] target = new double[length];
+
+        double[] numberOfVisit = new double[length];
+
+        double[] reward = new double[length];
+
+        //if white won, and the final statement get utility 1
+        target[length-1] = 1;
+
+        reward[length-1] = 1;
+
+        target[length-2] = target[length-2] + learningRate*numberOfVisit[length-2]*(discountValue*target[length-1] - target[length-2]);
+
+        int ctr = 0;
+
+        int index = length-1;
+
+        //update the utility and make it converge eventually
+        while(ctr < length){
+
+            ctr++;
+
+            //number of statements needed to be updated
+            int updateNumber = length-index - 1;
+
+
+            for (int i = 0;i<updateNumber;i++){
+
+                target[length - i - 2] = target[length - i - 2] + learningRate*(1/ctr)*(discountValue*target[length - i-1] - target[length - i - 2]);
+
+            }
+
+
+
+
+            if (index > 0){
+                index--;
+            }
+        }
+
+
+
+
+        return target;
+    }
+
+    public double[] fakeTarget(int length){
+        double[] target = new double[length];
+
+
+        target[0] = 0.5;
+
+        target[target.length-1] = 1;
+
+        double step = 0.5/length;
+
+        for (int i = 1;i<target.length-1;i++){
+
+            target[i] = target[i-1] + step;
+
+        }
+
+
+
+        return target;
+    }
+
 }
 
 class Test{
@@ -1259,6 +1367,12 @@ class Test{
         testArray[22] =0*b;
         testArray[23] =0*b;
 
+
+        double[] arr = new double[]{1,4,-2,3,1,-9};
+
+        System.out.println( td.findLowestNumber(arr));
+
+
 //        td.changeTurn();
 ////
 ////       td.take();
@@ -1279,9 +1393,21 @@ class Test{
 //            System.out.println(td.takeNext(testArray,6));
 //            td.printBoard(td.playATake(testArray,6));
 
-        td.playAgainstItself();
+//       td.playAgainstItself();
 
 //        System.out.println(td.countNumberOfChip(testArray,19));
+
+//        double[] arr = td.fakeTarget(100).clone();
+//
+//
+//
+//        for (int i = 0;i<arr.length;i++){
+//
+//            System.out.println(arr[i]);
+//
+//        }
+
+
 
 
 

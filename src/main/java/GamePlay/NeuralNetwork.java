@@ -21,7 +21,7 @@ public class NeuralNetwork {
     private double[] hiddenLayer;
 
     //number of neurons in hidden layers
-    private int hiddenNumber = 40;
+    private int hiddenNumber = 50;
 
     //value of weight of the input vector
     private double[][] weightOfInputVector;
@@ -30,7 +30,7 @@ public class NeuralNetwork {
     private double[] weightOfHiddenLayer;
 
     //learning rate
-    private double learningRate = 0.9;
+    private double learningRate = 0.6;
 
     //iteration times
     private double iteration = 1000;
@@ -46,31 +46,45 @@ public class NeuralNetwork {
 
     public boolean DEBUG = false;
 
+    public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight.txt";
+    public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight.txt";
+    public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight.txt";
+    public static String sampleForTrainPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/sampleForTrain.txt";
+    public static String initial_InputWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_InputWeight.txt";
+    public static String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
+    public static String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
 
 
 
     Test t =  new Test();
 
     public NeuralNetwork(double[] inputVector,double target) {
+
+        Files f = new Files();
         hiddenLayer = new double[hiddenNumber];
         this.inputVector = inputVector;
         this.target = target;
-        weightOfInputVector = new double[hiddenNumber][inputVector.length];
-        weightOfHiddenLayer = new double[hiddenNumber];
-        weightOfBias = new double[hiddenNumber];
+//        weightOfInputVector = new double[hiddenNumber][inputVector.length];
+//        weightOfHiddenLayer = new double[hiddenNumber];
+//        weightOfBias = new double[hiddenNumber];
+        weightOfInputVector = f.readInputWeightForUse(inputWeightPath).clone();
+        weightOfHiddenLayer = f.readHiddenWeightForUse(hiddenWeightPath).clone();
+        weightOfBias =f.readBiasWeightForUse(biasWeightPath).clone();
 
 //        initialization();
     }
 
-    public NeuralNetwork(double[] inputVector) {
-        hiddenLayer = new double[hiddenNumber];
-        this.inputVector = inputVector;
-        this.target = target;
-        weightOfInputVector = new double[hiddenNumber][inputVector.length];
-        weightOfHiddenLayer = new double[hiddenNumber];
-        weightOfBias = new double[hiddenNumber];
 
-        initialization();
+    //td use this constructor to feed forward to calculate the probability of winning
+    public NeuralNetwork(double[] inputVector) {
+
+        Files f = new Files();
+        this.inputVector = inputVector;
+        hiddenLayer = new double[hiddenNumber];
+        weightOfInputVector = f.readInputWeightForUse(inputWeightPath);
+        weightOfHiddenLayer = f.readHiddenWeightForUse(hiddenWeightPath);
+        weightOfBias =f.readBiasWeightForUse(biasWeightPath);
+
     }
 
     public NeuralNetwork(){
@@ -92,16 +106,16 @@ public class NeuralNetwork {
 
         for (int i = 0; i < weightOfInputVector.length; i++) {
             for (int j = 0; j < weightOfInputVector[0].length; j++) {
-                weightOfInputVector[i][j] = Math.random();
+                weightOfInputVector[i][j] = Math.random()/1000;
             }
         }
 
         for (int i = 0; i < weightOfHiddenLayer.length; i++) {
-            weightOfHiddenLayer[i] = Math.random();
+            weightOfHiddenLayer[i] = Math.random()/1000;
         }
 
         for (int i = 0; i < weightOfBias.length; i++) {
-            weightOfBias[i] = Math.random();
+            weightOfBias[i] = Math.random()/1000;
         }
 
     }
@@ -163,7 +177,6 @@ public class NeuralNetwork {
         double[] tempOutputHiddenLayer = new double[hiddenLayer.length];
 
 
-
         //first do forward prop
         for (int i = 0;i<hiddenLayer.length;i++){
             for (int j = 0;j<inputVector.length;j++){
@@ -171,6 +184,7 @@ public class NeuralNetwork {
                 sum = sum + inputVector[j]*weightOfInputVector[i][j];
 
             }
+
             sum = sum + bias*weightOfBias[i];
             tempInputHiddenLayer[i] = sum;
             tempOutputHiddenLayer[i] = activationFunction(sum);
@@ -190,10 +204,6 @@ public class NeuralNetwork {
         double output = activationFunction(netOutput);
         return output;
     }
-
-
-
-
 
     public void forwardAndBackward(){
         double sum = 0;
@@ -283,7 +293,10 @@ public class NeuralNetwork {
 
 
         //eventually update weight of hidden layer
-        weightOfHiddenLayer = tempHiddenLayerWeight.clone();
+        weightOfHiddenLayer = tempHiddenLayerWeight.clone() ;
+        setWeightOfHiddenLayer(tempHiddenLayerWeight.clone());
+        setWeightOfInputVector(weightOfInputVector);
+        setWeightOfBias(weightOfBias);
 
         if (DEBUG) {
             for (int i = 0; i < weightOfInputVector.length; i++) {
@@ -309,6 +322,8 @@ public class NeuralNetwork {
         }
 
     }
+
+
 
 
     public int getHiddenNumber(){
@@ -401,19 +416,148 @@ class Test1{
 class Files {
 
 
-    public static String hiddenWeightPath= "hiddenWeight.txt";
-    public static String biasWeightPath = "biasWeight.txt";
-    public static String inputWeightPath = "inputWeight.txt";
-    public static String sampleForTrainPath = "sampleForTrain.txt";
-    public static String initial_InputWeight = "initial_InputWeight.txt";
-    public static String initial_HiddenWeight = "initial_HiddenWeight.txt";
-    public static String initial_BiasWeight = "initial_BiasWeight.txt";
+    //now, IO part works good
 
-    public static int trainingTimes = 1000;
+    public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight.txt";
+    public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight.txt";
+    public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight.txt";
+    public static String sampleForTrainPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/sampleForTrain.txt";
+    public static String initial_InputWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_InputWeight.txt";
+    public static String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
+    public static String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
+
+
+
+    public static int trainingTimes = 10;
 
 
     public static void main(String[] args) {
 
+//        trainAfterOneGame();
+
+
+
+//        double[][] t = readInputWeight(initial_InputWeight);
+//
+//        NeuralNetwork nn = new NeuralNetwork();
+//
+//        nn.setWeightOfBias(readBiasWeight(initial_BiasWeight));
+//
+//        double[] te = nn.getWeightOfBias();
+
+//        for (int i = 0;i<t.length;i++){
+//            for (int j = 0;j<t[0].length;j++){
+//                System.out.println(t[i][j]);
+//            }
+//        }
+
+//        for (int i = 0;i<te.length;i++){
+//            System.out.println(te[i]);
+//
+//        }
+
+//        checkResult();
+
+//        NeuralNetwork ne = new NeuralNetwork();
+//
+
+//
+//        System.out.println(ne.forward());
+//
+//        writeBiasOrHiddenWeight(initial_HiddenWeight,ne.getWeightOfHiddenLayer());
+//
+//        writeInputWeightOrSample(initial_InputWeight,ne.getWeightOfInputVector());
+//
+//        writeBiasOrHiddenWeight(initial_BiasWeight,ne.getWeightOfBias());
+
+        //reset the weight
+
+        writeBiasOrHiddenWeight(hiddenWeightPath,readHiddenWeight(initial_HiddenWeight));
+
+        writeBiasOrHiddenWeight(biasWeightPath,readBiasWeight(initial_BiasWeight));
+
+        writeInputWeightOrSample(inputWeightPath,readInputWeight(initial_InputWeight));
+
+
+
+
+
+//            trainAfterOneGame();
+
+
+
+
+//
+//        TD td = new TD();
+//
+//        td.playAgainstItself();
+//
+//        double[][] database = cutDatabase(td.database).clone();
+//
+//        double[] sample = td.changeIntoInputVector(database[database.length-1]);
+//
+//        ne.setInputVector(sample);
+//
+//        writeBiasOrHiddenWeight(initial_HiddenWeight,ne.getWeightOfHiddenLayer());
+//
+//        writeInputWeightOrSample(initial_InputWeight,ne.getWeightOfInputVector());
+//
+//        writeBiasOrHiddenWeight(initial_BiasWeight,ne.getWeightOfBias());
+
+//        writeBiasOrHiddenWeight(hiddenWeightPath,readHiddenWeight(initial_HiddenWeight));
+//
+//        writeBiasOrHiddenWeight(biasWeightPath,readBiasWeight(initial_BiasWeight));
+//
+//        writeInputWeightOrSample(inputWeightPath,readInputWeight(initial_InputWeight));
+
+//        TD td = new TD();
+//
+//        td.playAgainstItself();
+//
+//        double[][] database = cutDatabase(td.database).clone();
+//
+//        double[] sample = td.changeIntoInputVector(database[database.length-1]);
+//
+//        NeuralNetwork nn = new NeuralNetwork(sample,1);
+//
+//        nn.train(10);
+//
+//        System.out.println(nn.forward());
+
+        checkResult();
+
+    }
+
+    public static void checkResult(){
+        TD td = new TD();
+
+        td.playAgainstItself();
+
+        double[][] database = cutDatabase(td.database).clone();
+
+        double[] sample = td.changeIntoInputVector(database[database.length-1]);
+
+        NeuralNetwork nn = new NeuralNetwork(sample);
+
+        //read the weight result from the previous train
+        nn.setWeightOfBias(readBiasWeight(biasWeightPath));
+        nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
+        nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
+
+//        nn.setWeightOfBias(readBiasWeight(initial_BiasWeight));
+//        nn.setWeightOfHiddenLayer(readHiddenWeight(initial_HiddenWeight));
+//        nn.setWeightOfInputVector(readInputWeight(initial_InputWeight));
+
+        System.out.println(nn.forward());
+    }
+
+    public void trainWhateverTimes(int times){
+        int ctr = 0;
+
+        while(ctr<times){
+            trainAfterOneGame();
+            ctr++;
+        }
 
 
     }
@@ -423,46 +567,52 @@ class Files {
 
         td.playAgainstItself();
 
+
+
         double[][] database = cutDatabase(td.database).clone();
 
-        writeInputWeightOrSample(sampleForTrainPath,database);
 
-        //TODO: Set the target of every statements using the temporal difference method
-        double[] target = new double[database.length];
-
-        for (int i = 0;i<database.length;i++){
-            //set the sample to be trained
-            double[] sample = td.changeIntoInputVector(database[i]);
-
-            NeuralNetwork nn = new NeuralNetwork(sample,target[i]);
-
-            //read the weight result from the previous train
-            nn.setWeightOfBias(readBiasWeight(biasWeightPath));
-            nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
-            nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
-
-            nn.train(trainingTimes);
-
-            //copy the weight after one train
-            double[] weightOfHiddenLayer = nn.getWeightOfHiddenLayer().clone();
-
-            double[] weightOfBiasLayer = nn.getWeightOfBias().clone();
-
-            double[][] weightOfInputVector = nn.getWeightOfInputVector().clone();
+        if (td.validData(database[database.length-1])) {
 
 
-            //record the result of this train
-            writeBiasOrHiddenWeight(hiddenWeightPath,weightOfHiddenLayer);
+            writeInputWeightOrSample(sampleForTrainPath, database);
 
-            writeBiasOrHiddenWeight(biasWeightPath,weightOfBiasLayer);
+            double[] target = td.fakeTarget(database.length).clone();
 
-            writeInputWeightOrSample(inputWeightPath,weightOfInputVector);
+            for (int i = 0; i < database.length; i++) {
+                //set the sample to be trained
+                double[] sample = td.changeIntoInputVector(database[i]);
+
+                NeuralNetwork nn = new NeuralNetwork(sample, target[i]);
+
+                //read the weight result from the previous train
+                nn.setWeightOfBias(readBiasWeight(biasWeightPath));
+                nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
+                nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
+
+                nn.train(trainingTimes);
+
+                //copy the weight after one train
+                double[] weightOfHiddenLayer = nn.getWeightOfHiddenLayer().clone();
+
+                double[] weightOfBiasLayer = nn.getWeightOfBias().clone();
+
+                double[][] weightOfInputVector = nn.getWeightOfInputVector().clone();
 
 
+                //record the result of this train
+                writeBiasOrHiddenWeight(hiddenWeightPath, weightOfHiddenLayer);
+
+                writeBiasOrHiddenWeight(biasWeightPath, weightOfBiasLayer);
+
+                writeInputWeightOrSample(inputWeightPath, weightOfInputVector);
+
+            }
 
         }
 
     }
+
 
 
     //example of one train
@@ -516,6 +666,7 @@ class Files {
         BufferedReader reader = null;
 
         NeuralNetwork nn = new NeuralNetwork();
+
         double[] array = new double[nn.getHiddenNumber()];
 
         try {
@@ -528,9 +679,9 @@ class Files {
 
             while ((tempString = reader.readLine()) != null) {
 
-                Double i = new Double(tempString);
+                Double i = Double.parseDouble(tempString);
 
-                array[line] = i.intValue();
+                array[line] = i;
 
                 //System.out.println("line " + line + ": " + tempString);
 
@@ -552,19 +703,22 @@ class Files {
         BufferedReader reader = null;
 
         NeuralNetwork nn = new NeuralNetwork();
+
         double[] array = new double[nn.getHiddenNumber()];
 
         try {
 
             reader = new BufferedReader(new FileReader(file));
+
             String tempString = null;
+
             int line = 0;
 
             while ((tempString = reader.readLine()) != null) {
 
-                Double i = new Double(tempString);
+                Double i = Double.parseDouble(tempString);
 
-                array[line] = i.intValue();
+                array[line] = i;
 
                 //System.out.println("line " + line + ": " + tempString);
 
@@ -584,7 +738,8 @@ class Files {
         BufferedReader reader = null;
 
         NeuralNetwork nn = new NeuralNetwork();
-        int row = 40;
+
+        int row = nn.getHiddenNumber();
 
         int column = 198;
 
@@ -602,9 +757,9 @@ class Files {
 
             while ((tempString = reader.readLine()) != null) {
 
-                Double num = new Double(tempString);
+                Double i = Double.parseDouble(tempString);
 
-                temp[line] = num.intValue();
+                temp[line] = i;
 
                 //System.out.println("line " + line + ": " + tempString);
 
@@ -666,14 +821,14 @@ class Files {
 
     public static void writeInputWeightOrSample(String fileName,double[][] inputWeight) {
 
-        NeuralNetwork nn = new NeuralNetwork();
+
 
         try{
             File writename = new File(fileName);
 
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 
-            double[] arr = new double[nn.getHiddenNumber()];
+
 
             for (int i = 0;i<inputWeight.length;i++){
                 for (int j = 0;j<inputWeight[0].length;j++){
@@ -720,8 +875,141 @@ class Files {
     }
 
 
+    public  double[][] readInputWeightForUse(String fileName) {
+        File file = new File(fileName);
+        BufferedReader reader = null;
+
+        NeuralNetwork nn = new NeuralNetwork();
+
+        int row = nn.getHiddenNumber();
+
+        int column = 198;
+
+        double[][] array = new double[row][column];
+
+        double [] temp = new double[row*column];
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+
+            String tempString = null;
+
+            int line = 0;
+
+
+            while ((tempString = reader.readLine()) != null) {
+
+                Double i = Double.parseDouble(tempString);
+
+                temp[line] = i;
+
+                //System.out.println("line " + line + ": " + tempString);
+
+                line++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int rowCtr = 0;
+
+        int colCtr = 0;
+
+        for (int i = 0;i<temp.length;i++) {
+
+            if (i != 0 && i % column == 0) {
+                rowCtr++;
+            }
+
+            if (colCtr == column) {
+                colCtr = 0;
+            }
+
+            array[rowCtr][colCtr] = temp[i];
+
+            colCtr++;
+
+        }
+
+        return array;
+
+    }
+
+    public  double[] readBiasWeightForUse(String fileName) {
+        File file = new File(fileName);
+        BufferedReader reader = null;
+
+        NeuralNetwork nn = new NeuralNetwork();
+
+        double[] array = new double[nn.getHiddenNumber()];
+
+        try {
+
+            reader = new BufferedReader(new FileReader(file));
+
+            String tempString = null;
+
+            int line = 0;
+
+            while ((tempString = reader.readLine()) != null) {
+
+                Double i = Double.parseDouble(tempString);
+
+                array[line] = i;
+
+                //System.out.println("line " + line + ": " + tempString);
+
+                line++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return array;
+
+    }
+
+    public  double[] readHiddenWeightForUse(String fileName) {
+        File file = new File(fileName);
+        BufferedReader reader = null;
+
+        NeuralNetwork nn = new NeuralNetwork();
+
+        double[] array = new double[nn.getHiddenNumber()];
+
+        try {
+
+            reader = new BufferedReader(new FileReader(file));
+
+            String tempString = null;
+
+            int line = 0;
+
+            while ((tempString = reader.readLine()) != null) {
+
+                Double i = Double.parseDouble(tempString);
+
+                array[line] = i;
+
+                //System.out.println("line " + line + ": " + tempString);
+
+                line++;
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+        return array;
+    }
 
 }
+
 
 
 
