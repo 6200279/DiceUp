@@ -49,6 +49,7 @@ public class Board {
             columns[18].getChips().add(new Chip(b));
         for (int j = 0; j < 2; j++)
             columns[23].getChips().add(new Chip(a));
+
     }
 
     public void takeinit(Column[] columns, Player a, Player b) {
@@ -125,5 +126,4 @@ public class Board {
         }
         return newBoard;
     }
-
 }
