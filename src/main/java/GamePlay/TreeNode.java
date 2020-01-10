@@ -17,6 +17,7 @@
 package GamePlay;
 
 import GUI.GameState;
+import apple.laf.JRSUIUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,10 @@ public class TreeNode {
     public List<TreeNode> children = new ArrayList<>();
 
     private ArrayList<TreeNode> allLeafs = new ArrayList<>();
+
+    private ArrayList<TreeNode> secondLayer = new ArrayList<>();
+
+    private ArrayList<TreeNode> firstLayer = new ArrayList<>();
 
     private TreeNode parent = null;
 
@@ -95,12 +100,15 @@ public class TreeNode {
 
 // mutator methods
 
-    public void addLeaf(){
-
-            /*
-            TODO:
-                * make a list of all leaf nodes from the current tree
-             */
+    // creating lists of every tree node in every level (except root)
+    public void addLeaf(TreeNode leaf){
+        allLeafs.add(leaf);
+    }
+    public void addSecondLayer(TreeNode secondLayerNode){
+        secondLayer.add(secondLayerNode);
+    }
+    public void addFirstLayer(TreeNode firstLayerNode){
+        firstLayer.add(firstLayerNode);
     }
 
     //basic method of adding moves
@@ -121,6 +129,10 @@ public class TreeNode {
 
     public List<TreeNode> getChildren() { return children; }
 
+    public void setMoveScore(double moveScore){
+        this.moveScore  = moveScore;
+    }
+
     // some basic method we might need
     public void setParent(TreeNode parent) {
 
@@ -132,6 +144,8 @@ public class TreeNode {
     }
 
     public ArrayList<TreeNode> getAllLeafs(){ return allLeafs; }
+    public ArrayList<TreeNode> getSecondLayer(){ return secondLayer; }
+    public ArrayList<TreeNode> getFirstLayer(){ return firstLayer; }
 
     public Double getProb(){ return prob; }
 

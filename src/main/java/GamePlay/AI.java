@@ -190,9 +190,9 @@ public abstract class AI extends Player {
         return evaluation;
     }
 
-    public static double evaluateGame(Game g1, Player p1){
+    public static double evaluateGame(Player p1, Player p2, Board board){
         Player currentPlayer = p1;
-        Board currentBoard = g1.getBoard();
+        Board currentBoard = board;
         double evaluation = 0;
         ArrayList<Integer> soloChips = new ArrayList<Integer>();
 
@@ -211,15 +211,15 @@ public abstract class AI extends Player {
                     //If it is a gate:
                     if (currentColumn.getChips().size() >= 2) {
                         //If in home board +1, otherwise +0.7
-                        if (currentPlayer == g1.getP1() && i >= 0 && i <= 5)
+                        if (currentPlayer == p1 && i >= 0 && i <= 5)
                             evaluation = evaluation + 1D;
-                        else if (currentPlayer == g1.getP1())
+                        else if (currentPlayer == p1)
                             evaluation = evaluation + 0.7;
 
                             //If in home board +1, otherwise +0.7
-                        else if (currentPlayer == g1.getP2() && i >= 18 && i <= 23)
+                        else if (currentPlayer == p2 && i >= 18 && i <= 23)
                             evaluation = evaluation + 1D;
-                        else if (currentPlayer == g1.getP2())
+                        else if (currentPlayer == p2)
                             evaluation = evaluation + 0.7;
                     }
                 }
@@ -233,15 +233,15 @@ public abstract class AI extends Player {
                     //If it is a gate:
                     if (currentColumn.getChips().size() >= 2) {
                         //If in home board +1, otherwise +0.7
-                        if (opponent == g1.getP1() && i >= 0 && i <= 5)
+                        if (opponent == p1 && i >= 0 && i <= 5)
                             evaluation = evaluation - 1D;
-                        else if (opponent == g1.getP1())
+                        else if (opponent == p1)
                             evaluation = evaluation - 0.7;
 
                             //If in home board +1, otherwise +0.7
-                        else if (opponent == g1.getP2() && i >= 18 && i <= 23)
+                        else if (opponent == p2 && i >= 18 && i <= 23)
                             evaluation = evaluation - 1D;
-                        else if (opponent == g1.getP2())
+                        else if (opponent == p2)
                             evaluation = evaluation - 0.7;
                     }
 
@@ -251,7 +251,7 @@ public abstract class AI extends Player {
         }
 
         //The if statements below consider the middle.
-        if (currentPlayer == g1.getP1()) {
+        if (currentPlayer == p1) {
             Column myMiddle = currentBoard.getColumns()[24];
             Column opponentMiddle = currentBoard.getColumns()[25];
             for (int i =0; i<myMiddle.getChips().size();i++) {
@@ -262,7 +262,7 @@ public abstract class AI extends Player {
             }
         }
 
-        if (currentPlayer == g1.getP2()) {
+        if (currentPlayer == p2) {
             Column myMiddle = currentBoard.getColumns()[25];
             Column opponentMiddle = currentBoard.getColumns()[24];
             for (int i =0; i<myMiddle.getChips().size();i++) {
