@@ -5,15 +5,14 @@ import java.util.ArrayList;
 public class BoardAnalysis {
     public static final int[][] DICE_OUTCOMES = {
             {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5},  {6, 6},
-            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 4}, {5, 6},
-            {0, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 4},
+            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6},
+            {0, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 6},
             {0, 3}, {1, 4}, {2, 5}, {3, 6},
             {0, 4}, {1, 5}, {2, 6},
             {0, 5}, {1, 6},
             {0, 6}
     };
 
-    //TODO: Modify the result arraylist into a multidimensional one (depending on the amount of moves available) so that no overlaps will happen
     public static ArrayList<int[]>[] possibleMoves (Board b, ArrayList<Integer> moves, Player p) {
         int player = p.getID();
         ArrayList<int[]>[] possibleCols = new ArrayList[moves.size()];
@@ -130,6 +129,25 @@ public class BoardAnalysis {
         return possibleCols;
     }
 
+    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, int lengthfirst, ArrayList<int[][]> pC, int[] current, int[] checked) {
+        lengthfirst = checked.length;
+        if (lengthfirst>0) {
+            ArrayList<int[][]> pC = new ArrayList<>();
+
+            ArrayList<int[]>[] possibleMoves = possibleMoves(b, moves, p);
+
+            for (int i = 0; i < possibleMoves.length; i++) {//iterate through all dice outputs
+                for (int j = 0; j < possibleMoves[i].size(); j++) { //iterate through single moves
+
+                }
+            }
+        }
+        possibleCombinations(b, moves, p, lengthfirst-1, pC, current, moves.get(lengthfirst-1));
+        else {
+            current++;
+        }
+        }
+    }
     public static double evaluateBoard(Board b, Player p, Game g1){
         Player currentPlayer = p;
         Board currentBoard = b;
