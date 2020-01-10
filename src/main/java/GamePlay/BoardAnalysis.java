@@ -129,25 +129,23 @@ public class BoardAnalysis {
         return possibleCols;
     }
 
-    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, int lengthfirst, ArrayList<int[][]> pC, int[] current, int[] checked) {
-        lengthfirst = checked.length;
+    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int lengthfirst, int lengthsecond, ArrayList<int[][]> pC, int[] current, int[] checked) {
+
         if (lengthfirst>0) {
-            ArrayList<int[][]> pC = new ArrayList<>();
-
-            ArrayList<int[]>[] possibleMoves = possibleMoves(b, moves, p);
-
-            for (int i = 0; i < possibleMoves.length; i++) {//iterate through all dice outputs
-                for (int j = 0; j < possibleMoves[i].size(); j++) { //iterate through single moves
-
-                }
-            }
+            lengthfirst--;
+            pC.add(new int[][]{possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst)});
+            return possibleCombinations(b, moves, p, possibleMoves,lengthfirst, lengthsecond, pC, possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst));
         }
-        possibleCombinations(b, moves, p, lengthfirst-1, pC, current, moves.get(lengthfirst-1));
-        else {
-            current++;
+        else if (lengthsecond> 0) {
+            lengthfirst = possibleMoves[0].size();
+            lengthsecond--;
+            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst ,lengthsecond, pC, possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst-1));
         }
-        }
+
+
+        return pC;
     }
+
     public static double evaluateBoard(Board b, Player p, Game g1){
         Player currentPlayer = p;
         Board currentBoard = b;
