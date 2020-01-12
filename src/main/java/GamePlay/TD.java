@@ -146,13 +146,18 @@ public class TD {
 
         System.out.println("Finished gjhghjbhjbjhvjhvhjvhhjvjhvhjvhjjhjhbjhkjjkbkjbjk");
 
-        while (!someOneWonEventually()){
+        if (whiteChipsNumber(database[getStatesNumber() - 1]) > 15 ||blackChipsNumber(database[getStatesNumber() - 1]) > 15) {
+            System.out.println("Invalid simulation");
+            return;
+        }
 
-            if (whiteCanTake&&database[getStatesNumber()-1][25] != 0){
+        while (!someOneWonEventually()) {
+
+            if (whiteCanTake && database[getStatesNumber() - 1][25] != 0) {
                 System.out.println("White lose");
                 break;
             }
-            if (blackCantake&&database[getStatesNumber()-1][26] != 0){
+            if (blackCantake && database[getStatesNumber() - 1][26] != 0) {
                 System.out.println("Black lose");
                 break;
             }
@@ -160,13 +165,24 @@ public class TD {
             whoseTurn();
             take();
             changeTurn();
-            System.out.println("There are " + getStatesNumber() + " states have been stored");
-            System.out.println("----------------------------------------------");
-            printBoard(database[getStatesNumber()-1]);
-            System.out.println("----------------------------------------------");
-            System.out.println("White chips' number: " + whiteChipsNumber(database[getStatesNumber()-1]));
-            System.out.println("Black chips' number: " + blackChipsNumber(database[getStatesNumber()-1]));
-            System.out.println("----------------------------------------------");
+
+            if (whiteChipsNumber(database[getStatesNumber() - 1]) > 15) {
+                System.out.println("Invalid simulation");
+                break;
+            } else if (blackChipsNumber(database[getStatesNumber() - 1]) > 15) {
+                System.out.println("Invalid simulation");
+                break;
+            }
+
+            if (debug = true) {
+                System.out.println("There are " + getStatesNumber() + " states have been stored");
+                System.out.println("----------------------------------------------");
+                printBoard(database[getStatesNumber() - 1]);
+                System.out.println("----------------------------------------------");
+                System.out.println("White chips' number: " + whiteChipsNumber(database[getStatesNumber() - 1]));
+                System.out.println("Black chips' number: " + blackChipsNumber(database[getStatesNumber() - 1]));
+                System.out.println("----------------------------------------------");
+            }
         }
 
 
@@ -599,11 +615,15 @@ public class TD {
      * @param database Q-table
      * @param state state to be inserted
      */
-    public void insertIntoQ_Table(double[][] database,double[] state){
+    public void insertIntoQ_Table (double[][] database,double[] state){
         int numberOfStateAlreadyThere = getStatesNumber();
 
+            try{
+                database[numberOfStateAlreadyThere] = state;
+            }catch (ArrayIndexOutOfBoundsException e){
+                System.out.println("This simulation occur bugs, not valid");
+            }
 
-            database[numberOfStateAlreadyThere] = state;
 
         numberOfStateAlreadyThere++;
         setStatesNumber(numberOfStateAlreadyThere);
@@ -1172,8 +1192,19 @@ public class TD {
                 input[i*8+j] = temp[i][j];
             }
         }
-        if (turn == 0) input[196] = 1;
-        else input[197] = 1;
+
+        //if this is white turn, 196 == 1, else , 197 == 1
+        if (turn == 0){
+            input[196] = 1;
+        }
+        else{
+            input[197] = 1;
+        }
+
+
+        //input 194 and 195 represent the number of chips have already be taken.
+        input[194] = 15-whiteChipsNumber(currState);
+        input[195] = 15-blackChipsNumber(currState);
 
         input[192] = countNumberOfChip(currState,25)/2;
         input[193] = countNumberOfChip(currState,26)/2;
@@ -1251,7 +1282,43 @@ public class TD {
 
     }
 
+    public boolean validAndWhiteWon(double[] finalState) {
 
+        boolean val = true;
+
+        if (whiteChipsNumber(finalState) != 0){
+
+            val = false;
+
+        }
+
+        if (whiteChipsNumber(finalState)>15 ||blackChipsNumber(finalState)>15){
+
+            val = false;
+
+        }
+        return val;
+
+    }
+
+    public boolean validAndBlackWon(double[] finalState){
+        boolean val = true;
+
+        if (blackChipsNumber(finalState) != 0){
+
+            val = false;
+
+        }
+
+        if (whiteChipsNumber(finalState)>15 ||blackChipsNumber(finalState)>15){
+
+            val = false;
+
+        }
+
+        return val;
+
+    }
 
     //length is the number of statements in a game
     public double[] targetGivenByQLearning(int length){
@@ -1261,44 +1328,26 @@ public class TD {
 
         double[] target = new double[length];
 
-        double[] numberOfVisit = new double[length];
+        double reward = 0;
 
-        double[] reward = new double[length];
+        double numberOfVisit = 1;
 
         //if white won, and the final statement get utility 1
         target[length-1] = 1;
 
-        reward[length-1] = 1;
 
-        target[length-2] = target[length-2] + learningRate*numberOfVisit[length-2]*(discountValue*target[length-1] - target[length-2]);
+        for (int j = 0; j<length-1;j++){
 
-        int ctr = 0;
+            numberOfVisit++;
 
-        int index = length-1;
+            for (int i = 0;i<target.length-1;i++) {
 
-        //update the utility and make it converge eventually
-        while(ctr < length){
+            double a = (1 / (numberOfVisit+1));
 
-            ctr++;
+            target[i] = target[i] + a * (discountValue*target[i + 1] - target[i]);
 
-            //number of statements needed to be updated
-            int updateNumber = length-index - 1;
-
-
-            for (int i = 0;i<updateNumber;i++){
-
-                target[length - i - 2] = target[length - i - 2] + learningRate*(1/ctr)*(discountValue*target[length - i-1] - target[length - i - 2]);
-
-            }
-
-
-
-
-            if (index > 0){
-                index--;
             }
         }
-
 
 
 
@@ -1370,44 +1419,38 @@ class Test{
 
         double[] arr = new double[]{1,4,-2,3,1,-9};
 
-        System.out.println( td.findLowestNumber(arr));
+        double[] a = td.targetGivenByQLearning(60);
+
+        for (int i = 0;i<a.length;i++){
+            System.out.println(a[i]);
+        }
 
 
-//        td.changeTurn();
-////
-////       td.take();
-////       System.out.println(td.database[td.getStatesNumber()-1]);
-//        td.printBoard(testArray);
-//        System.out.println(td.canTakeSmaller(testArray,3));
-//        System.out.println(td.whiteCanTake);
-////        System.out.println(td.takeNext(testArray,4));
- //       printArray(td.chooseColumnToMoveWhiteChips(testArray,5));
-  //      td.printBoard(td.playATake(testArray,2));
-////        int[] possibleMoves = td.chooseColumnToMoveWhiteChips(testArray,5);
-////        printArray(possibleMoves);
-//            td.database[0] = testArray;
-//            td.take();
-
+//        double learningRate = 0.5;
 //
-//            td.whiteCanTake = true;
-//            System.out.println(td.takeNext(testArray,6));
-//            td.printBoard(td.playATake(testArray,6));
-
-//       td.playAgainstItself();
-
-//        System.out.println(td.countNumberOfChip(testArray,19));
-
-//        double[] arr = td.fakeTarget(100).clone();
+//        double discountValue = 1;
+//
+//        double[] target = new double[5];
+//
+//        double reward = 0;
+//
+//        int numberOfVisit = 1;
+//
+//        //if white won, and the final statement get utility 1
+//        target[5-1] = 1;
 //
 //
+//        for (int i = 0;i<target.length-1;i++){
 //
-//        for (int i = 0;i<arr.length;i++){
+//            double  a= (1/(numberOfVisit+1));
 //
-//            System.out.println(arr[i]);
+//            target[i] = target[i] + a*(reward+(discountValue*target[i+1]) - target[i]);
 //
 //        }
-
-
+//        target[3] = target[3] + 0.5*(reward+(discountValue*target[4]) - target[3]);
+////        System.out.println(0.5*(reward+(discountValue*target[4]) - target[3]));
+//
+//        System.out.println(target[3]);
 
 
 

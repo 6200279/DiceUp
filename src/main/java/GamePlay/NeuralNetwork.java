@@ -395,13 +395,20 @@ class Test1{
 
     public static void main(String[] args){
 
-        //just test. no meaning, you can see the result of training
-        TD td = new TD();
-        double[] temp = td.database[0];
-        double[] input = td.changeIntoInputVector(temp);
-        NeuralNetwork bp = new NeuralNetwork(input,0.5);
-        System.out.println("Showing the error");
-        bp.train(100);
+//        //just test. no meaning, you can see the result of training
+//        TD td = new TD();
+//        double[] temp = td.database[0];
+//        double[] input = td.changeIntoInputVector(temp);
+//        NeuralNetwork bp = new NeuralNetwork(input,0.5);
+//        System.out.println("Showing the error");
+//        bp.train(100);
+
+        double[] arr = new double[]{1,2,3,4,5};
+        for (int i = arr.length-1;i>=0;i--){
+            System.out.println(arr[i]);
+        }
+
+
 
 
 
@@ -430,101 +437,22 @@ class Files {
 
     public static int trainingTimes = 10;
 
+    //parameter that determines how much the update are influenced by the events that occurs later in time.
+    public static double lambda = 0.5;
+
 
     public static void main(String[] args) {
+        int times = 1000;
+        long startTime=System.currentTimeMillis();
+        trainWhateverTimes(times);
+        long endTime=System.currentTimeMillis();
 
-//        trainAfterOneGame();
-
-
-
-//        double[][] t = readInputWeight(initial_InputWeight);
-//
-//        NeuralNetwork nn = new NeuralNetwork();
-//
-//        nn.setWeightOfBias(readBiasWeight(initial_BiasWeight));
-//
-//        double[] te = nn.getWeightOfBias();
-
-//        for (int i = 0;i<t.length;i++){
-//            for (int j = 0;j<t[0].length;j++){
-//                System.out.println(t[i][j]);
-//            }
-//        }
-
-//        for (int i = 0;i<te.length;i++){
-//            System.out.println(te[i]);
-//
-//        }
-
-//        checkResult();
-
-//        NeuralNetwork ne = new NeuralNetwork();
-//
-
-//
-//        System.out.println(ne.forward());
-//
-//        writeBiasOrHiddenWeight(initial_HiddenWeight,ne.getWeightOfHiddenLayer());
-//
-//        writeInputWeightOrSample(initial_InputWeight,ne.getWeightOfInputVector());
-//
-//        writeBiasOrHiddenWeight(initial_BiasWeight,ne.getWeightOfBias());
-
-        //reset the weight
-
-        writeBiasOrHiddenWeight(hiddenWeightPath,readHiddenWeight(initial_HiddenWeight));
-
-        writeBiasOrHiddenWeight(biasWeightPath,readBiasWeight(initial_BiasWeight));
-
-        writeInputWeightOrSample(inputWeightPath,readInputWeight(initial_InputWeight));
+        System.out.println("It cost ： "+(endTime-startTime)+" ms to train "+times +" games");
 
 
+//        trainANNByTD();
 
-
-
-//            trainAfterOneGame();
-
-
-
-
-//
-//        TD td = new TD();
-//
-//        td.playAgainstItself();
-//
-//        double[][] database = cutDatabase(td.database).clone();
-//
-//        double[] sample = td.changeIntoInputVector(database[database.length-1]);
-//
-//        ne.setInputVector(sample);
-//
-//        writeBiasOrHiddenWeight(initial_HiddenWeight,ne.getWeightOfHiddenLayer());
-//
-//        writeInputWeightOrSample(initial_InputWeight,ne.getWeightOfInputVector());
-//
-//        writeBiasOrHiddenWeight(initial_BiasWeight,ne.getWeightOfBias());
-
-//        writeBiasOrHiddenWeight(hiddenWeightPath,readHiddenWeight(initial_HiddenWeight));
-//
-//        writeBiasOrHiddenWeight(biasWeightPath,readBiasWeight(initial_BiasWeight));
-//
-//        writeInputWeightOrSample(inputWeightPath,readInputWeight(initial_InputWeight));
-
-//        TD td = new TD();
-//
-//        td.playAgainstItself();
-//
-//        double[][] database = cutDatabase(td.database).clone();
-//
-//        double[] sample = td.changeIntoInputVector(database[database.length-1]);
-//
-//        NeuralNetwork nn = new NeuralNetwork(sample,1);
-//
-//        nn.train(10);
-//
-//        System.out.println(nn.forward());
-
-        checkResult();
+//        checkInitialResult();
 
     }
 
@@ -535,7 +463,11 @@ class Files {
 
         double[][] database = cutDatabase(td.database).clone();
 
-        double[] sample = td.changeIntoInputVector(database[database.length-1]);
+        writeInputWeightOrSample(sampleForTrainPath, database);
+
+//        double[][] recordOfGame = readRecordOfAGame(sampleForTrainPath).clone();
+
+        double[] sample = td.changeIntoInputVector(database[0]);
 
         NeuralNetwork nn = new NeuralNetwork(sample);
 
@@ -551,11 +483,40 @@ class Files {
         System.out.println(nn.forward());
     }
 
-    public void trainWhateverTimes(int times){
+    public static void checkInitialResult(){
+        TD td = new TD();
+
+        td.playAgainstItself();
+
+        double[][] database = cutDatabase(td.database).clone();
+
+        writeInputWeightOrSample(sampleForTrainPath, database);
+
+//        double[][] recordOfGame = readRecordOfAGame(sampleForTrainPath).clone();
+
+        double[] sample = td.changeIntoInputVector(database[0]);
+
+        NeuralNetwork nn = new NeuralNetwork(sample);
+
+        //read the weight result from the previous train
+        nn.setWeightOfBias(readBiasWeight(initial_BiasWeight));
+        nn.setWeightOfHiddenLayer(readHiddenWeight(initial_HiddenWeight));
+        nn.setWeightOfInputVector(readInputWeight(initial_InputWeight));
+
+//        nn.setWeightOfBias(readBiasWeight(initial_BiasWeight));
+//        nn.setWeightOfHiddenLayer(readHiddenWeight(initial_HiddenWeight));
+//        nn.setWeightOfInputVector(readInputWeight(initial_InputWeight));
+
+        System.out.println(nn.forward());
+    }
+
+
+
+    public static void trainWhateverTimes(int times){
         int ctr = 0;
 
         while(ctr<times){
-            trainAfterOneGame();
+            trainANNByTD();
             ctr++;
         }
 
@@ -574,10 +535,11 @@ class Files {
 
         if (td.validData(database[database.length-1])) {
 
+              System.out.println("The sample is valid, not noisy，can be trained ----------------------------------------------------------");
+//            writeInputWeightOrSample(sampleForTrainPath, database);
 
-            writeInputWeightOrSample(sampleForTrainPath, database);
-
-            double[] target = td.fakeTarget(database.length).clone();
+            //TODO: some problem here, need to be improved
+            double[] target = td.targetGivenByQLearning(database.length).clone();
 
             for (int i = 0; i < database.length; i++) {
                 //set the sample to be trained
@@ -657,6 +619,125 @@ class Files {
         writeBiasOrHiddenWeight(biasWeightPath,weightOfBiasLayer);
 
         writeInputWeightOrSample(inputWeightPath,weightOfInputVector);
+
+    }
+
+
+    //train ANN for one game
+    public static void trainANNByTD(){
+
+        TD td = new TD();
+
+        td.playAgainstItself();
+
+        double[][] database = cutDatabase(td.database).clone();
+
+        double reward = -1;
+
+
+
+        if (td.validAndWhiteWon(database[database.length-1])) {
+
+            //if white won, get final reward with 1;
+             reward = 1;
+
+        }else if (td.validAndBlackWon(database[database.length-1])){
+
+        //if black won, get final reward with 0;
+         reward = 0;
+
+    }
+
+            //First train the terminal statement with reward given
+            NeuralNetwork nn = new NeuralNetwork(database[database.length-1], reward);
+
+            //read the weight result from the previous train
+            nn.setWeightOfBias(readBiasWeight(biasWeightPath));
+            nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
+            nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
+
+            nn.train(trainingTimes);
+
+            //copy the weight after one train
+            double[] weightOfHiddenLayer = nn.getWeightOfHiddenLayer().clone();
+
+            double[] weightOfBiasLayer = nn.getWeightOfBias().clone();
+
+            double[][] weightOfInputVector = nn.getWeightOfInputVector().clone();
+
+
+            //record the result of this train
+            writeBiasOrHiddenWeight(hiddenWeightPath, weightOfHiddenLayer);
+
+            writeBiasOrHiddenWeight(biasWeightPath, weightOfBiasLayer);
+
+            writeInputWeightOrSample(inputWeightPath, weightOfInputVector);
+
+
+            //Then, the terminal statement was set to be the previous statement, its reward was set to the previous desired output
+            double previousDesiredOutPut = reward;
+
+            double[] previousState = td.changeIntoInputVector(database[database.length-1]).clone();
+
+            //To see the feed forward result after the terminal statement was trained, which would be the test output
+            NeuralNetwork seeResult = new NeuralNetwork(previousState);
+
+            double previousTestOutput = seeResult.forward();
+
+            //The current statement is the one before the terminal statement.
+            double[] currState = td.changeIntoInputVector(database[database.length-2]).clone();
+
+            //according to the TD reinforcement learning, the update rules is this one below:
+            double currentDesiredOutput = previousTestOutput+lambda*(previousDesiredOutPut-previousTestOutput);
+
+
+            //Using a for loop to train all the statements occurred in this game.
+            for (int i = database.length - 2; i > 0; i--) {
+
+
+                //First, it will train the currState I set before the for loop, then, after the changing of parameter, the currState and currentDesired output would change, too
+                NeuralNetwork train = new NeuralNetwork(currState, currentDesiredOutput);
+
+                //read the weight result from the previous train
+                nn.setWeightOfBias(readBiasWeight(biasWeightPath));
+                nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
+                nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
+
+                train.train(trainingTimes);
+
+                //copy the weight after one train
+                weightOfHiddenLayer = train.getWeightOfHiddenLayer().clone();
+
+                weightOfBiasLayer = train.getWeightOfBias().clone();
+
+                weightOfInputVector = train.getWeightOfInputVector().clone();
+
+
+                //record the result of this train
+                writeBiasOrHiddenWeight(hiddenWeightPath, weightOfHiddenLayer);
+
+                writeBiasOrHiddenWeight(biasWeightPath, weightOfBiasLayer);
+
+                writeInputWeightOrSample(inputWeightPath, weightOfInputVector);
+
+                //update the previous desired output to be the current desired output
+                previousDesiredOutPut = currentDesiredOutput;
+
+                //update the previous state after trained
+                previousState = database[i];
+
+                NeuralNetwork seeResult_ = new NeuralNetwork(previousState);
+
+                //use the ANN after the epoch has ended and calculate the test output for previous statement
+                previousTestOutput = seeResult_.forward();
+
+                //also update the currState to the next statement going to be trained
+                currState = td.changeIntoInputVector(database[i - 1]);
+
+                //update the current desired output again.
+                currentDesiredOutput = previousTestOutput + lambda * (previousDesiredOutPut - previousTestOutput);
+
+            }
 
     }
 
@@ -792,6 +873,67 @@ class Files {
 
         return array;
 
+    }
+
+    public static double[][] readRecordOfAGame(String fileName){
+        File file = new File(fileName);
+
+        BufferedReader reader = null;
+
+        NeuralNetwork nn = new NeuralNetwork();
+
+        int row = 1000;
+
+        int column = 29;
+
+        double[][] array = new double[row][column];
+
+        double [] temp = new double[row*column];
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+
+            String tempString = null;
+
+            int line = 0;
+
+
+            while ((tempString = reader.readLine()) != null) {
+
+                Double i = Double.parseDouble(tempString);
+
+                temp[line] = i;
+
+                //System.out.println("line " + line + ": " + tempString);
+
+                line++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int rowCtr = 0;
+
+        int colCtr = 0;
+
+        for (int i = 0;i<temp.length;i++) {
+
+            if (i != 0 && i % column == 0) {
+                rowCtr++;
+            }
+
+            if (colCtr == column) {
+                colCtr = 0;
+            }
+
+            array[rowCtr][colCtr] = temp[i];
+
+            colCtr++;
+
+        }
+
+        return cutDatabase(array);
     }
 
     public static void writeBiasOrHiddenWeight(String fileName, double[] array) {
