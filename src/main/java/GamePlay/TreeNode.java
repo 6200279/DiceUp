@@ -133,6 +133,8 @@ public class TreeNode {
         this.moveScore  = moveScore;
     }
 
+    public double getMoveScore(){ return moveScore; }
+
     // some basic method we might need
     public void setParent(TreeNode parent) {
 

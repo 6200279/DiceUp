@@ -169,7 +169,7 @@ public class MiniMax extends AI {
                         }
 
 
-                // chance nodes
+                // chance nodes || terminal leaf nodes
                         // iterate again over the current amount of possible moves
                         for(int k = 0; k < boardAnalysis.possibleMoves(childBoard, diceComb, game.getP2()).length; k++){
 
@@ -260,7 +260,8 @@ public class MiniMax extends AI {
 
     public int[][] expectiminimax(Game game) {
 
-        int[][] move = new int[4][2];
+        // TODO: size can change
+        int[][] move = new int[2][2];
 
         TreeNode root = buildTree(game);
         TreeNode temp = root;
@@ -272,30 +273,66 @@ public class MiniMax extends AI {
         // chance layer
         ArrayList<TreeNode> firstLayer = root.getFirstLayer();
 
-        int bestMove = 0;
+        double tempMin = Double.POSITIVE_INFINITY;
+        double tempMax = Double.NEGATIVE_INFINITY;
 
         // iterate over all leaf nodes
-        for(int i = 0; i < leafNodes.size(); i++){
+        // TODO: last leaf node is not being iterated over
+        for (int i = 0; i < leafNodes.size() - 1; i++) {
 
             // evaluate each board, stored in every leaf node
             Board evaluateBoard = leafNodes.get(i).getBoard();
             double movescore = AI.evaluateGame(game.getP1(), game.getP2(), evaluateBoard);
             leafNodes.get(i).setMoveScore(movescore);
 
-        // find min leaf node of each subtree
 
-            double tempMin = Double.POSITIVE_INFINITY;
+            if (movescore < tempMin) {
+                // update the lowest value
+                tempMin = movescore;
+                // assign parent a score
+                leafNodes.get(i).getParent().setMoveScore(movescore);
 
-            if(leafNodes.get(i).getParent() == leafNodes.get(i+1)) {
-
-                if (movescore < tempMin) {
-                    tempMin = movescore;
-                    bestMove = i;
+                // if we reach a new subtree -> the chance nodes
+                if (leafNodes.get(i).getParent() != leafNodes.get(i + 1).getParent()) {
+                    tempMin = Double.POSITIVE_INFINITY;
                 }
             }
-
         }
+        // iterate over all min nodes
+        for (int i = 0; i < firstLayer.size(); i++) {
 
+            double movescore = 0;
+            // iterate over all children of a node
+            // the move score: Sum(Prob(d_i)*minScore(i))
+            for (int j = 0; j < firstLayer.get(i).getChildren().size(); j++) {
+
+                double dieProb = secondLayer.get(j).getProb();
+                movescore = +dieProb * secondLayer.get(j).getMoveScore();
+
+            }
+            // assigning the score to the chance nodes
+            firstLayer.get(i).setMoveScore(movescore);
+        }
+        int bestmove = 0;
+        // iterate over all min nodes
+        for (int i = 0; i < firstLayer.size(); i++){
+
+            double movescore = firstLayer.get(i).getMoveScore();
+
+            if (movescore > tempMax) {
+                // update the lowest value
+                tempMax = movescore;
+                // assign parent a score
+                root.setMoveScore(movescore);
+                bestmove = i;
+            }
+        }
+        // TODO: this gets just one move
+        int from = root.getChildren().get(bestmove).from;
+        int to = root.getChildren().get(bestmove).to;
+
+        move[0][0] = from;
+        move[0][1] = to;
 
         return move;
     }
@@ -407,7 +444,7 @@ public class MiniMax extends AI {
 }
 */
 
-/* TODO:
+/**
 
    General info about expectiminimax:
 
@@ -435,12 +472,5 @@ public class MiniMax extends AI {
 
     --------------------------------------------------------------------------------------------------------------------
     --------------------------------------------------------------------------------------------------------------------
-    TODO:
-
-    - make TreeNode working
-    - use TreeNodes tree in minimax
-    - evaluate leaf nodes
-    - recursively evaluate all other nodes
 
 */
-
