@@ -90,8 +90,6 @@ public class BoardAnalysis {
         }
         //End Basecases
 
-        //TODO: Move calculator is only implemented to allow p1 moves! Make it in a way so it can calculate for p1&p2
-
         /**
          *
          * so we have already chosen the indexes for the players during initialization such that P1 plays from (18:23] on S|
@@ -115,7 +113,8 @@ public class BoardAnalysis {
                                     int[] move = {i, moveTo};
                                     possibleCols[j].add(move);
                                 }
-                            } else {
+                            }
+                            else {
                                 int[] move = {i, moveTo};
                                 possibleCols[j].add(move);
                             }
@@ -125,123 +124,63 @@ public class BoardAnalysis {
             }
         }
 
-     //   possibleCols= combine(possibleCols, b, moves, p);
-
         return possibleCols;
     }
 
-    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int lengthfirst, int lengthsecond, ArrayList<int[][]> pC) {
+    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int lengthfirst, int lengthsecond, ArrayList<int[][]> pC, int[] current, int[] checked) {
 
         if (lengthfirst>0) {
             lengthfirst--;
-                pC.add(new int[][]{possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst)});
-                return possibleCombinations(b, moves, p, possibleMoves, lengthfirst, lengthsecond, pC);
+            pC.add(new int[][]{possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst)});
+            return possibleCombinations(b, moves, p, possibleMoves,lengthfirst, lengthsecond, pC, possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst));
         }
         else if (lengthsecond> 0) {
             lengthfirst = possibleMoves[0].size();
             lengthsecond--;
-            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst ,lengthsecond, pC);
+            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst ,lengthsecond, pC, possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst-1));
         }
 
 
         return pC;
     }
 
-   /* public static ArrayList<int[]>[] combine(ArrayList<int[]>[] possibleCols, Board b, ArrayList<Integer> moves, Player p) {
-        for (int i = 0; i < possibleCols.length; i++) {
-            for (int j = 0; j < possibleCols[i].size(); j++) {
-                int moveFrom = possibleCols[i].get(j)[1];
-                int original = possibleCols[i].get(j)[0];
-                int moveTo;
-                for (int index = 0; index < moves.size(); index++) {
-                    if (original - moveFrom != moves.get(index)) {
-                        moveTo = moveFrom - moves.get(index);
-                        if (moveTo < 24 && moveTo > -1) { //check if move is attempted in legal boundaries [0:23]
-                            if (b.getColumns()[moveTo].getChips().size() >= 2) { //if has more than 2 chips- check if it's ours
-                                if (b.getColumns()[moveTo].getChips().get(0).getOwner().equals(p)) {
-                                    int[] move = {moveFrom, moveTo};
-                                    possibleCols[index].add(move);
-                                }
-                            }
-                        }
+    public static ArrayList<int[][]> possibleSingleChipCombinations(Board b, ArrayList<Integer> moves, Player p) {
+        ArrayList<int[][]> result = new ArrayList<>();
+
+        ArrayList<int[]>[] possibleMoves = possibleMoves(b, moves, p);
+        int player = p.getID();
+
+        for (int i = 0; i < possibleMoves.length; i++) {//for every dice available (i is also the current dice being played!)
+            for (int j = 0; j < possibleMoves[i].size(); j++) { //for every starting pos available
+                int[][] currentC = new int[moves.size()][2];
+                currentC[0] = possibleMoves[i].get(j);
+                int currentPlacement = 1;
+
+                for (int m = 0; m < moves.size(); m++) { //for every move available
+                    if (m != i) { //skip if we're trying to play the same dice again!
+                        int lastToPlace = currentC[currentPlacement - 1][1];
+                        int nextPlacement = lastToPlace - moves.get(m);
+                        if (player == 2) nextPlacement = lastToPlace + moves.get(m);
+
+                        currentC[currentPlacement] = new int[]{lastToPlace, nextPlacement};
+                        currentPlacement++;
                     }
                 }
+                result.add(currentC);
             }
         }
-        return possibleCols;
-    }*/
+        return result;
+    }
 
-    public static double evaluateBoard(Board b, Player p, Game g1){
-        Player currentPlayer = p;
-        Board currentBoard = b;
-        double evaluation = 0;
-        ArrayList<Integer> soloChips = new ArrayList<Integer>();
+    //TODO: Check move legality!
+    public static ArrayList<int[][]> allCombinations (Board b, ArrayList<Integer> moves, Player p) {
+        ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(b, moves, p);
 
-        for (int i=0;i<24;i++){
-            //Save the current column
-            Column currentColumn = currentBoard.getColumns()[i];
-            //Check if there are chips of the respective player in this column
-            if (currentColumn.getChips().size()>0) {
-                if (currentPlayer == currentColumn.getChips().get(0).getOwner()) {
-                    //For every alone chip, decrease evaluation
-                    if (currentColumn.getChips().size() == 1) {
-                        evaluation = evaluation - 1D;
-                        soloChips.add(i);
-                    }
+        ArrayList<int[][]> pC = new ArrayList<>();
+        pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC, possibleMoves[1].get(possibleMoves[1].size() - 1), possibleMoves[0].get(possibleMoves[0].size() - 1));
 
-                    //If it is a gate:
-                    if (currentColumn.getChips().size() >= 2) {
-                        //If in home board +1.5, otherwise +1
-                        if (currentPlayer == g1.getP1() && i >= 0 && i <= 5)
-                            evaluation = evaluation + 1D;
-                        else if (currentPlayer == g1.getP1())
-                            evaluation = evaluation + 0.7;
-
-                            //If in home board +1.5, otherwise +1
-                        else if (currentPlayer == g1.getP2() && i >= 18 && i <= 23)
-                            evaluation = evaluation + 1D;
-                        else if (currentPlayer == g1.getP2())
-                            evaluation = evaluation + 0.7;
-                    }
-                }
-            }
-        }
-
-        //The if statements below consider the middle.
-        if (currentPlayer == g1.getP1()) {
-            Column myMiddle = currentBoard.getColumns()[24];
-            Column opponentMiddle = currentBoard.getColumns()[25];
-            for (int i =0; i<myMiddle.getChips().size();i++) {
-                evaluation--;
-            }
-            for (int i =0; i<opponentMiddle.getChips().size();i++) {
-                evaluation++;
-            }
-        }
-
-        if (currentPlayer == g1.getP2()) {
-            Column myMiddle = currentBoard.getColumns()[25];
-            Column opponentMiddle = currentBoard.getColumns()[24];
-            for (int i =0; i<myMiddle.getChips().size();i++) {
-                evaluation--;
-            }
-            for (int i =0; i<opponentMiddle.getChips().size();i++) {
-                evaluation++;
-            }
-
-        }
-
-        //Consider the taken chips
-        for (int i = 0; i<currentBoard.getColumns()[26].getChips().size();i++){
-            if (currentBoard.getColumns()[26].getChips().get(i).getOwner()==currentPlayer){
-                evaluation++;
-            }
-            else {
-                evaluation--;
-            }
-        }
-
-        return evaluation;
+        pC.addAll(possibleSingleChipCombinations(b, moves, p));
+        return pC;
     }
 
     /**
