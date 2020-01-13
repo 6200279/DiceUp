@@ -60,7 +60,8 @@ public class TreeNode {
 
     private Board board;
 
-    String test = "TEST";
+    private int[][] move;
+
 
 // constructors
 
@@ -77,17 +78,11 @@ public class TreeNode {
     }
 
 
-    public TreeNode(int from, int to, Board aBoard) {
+    public TreeNode(int[][] move, Board aBoard) {
 
-       // if(this.getParent().isRoot){
-        //    player = GameState.p2;
-       // }
-      //  player = this.getParent().getParent().getPlayer();
-        this.from = from;
-        //System.out.println("from: " + from);
-        this.to = to;
-        //System.out.println("to: " + to);
+
         this.board  = aBoard;
+        this.move = move;
 
     }
 
@@ -121,6 +116,10 @@ public class TreeNode {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public int[][] getMove(){
+        return move;
     }
 
     public boolean isRoot() {
