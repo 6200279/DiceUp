@@ -53,7 +53,9 @@ public class TD {
     Dice dice1 = new Dice();
     Dice dice2 = new Dice();
 
-    private boolean debug = true;
+    public boolean debug = true;
+
+
 
 
     //if turn = 0, it is white-chip's turn, if turn = 1, it is black-chip's turn.
@@ -114,6 +116,10 @@ public class TD {
         database[0][12] = 5 * whiteChip;
         database[0][23] = 2 * whiteChip;
 
+
+        //if [28] = 1, means this is white's turn, if [28] = 2; means this is black's turn
+        database[0][28] = 1;
+
     }
 
     /*
@@ -133,7 +139,7 @@ public class TD {
             playATurn(currState);
             changeTurn();
             currState = database[getStatesNumber()-1].clone();
-            if (debug = true) {
+            if (debug == true) {
                 System.out.println("There are " + getStatesNumber() + " states have been stored");
                 System.out.println("----------------------------------------------");
                 printBoard(currState);
@@ -162,7 +168,7 @@ public class TD {
                 break;
             }
 
-            whoseTurn();
+
             take();
             changeTurn();
 
@@ -174,7 +180,7 @@ public class TD {
                 break;
             }
 
-            if (debug = true) {
+            if (debug == true) {
                 System.out.println("There are " + getStatesNumber() + " states have been stored");
                 System.out.println("----------------------------------------------");
                 printBoard(database[getStatesNumber() - 1]);
@@ -186,11 +192,6 @@ public class TD {
         }
 
 
-    }
-
-    public void whoseTurn(){
-        if (turn==0) System.out.println("It is white turn  ");
-        if (turn==1) System.out.println("It is black turn  ");
     }
 
     //someone took all the chips
@@ -231,9 +232,17 @@ public class TD {
                 double[] newState3 = playATake(newState2, num1);
                 double[] newState4 = playATake(newState3, num1);
 
-                insertIntoQ_Table(database, newState1);
-                insertIntoQ_Table(database, newState2);
-                insertIntoQ_Table(database, newState3);
+//                insertIntoQ_Table(database, newState1);
+//                insertIntoQ_Table(database, newState2);
+//                insertIntoQ_Table(database, newState3);
+
+                if (turn == 0){
+                    newState4[28] = 2;
+
+                }else if (turn == 1){
+                    newState4[28] = 1;
+                }
+
                 insertIntoQ_Table(database, newState4);
 
 
@@ -241,7 +250,15 @@ public class TD {
                 double[] newState1 = playATake(newState, num1);
                 double[] newState2 = playATake(newState1, num2);
 
-                insertIntoQ_Table(database, newState1);
+//                insertIntoQ_Table(database, newState1);
+
+                if (turn == 0){
+                    newState2[28] = 2;
+
+                }else if (turn == 1){
+                    newState2[28] = 1;
+                }
+
                 insertIntoQ_Table(database, newState2);
             }
         }else{
@@ -260,8 +277,16 @@ public class TD {
                 double[] newState1 = playATake(newState, num1);
                 double[] newState2 = playATake(newState1, num2);
 
-                insertIntoQ_Table(database, newState1);
+//                insertIntoQ_Table(database, newState1);
+
+                if (turn == 0){
+                    newState2[28] = 2;
+
+                }else if (turn == 1){
+                    newState2[28] = 1;
+                }
                 insertIntoQ_Table(database, newState2);
+
             }else {
 
                 dice1.roll();
@@ -269,7 +294,14 @@ public class TD {
                 System.out.println("The first dice num is: " + num1);
                 System.out.println("----------------------------");
                 double[] newState1 = playATake(newState, num1);
+                if (turn == 0){
+                    newState1[28] = 2;
+
+                }else if (turn == 1){
+                    newState1[28] = 1;
+                }
                 insertIntoQ_Table(database, newState1);
+
             }
         }
     }
@@ -294,6 +326,7 @@ public class TD {
 
 
         }
+
 
 
         if (turn == 1 && blackCantake == false) {
@@ -555,15 +588,22 @@ public class TD {
             double[] newState_3 = move(database, newState_2, dice2.getNum());
             double[] newState_4 = move(database, newState_3, dice2.getNum());
 
+
+            if (turn == 0){
+                newState_4[28] = 2;
+            }else if (turn == 1){
+                newState_4[28] = 1;
+            }
+
             //if it is not there, insert it.
 
-                insertIntoQ_Table(database, newState_1);
-
-
-                insertIntoQ_Table(database, newState_2);
-
-
-                insertIntoQ_Table(database, newState_3);
+//                insertIntoQ_Table(database, newState_1);
+//
+//
+//                insertIntoQ_Table(database, newState_2);
+//
+//
+//                insertIntoQ_Table(database, newState_3);
 
 
                 insertIntoQ_Table(database, newState_4);
@@ -571,14 +611,22 @@ public class TD {
 
 
         }else {
-            double[] newState_1 = move(database, currState, dice1.getNum());
-            double[] newState_2 = move(database, newState_1, dice2.getNum());
-
+//            double[] newState_1 = move(database, currState, dice1.getNum());
+//            double[] newState_2 = move(database, newState_1, dice2.getNum());
+//
+            double[] newState3 = moveWithTwo(currState,dice1.getNum(),dice2.getNum());
             //if it is not there, insert it.
 
-                insertIntoQ_Table(database, newState_1);
+//                insertIntoQ_Table(database, newState_1);
 
-                insertIntoQ_Table(database, newState_2);
+            if (turn == 0){
+                newState3[28] = 2;
+
+            }else if (turn == 1){
+                newState3[28] = 1;
+            }
+
+                insertIntoQ_Table(database, newState3);
 
         }
     }
@@ -654,7 +702,7 @@ public class TD {
 ////                    return newState;
 ////                }
 
-            System.out.println("It move from "+fromColumn+" column to "+toColumn);
+//            System.out.println("It move from "+fromColumn+" column to "+toColumn);
             newState = currState.clone();
 
             //column 26 is the hit place for white chip
@@ -691,6 +739,71 @@ public class TD {
 
         return newState;
     }
+
+
+    /**
+     * Given two dice number, make a complete move
+     * @param database
+     * @param currState
+     * @param diceNumber
+     * @param diceNumber2
+     * @return
+     */
+    public double[] move(double[][] database, double[] currState, int diceNumber,int diceNumber2) {
+
+        int fromColumn;
+        int toColumn;
+        double[] newState = new double[29];
+
+        if (getTurn() == 0) {
+            int[] temp = chooseColumnToMoveWhiteChips(currState,diceNumber).clone();
+            fromColumn = temp[0];
+            toColumn = temp[1];
+//                if (fromColumn == toColumn){
+////                    return newState;
+////                }
+
+            System.out.println("It move from "+fromColumn+" column to "+toColumn);
+            newState = currState.clone();
+
+            //column 26 is the hit place for white chip
+            if(newState[toColumn]-blackChip == 0){
+                newState[fromColumn] = newState[fromColumn] - whiteChip;
+                newState[toColumn] = whiteChip;
+                newState[26] = newState[26] + blackChip;
+            }else {
+                newState[fromColumn] = newState[fromColumn] - whiteChip;
+                newState[toColumn] = newState[toColumn] + whiteChip;
+            }
+
+
+
+        } else if (getTurn() == 1) {
+            int[] temp = chooseColumnToMoveBlackChips(currState,diceNumber).clone();
+            fromColumn = temp[0];
+            toColumn = temp[1];
+//                if (fromColumn == toColumn){
+//                    return newState;
+//                }
+            System.out.println("It move from "+fromColumn+" column to "+toColumn);
+
+            newState = currState.clone();
+
+            //column 25 is the hit place for black chip
+            if(newState[toColumn]-whiteChip == 0){
+                newState[fromColumn] = newState[fromColumn] - blackChip;
+                newState[toColumn] = blackChip;
+                newState[25] = newState[25] + whiteChip;
+            }else {
+                newState[fromColumn] = newState[fromColumn] - blackChip;
+                newState[toColumn] = newState[toColumn] + blackChip;
+            }
+        }
+
+        return newState;
+    }
+
+
 
     /*
     To see which column with white chip is possible to execute the move
@@ -783,6 +896,48 @@ public class TD {
 
         }
         return movesFromAndTo;
+    }
+
+
+
+    public double[] moveWithTwo(double[] currState, int diceNum1, int diceNum2){
+
+        double[] newState = currState.clone();
+
+        double[] mid = move(database,currState,diceNum1);
+        double[] then = move(database,mid,diceNum2);
+
+        double[] mid2 = move(database,currState,diceNum2);
+        double[] then2 = move(database,mid2,diceNum1);
+
+
+        NeuralNetwork test1 = new NeuralNetwork(then);
+
+        NeuralNetwork test2 = new NeuralNetwork(then2);
+
+        double val1 = test1.forward();
+
+        double val2 = test2.forward();
+
+
+        if (turn == 0){
+
+            if (val1 > val2){
+                return then;
+            }else{
+                return then2;
+            }
+
+        }else if (turn == 1){
+
+            if (val1 > val2){
+                return then2;
+            }else{
+                return then;
+            }
+
+        }
+        return newState;
     }
 
     public int findHighestNumber(double[] array){
@@ -919,6 +1074,12 @@ public class TD {
         }
         return movesFromAndTo;
     }
+
+
+
+
+
+
 
     //To see if the next possible move is empty
     public boolean moveToColumnIsEmpty(double[] stateCurr, int fromNumber, int diceNumber) {
@@ -1077,7 +1238,7 @@ public class TD {
 
     //like a debug method to check the board state
     public void printBoard(double[] state) {
-        for(int i = 0;i<state.length;i++){
+        for(int i = 0;i<state.length-1;i++){
             if(state[i] == 0){
                 System.out.println("Column "+i+" has no chips ");
             }
@@ -1087,6 +1248,16 @@ public class TD {
                 System.out.println("Column " + i+" has "+(int)countNumberOfChip(state,i)+" Black chips");
             }
         }
+
+        if (state[28] == 1){
+
+            System.out.println("Now it is white's turn to move");
+
+        }else if (state[28] == 2){
+            System.out.println("Now it is black's turn to move");
+        }
+
+
     }
 
     //getter and setter for the number of state in Q-table
@@ -1194,11 +1365,14 @@ public class TD {
         }
 
         //if this is white turn, 196 == 1, else , 197 == 1
-        if (turn == 0){
+        if (currState[28] == 1){
             input[196] = 1;
+            input[197] = 0;
         }
-        else{
+        else if (currState[28] == 2){
             input[197] = 1;
+            input[196] = 0;
+
         }
 
 
@@ -1417,14 +1591,15 @@ class Test{
         testArray[23] =0*b;
 
 
-        double[] arr = new double[]{1,4,-2,3,1,-9};
+//        double[] arr = new double[]{1,4,-2,3,1,-9};
+//
+//        double[] a = td.targetGivenByQLearning(60);
+//
+//        for (int i = 0;i<a.length;i++){
+//            System.out.println(a[i]);
+//        }
 
-        double[] a = td.targetGivenByQLearning(60);
-
-        for (int i = 0;i<a.length;i++){
-            System.out.println(a[i]);
-        }
-
+        td.playAgainstItself();
 
 //        double learningRate = 0.5;
 //

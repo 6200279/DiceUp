@@ -308,7 +308,7 @@ public class NeuralNetwork {
 
             }
         }
-        System.out.println(Error);
+//        System.out.println(Error);
 
     }
 
@@ -433,26 +433,76 @@ class Files {
     public static String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
     public static String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
 
+    public static String H10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight10t.txt";
+    public static String B10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight10t.txt";
+    public static String I10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight10t.txt";
 
+
+
+
+    private static final double w = Math.PI-2;
+
+    private static final double b = Math.PI -3;
 
     public static int trainingTimes = 10;
 
     //parameter that determines how much the update are influenced by the events that occurs later in time.
     public static double lambda = 0.5;
 
+    public static boolean debug = true;
+
 
     public static void main(String[] args) {
-        int times = 1000;
-        long startTime=System.currentTimeMillis();
-        trainWhateverTimes(times);
-        long endTime=System.currentTimeMillis();
-
-        System.out.println("It cost ： "+(endTime-startTime)+" ms to train "+times +" games");
-
+//        int times = 1;
+//        long startTime=System.currentTimeMillis();
+//        trainWhateverTimes(times);
+//        long endTime=System.currentTimeMillis();
+//
+//        System.out.println("It cost ： "+(endTime-startTime)+" ms to train "+times +" games");
 
 //        trainANNByTD();
 
 //        checkInitialResult();
+//        double[] testArray = new double[29];
+//        //td.playAgainstItself();
+//
+//        testArray[0] =3*w;
+//        testArray[1] =4*b;
+//        testArray[2] =2*w;
+//        testArray[3] =0*w;
+//        testArray[4] =0*b;
+//        testArray[5] =6*b;
+//        testArray[6] =0*b;
+//        testArray[7] =0*b;
+//        testArray[8] =0;
+//        testArray[9] =0;
+//        testArray[10] =0*b;
+//        testArray[11] =1;
+//        testArray[12] =0;
+//        testArray[13] =0;
+//        testArray[14] =0;
+//        testArray[15] =0*b;
+//        testArray[16] =0;
+//        testArray[17] =0;
+//        testArray[18] =0*b;
+//        testArray[19] =0*w;
+//        testArray[20] =1;
+//        testArray[21] =0;
+//        testArray[22] =0*b;
+//        testArray[23] =0*b;
+//
+//        NeuralNetwork  nn = new NeuralNetwork(testArray);
+
+
+
+
+//        checkResult();
+//        System.out.println(nn.forward());
+//        trainANNByTD();
+
+//        checkInitialResult();
+
+
 
     }
 
@@ -468,19 +518,36 @@ class Files {
 //        double[][] recordOfGame = readRecordOfAGame(sampleForTrainPath).clone();
 
         double[] sample = td.changeIntoInputVector(database[0]);
+        double[] sample2 = td.changeIntoInputVector(database[1]);
+        double[] sample3 = td.changeIntoInputVector(database[2]);
 
         NeuralNetwork nn = new NeuralNetwork(sample);
+
+        NeuralNetwork nn2 = new NeuralNetwork(sample2);
+
+        NeuralNetwork nn3 = new NeuralNetwork(sample3);
 
         //read the weight result from the previous train
         nn.setWeightOfBias(readBiasWeight(biasWeightPath));
         nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
         nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
 
+        nn2.setWeightOfBias(readBiasWeight(biasWeightPath));
+        nn2.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
+        nn2.setWeightOfInputVector(readInputWeight(inputWeightPath));
+
+        nn3.setWeightOfBias(readBiasWeight(biasWeightPath));
+        nn3.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
+        nn3.setWeightOfInputVector(readInputWeight(inputWeightPath));
+
 //        nn.setWeightOfBias(readBiasWeight(initial_BiasWeight));
 //        nn.setWeightOfHiddenLayer(readHiddenWeight(initial_HiddenWeight));
 //        nn.setWeightOfInputVector(readInputWeight(initial_InputWeight));
 
-        System.out.println(nn.forward());
+        System.out.println(nn.forward()+"       1");
+        System.out.println(nn2.forward()+"       2");
+        System.out.println(nn3.forward()+"       3");
+
     }
 
     public static void checkInitialResult(){
@@ -494,7 +561,7 @@ class Files {
 
 //        double[][] recordOfGame = readRecordOfAGame(sampleForTrainPath).clone();
 
-        double[] sample = td.changeIntoInputVector(database[0]);
+        double[] sample = td.changeIntoInputVector(database[database.length-1]);
 
         NeuralNetwork nn = new NeuralNetwork(sample);
 
@@ -630,9 +697,11 @@ class Files {
 
         td.playAgainstItself();
 
+
+
         double[][] database = cutDatabase(td.database).clone();
 
-        double reward = -1;
+        double reward = -2;
 
 
 
@@ -643,74 +712,35 @@ class Files {
 
         }else if (td.validAndBlackWon(database[database.length-1])){
 
-        //if black won, get final reward with 0;
-         reward = 0;
+            //if black won, get final reward with 0;
+             reward = 0;
 
     }
+            if (reward!=-2) {
+                System.out.println("reward of this game is "+reward);
 
-            //First train the terminal statement with reward given
-            NeuralNetwork nn = new NeuralNetwork(database[database.length-1], reward);
-
-            //read the weight result from the previous train
-            nn.setWeightOfBias(readBiasWeight(biasWeightPath));
-            nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
-            nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
-
-            nn.train(trainingTimes);
-
-            //copy the weight after one train
-            double[] weightOfHiddenLayer = nn.getWeightOfHiddenLayer().clone();
-
-            double[] weightOfBiasLayer = nn.getWeightOfBias().clone();
-
-            double[][] weightOfInputVector = nn.getWeightOfInputVector().clone();
+                //First train the TERMINAL statement with reward given
 
 
-            //record the result of this train
-            writeBiasOrHiddenWeight(hiddenWeightPath, weightOfHiddenLayer);
 
-            writeBiasOrHiddenWeight(biasWeightPath, weightOfBiasLayer);
-
-            writeInputWeightOrSample(inputWeightPath, weightOfInputVector);
+                NeuralNetwork nn = new NeuralNetwork(td.changeIntoInputVector(database[database.length - 1]), reward);
 
 
-            //Then, the terminal statement was set to be the previous statement, its reward was set to the previous desired output
-            double previousDesiredOutPut = reward;
-
-            double[] previousState = td.changeIntoInputVector(database[database.length-1]).clone();
-
-            //To see the feed forward result after the terminal statement was trained, which would be the test output
-            NeuralNetwork seeResult = new NeuralNetwork(previousState);
-
-            double previousTestOutput = seeResult.forward();
-
-            //The current statement is the one before the terminal statement.
-            double[] currState = td.changeIntoInputVector(database[database.length-2]).clone();
-
-            //according to the TD reinforcement learning, the update rules is this one below:
-            double currentDesiredOutput = previousTestOutput+lambda*(previousDesiredOutPut-previousTestOutput);
-
-
-            //Using a for loop to train all the statements occurred in this game.
-            for (int i = database.length - 2; i > 0; i--) {
-
-
-                //First, it will train the currState I set before the for loop, then, after the changing of parameter, the currState and currentDesired output would change, too
-                NeuralNetwork train = new NeuralNetwork(currState, currentDesiredOutput);
 
                 //read the weight result from the previous train
                 nn.setWeightOfBias(readBiasWeight(biasWeightPath));
                 nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
                 nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
 
-                train.train(trainingTimes);
+                nn.train(trainingTimes);
 
+                System.out.println("The terminal statement is trained with given reward");
                 //copy the weight after one train
-                weightOfHiddenLayer = train.getWeightOfHiddenLayer().clone();
+                double[] weightOfHiddenLayer = nn.getWeightOfHiddenLayer().clone();
 
-                weightOfBiasLayer = train.getWeightOfBias().clone();
+                double[] weightOfBiasLayer = nn.getWeightOfBias().clone();
 
-                weightOfInputVector = train.getWeightOfInputVector().clone();
+                double[][] weightOfInputVector = nn.getWeightOfInputVector().clone();
 
 
                 //record the result of this train
@@ -720,22 +750,90 @@ class Files {
 
                 writeInputWeightOrSample(inputWeightPath, weightOfInputVector);
 
-                //update the previous desired output to be the current desired output
-                previousDesiredOutPut = currentDesiredOutput;
 
-                //update the previous state after trained
-                previousState = database[i];
+                //Then, the terminal statement was set to be the previous statement, its reward was set to the previous desired output
+                double previousDesiredOutPut = reward;
 
-                NeuralNetwork seeResult_ = new NeuralNetwork(previousState);
+                double[] previousState = td.changeIntoInputVector(database[database.length - 1]).clone();
 
-                //use the ANN after the epoch has ended and calculate the test output for previous statement
-                previousTestOutput = seeResult_.forward();
+                //To see the feed forward result after the terminal statement was trained, which would be the test output
+                NeuralNetwork seeResult = new NeuralNetwork(previousState);
 
-                //also update the currState to the next statement going to be trained
-                currState = td.changeIntoInputVector(database[i - 1]);
+                double previousTestOutput = seeResult.forward();
 
-                //update the current desired output again.
-                currentDesiredOutput = previousTestOutput + lambda * (previousDesiredOutPut - previousTestOutput);
+                //The current statement is the one before the terminal statement.
+                double[] currState = td.changeIntoInputVector(database[database.length - 2]).clone();
+
+                //according to the TD reinforcement learning, the update rules is this one below:
+                double currentDesiredOutput = previousTestOutput + lambda * (previousDesiredOutPut - previousTestOutput);
+
+                if (debug == true){
+                    System.out.println("The previous desired output is: "+previousDesiredOutPut);
+                    System.out.println("The previous test output is: "+previousTestOutput);
+                    System.out.println("The current desired output is: "+currentDesiredOutput);
+                    System.out.println("--------------------------------Upper is the data for the first training------------------------------------");
+                }
+
+
+                //Using a for loop to train all the statements occurred in this game.
+                for (int i = database.length - 2; i > 0; i--) {
+
+
+                    //First, it will train the currState I set before the for loop, then, after the changing of parameter, the currState and currentDesired output would change, too
+                    NeuralNetwork train = new NeuralNetwork(currState, currentDesiredOutput);
+
+                    //read the weight result from the previous train
+                    nn.setWeightOfBias(readBiasWeight(biasWeightPath));
+                    nn.setWeightOfHiddenLayer(readHiddenWeight(hiddenWeightPath));
+                    nn.setWeightOfInputVector(readInputWeight(inputWeightPath));
+
+                    train.train(trainingTimes);
+
+                    //copy the weight after one train
+                    weightOfHiddenLayer = train.getWeightOfHiddenLayer().clone();
+
+                    weightOfBiasLayer = train.getWeightOfBias().clone();
+
+                    weightOfInputVector = train.getWeightOfInputVector().clone();
+
+
+                    //record the result of this train
+                    writeBiasOrHiddenWeight(hiddenWeightPath, weightOfHiddenLayer);
+
+                    writeBiasOrHiddenWeight(biasWeightPath, weightOfBiasLayer);
+
+                    writeInputWeightOrSample(inputWeightPath, weightOfInputVector);
+
+                    //update the previous desired output to be the current desired output
+
+
+                    previousDesiredOutPut = currentDesiredOutput;
+
+
+
+                    //update the previous state after trained
+                    previousState = td.changeIntoInputVector(database[i]);
+
+                    NeuralNetwork seeResult_ = new NeuralNetwork(previousState);
+
+                    //use the ANN after the epoch has ended and calculate the test output for previous statement
+                    previousTestOutput = seeResult_.forward();
+
+                    //also update the currState to the next statement going to be trained
+                    currState = td.changeIntoInputVector(database[i - 1]);
+
+                    //update the current desired output again.
+                    currentDesiredOutput = previousTestOutput + lambda * (previousDesiredOutPut - previousTestOutput);
+
+
+                    if (debug == true){
+                        System.out.println("The previous desired output is: "+previousDesiredOutPut);
+                        System.out.println("The previous test output is: "+previousTestOutput);
+                        System.out.println("The current desired output is: "+currentDesiredOutput);
+                        System.out.println("--------------------------------Upper is the data for next training------------------------------------");
+                    }
+
+                }
 
             }
 
