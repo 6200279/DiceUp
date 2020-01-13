@@ -1,8 +1,43 @@
 package GamePlay;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+
+/**
+
+ General info about expectiminimax:
+
+ - each chance node has 21 distinct children ( 6 doubles, and the 15 others )
+ - max dice(min rolls) min dice(max rolls) max terminal structure
+ - use expected values for chance nodes: Taking the weighted average of the values resulting from all possible dice rolls
+ - over a max node: expectimax(C) = sum_i(P(d_i)*maxvalue(i))
+ - over a min node: expectimin(C) = sum_i(P(d_i)*minvalue(i))
+
+ - Decision with chance:
+ - we want to pick move that leads to best position
+ - resulting values do not have definite minimax values
+ -> we calculate the expected value, where the expectation is taken over by all the possible dice rolls that could occur
+
+
+ Steps (recursive implementation):
+
+ at current tree node
+
+ 1. Terminal test -> if we are at the leaf node or depth = MaxDepth
+ 2. write a method isTerminalNode, return true if it is (makes things easier)
+ 3. if max: get maximum score from evaluation function for all the children of current node
+
+
+
+ --------------------------------------------------------------------------------------------------------------------
+ --------------------------------------------------------------------------------------------------------------------
+
+ */
+
+
 public class MiniMax extends AI {
+
 
     // 21 unique dice combinations
     private static final int[][] diceCombinations = {
@@ -39,13 +74,23 @@ public class MiniMax extends AI {
 
     private static RandomAI randomAI = new RandomAI();
     private static BoardAnalysis boardAnalysis;
+    private static ArrayList<int[][]> possibleMoveCombinations = new ArrayList<>();
 
     public static TreeNode buildTree(Game game){
 
         Board board = game.getBoard();
 
-        System.out.println("Size of possible moves " + randomAI.possibleMoves(game).size());
+            int[][] moves;
 
+            int[] dice = game.getDicesNum();
+
+            // if we rolled a double then we make 4 moves
+            if(dice[0] == dice[1]) {
+                moves = new int[4][2];
+            }
+            else{
+                moves = new int[2][2];
+            }
 
             // first max node: this has to be player 2 (the AI)
 
@@ -56,56 +101,31 @@ public class MiniMax extends AI {
                     rolledDice.add(game.getDicesNum()[i]);
                 }
 
-
-
-                    /*
-                       TODO:
-                        * each move will consists of multiple tuples [x, y], [w, z], where x and w are the 'from' position,
-                         * and y and z are the 'to position'
-                        * this will equivalent one board
-                        * apply this to code!
-                    */
-
             // chance nodes
                 // iterate over all possible moves of the current game
-                ArrayList<int[]>[] possibleMovess =  boardAnalysis.possibleMoves(game.getBoard(), rolledDice , game.getP1());
+                possibleMoveCombinations =  boardAnalysis.allCombinations(game.getBoard(), rolledDice, game.getP2());
 
-                int possMoveCount = 0;
-
-                for (int kq = 0; kq < possibleMovess.length ; kq++) possMoveCount += possibleMovess[kq].size();
-                System.out.println("The sum of all possible moves with the rolled dice: " + possMoveCount);
-
-
-                for (int i = 0; i < possMoveCount ; i++) {
+                // iterate over all move combinations
+                for (int i = 0; i < possibleMoveCombinations.size() ; i++) {
 
                     // create a copy of each board
                     Board copyBoard = board.copyBoard(board, game);
 
-                    // storing a possible move
-                    int from  = 0;
+                    int from = 0;
                     int to = 0;
-                    ArrayList<int[]>[] move = boardAnalysis.possibleMoves(game.getBoard(),rolledDice, game.getP1());
 
-                    for(int q = 0; q<move.length; q++) {
+                    // iterate over all tuples
+                    for(int q = 0; q < possibleMoveCombinations.get(i).length; q++) {
 
-                        System.out.println("Q: " + q);
-                        System.out.println("I: " + i);
-                        from = move[q].get(i)[0];
-                        to = move[q].get(i)[1];
+                        int [] move = possibleMoveCombinations.get(i)[q];
+                        from = move[0];
+                        to = move[1];
 
-                        // doing the move inside the copy board
+                        executeMove(move, copyBoard);
+                        // store all tuples
+                        moves[q] = move;
 
-                        //Save columns involved
-                        Column fromColumn = copyBoard.getColumns()[from];
-                        Column toColumn = copyBoard.getColumns()[to];
-
-                        int fromChipsNum = fromColumn.getChips().size();
-
-                        //Make the respective move, without checking if it is a valid move.
-                        if (fromChipsNum > 0) {
-                            Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                            toColumn.getChips().add(movingChip);
-                        }
+                    }
 
                         // printing out the board
                         System.out.println("Dice 1: " + game.getDicesNum()[0]);
@@ -118,17 +138,12 @@ public class MiniMax extends AI {
                             System.out.println(" Column size for each board: " + copyBoard.getColumns()[k].getChips().size() + " column " + k);
                         }
 
-                        //  System.out.println(from);
-                        //  System.out.println(to);
-
                         // adding a new node to the tree
                         // this board describes one possible move
-                        TreeNode firstLayer = new TreeNode(from, to, copyBoard);
+                        TreeNode firstLayer = new TreeNode(moves, copyBoard);
                         root.addChild(firstLayer);
                         root.addFirstLayer(firstLayer);
-                    }
-                    System.out.println("Move 0 size " + move[0].size());
-                    System.out.println("Move 1 size " + move[1].size());
+
                 }
 
             // min nodes
@@ -149,7 +164,7 @@ public class MiniMax extends AI {
                         root.addSecondLayer(child);
 
                         // storing a possible dice combination
-                        int[] dice = diceCombinations[j];
+                        dice = diceCombinations[j];
                         int die1 = dice[0];
                         int die2 = dice[1];
 
@@ -168,10 +183,10 @@ public class MiniMax extends AI {
 
                         }
 
-
+                        ArrayList<int[][]> possibleCombination2 = boardAnalysis.allCombinations(childBoard, diceComb, game.getP1());
                 // chance nodes || terminal leaf nodes
                         // iterate again over the current amount of possible moves
-                        for(int k = 0; k < boardAnalysis.possibleMoves(childBoard, diceComb, game.getP2()).length; k++){
+                        for(int k = 0; k < possibleCombination2.size(); k++){
 
                             // copy the current board
                             Board copyBoard = board.copyBoard(childBoard, game);
@@ -180,32 +195,16 @@ public class MiniMax extends AI {
                              * and Player 2 is MAX and the AI!!
                             */
 
-                            int from = 0;
-                            int to = 0;
+                            for(int q = 0; q < possibleCombination2.get(k).length; q++) {
 
-                            ArrayList<int[]>[] move = boardAnalysis.possibleMoves(copyBoard, diceComb, game.getP1());
+                                int move [] = possibleCombination2.get(k)[q];
 
-                            for(int q = 0; q < move.length; q++) {
+                                executeMove(move, copyBoard);
 
-                                // store the move
-                                from = move[q].get(k)[0];
-                                to = move[q].get(k)[1];
-
-
-                                // do the move
-                                //Save columns involved
-                                Column fromColumn = copyBoard.getColumns()[from];
-                                Column toColumn = copyBoard.getColumns()[to];
-
-                                int fromChipsNum = fromColumn.getChips().size();
-
-                                //Make the respective move, without checking if it is a valid move.
-                                if (fromChipsNum > 0) {
-                                    Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
-                                    toColumn.getChips().add(movingChip);
+                                moves[q] = move;
                                 }
                                 // add the node which describes a possible move to the tree
-                                TreeNode leaf = new TreeNode(from, to, copyBoard);
+                                TreeNode leaf = new TreeNode(moves, copyBoard);
                                 child.addChild(leaf);
                                 root.addLeaf(leaf);
 
@@ -214,32 +213,12 @@ public class MiniMax extends AI {
                     }
 
 
-                }
+
 
         System.out.println("1. Layer children: " + root.getChildren().size());
         System.out.println("2. Layer children: " + root.getChildren().get(0).getChildren().size());
         System.out.println("3. Layer children: " + root.getChildren().get(0).getChildren().get(0).getChildren().size());
 
-            /*
-            // min nodes and max nodes
-            if(counter == 2){
-
-                // go through all current chance nodes
-                for(int i = 0; i < root.getChildren().size(); i++){
-
-                    TreeNode temp = root.getChildren().get(i);
-
-                    for(int j = 0; j< randomAI.possibleMoves(game).size(); j++) {
-
-                        int[] move = randomAI.possibleMoves(game).get(i);
-                        int from = move[0];
-                        int to = move[1];
-                        temp.addChild(new TreeNode(to, from));
-                    }
-                }
-                counter++;
-            }
-*/
             return root;
         }
 
@@ -260,11 +239,22 @@ public class MiniMax extends AI {
 
     public int[][] expectiminimax(Game game) {
 
-        // TODO: size can change
-        int[][] move = new int[2][2];
 
+        // get the rolled dice
+        int die[] = game.getDicesNum();
+        int die1 = die[0];
+        int die2 = die[1];
+
+        int[][] move;
+
+        // if we rolled a double then we make 4 moves
+        if(die1 == die2) {
+                move = new int[4][2];
+        }
+        else{
+                move = new int[2][2];
+        }
         TreeNode root = buildTree(game);
-        TreeNode temp = root;
 
         // chance layer
         ArrayList<TreeNode> leafNodes = root.getAllLeafs();
@@ -277,16 +267,29 @@ public class MiniMax extends AI {
         double tempMax = Double.NEGATIVE_INFINITY;
 
         // iterate over all leaf nodes
-        // TODO: last leaf node is not being iterated over
-        for (int i = 0; i < leafNodes.size() - 1; i++) {
+        for (int i = 0; i < leafNodes.size(); i++) {
 
             // evaluate each board, stored in every leaf node
             Board evaluateBoard = leafNodes.get(i).getBoard();
+            // it is P1's turn
             double movescore = AI.evaluateGame(game.getP1(), game.getP2(), evaluateBoard);
             leafNodes.get(i).setMoveScore(movescore);
 
+            // covering the case when we reach the last leaf node
+            if(i==leafNodes.size()-1){
 
-            if (movescore < tempMin) {
+                if(leafNodes.get(i-1).getParent() == leafNodes.get(i).getParent()){
+                    if(leafNodes.get(i).getParent().getMoveScore() > movescore){
+                        leafNodes.get(i).getParent().setMoveScore(movescore);
+                    }
+                }
+                else{
+                    leafNodes.get(i).getParent().setMoveScore(movescore);
+                }
+
+            }
+
+            else if (movescore < tempMin) {
                 // update the lowest value
                 tempMin = movescore;
                 // assign parent a score
@@ -307,7 +310,7 @@ public class MiniMax extends AI {
             for (int j = 0; j < firstLayer.get(i).getChildren().size(); j++) {
 
                 double dieProb = secondLayer.get(j).getProb();
-                movescore = +dieProb * secondLayer.get(j).getMoveScore();
+                movescore =+ dieProb * secondLayer.get(j).getMoveScore();
 
             }
             // assigning the score to the chance nodes
@@ -327,150 +330,30 @@ public class MiniMax extends AI {
                 bestmove = i;
             }
         }
-        // TODO: this gets just one move
-        int from = root.getChildren().get(bestmove).from;
-        int to = root.getChildren().get(bestmove).to;
 
-        move[0][0] = from;
-        move[0][1] = to;
-
-        return move;
-    }
-}
-
-
-/*
-    public ArrayList<TreeNode> expectiminimax(){
-
-        ArrayList<TreeNode> move = new ArrayList<>();
-        return move;
-    }
-
-}
-/*
-   private final int MAX_DEPTH = 4;
-   private Game game;
-   private TreeNode treeNode;
-
-
-   double moveScore;
-   private int from;
-   private int to;
-
-    public MiniMax(){
-        super();
-    }
-
-    public int[] decisionAlgorithm(Game game){
-
-        this.game = game;
-        int[] move = new int[2];
-        minimax(treeNode, this , MAX_DEPTH);
-        move[0] = getFrom();
-        move[1] = getTo();
+        // return the best current move
+        move = root.getFirstLayer().get(bestmove).getMove();
 
         return move;
     }
 
-   public Double minimax(TreeNode treeNode, Player p, int depth){
+    public static void executeMove(int move[], Board copyBoard) {
 
-       double moveScore = 0;
+        int from = move[0];
+        int to = move[1];
 
-        // if tree node is leaf or depth is 0
-       if(treeNode == gameTree.getChild() || depth == 0){
-           // supposed to update from and to
-           setFrom(treeNode.from);
-           setTo(treeNode.to);
-           return moveScore;
+        // doing the move inside the copy board
 
-       }
-       // opponent's move
-       if(p.getID() == p2.getID()){
-           // alpha has to be KB -  tree
-           double alpha = Double.POSITIVE_INFINITY;
-            // go through children of current node
-           for(int i = 0; i<treeNode.getChildren().size()+1; i++){
-               alpha = min(alpha, minimax(treeNode.getChildren().get(i), p ,depth-1));
-           }
-       }
-       else {
-           // alpha has to be KB -  tree
-           double alpha = Double.NEGATIVE_INFINITY;
-           for(int i = 0; i<treeNode.getChildren().size()+1; i++){
-               alpha = max(alpha, minimax(treeNode.getChildren().get(i), p ,depth-1));
-           }
-       }
+        //Save columns involved
+        Column fromColumn = copyBoard.getColumns()[from];
+        Column toColumn = copyBoard.getColumns()[to];
 
-       return moveScore;
-   }
+        int fromChipsNum = fromColumn.getChips().size();
 
-   public double expectiminimax(AI ai, int depth, TreeNode treeNode){
-
-        if(depth == MAX_DEPTH){
-
-           return ai.evaluateGame(game, p);
-
+        //Make the respective move, without checking if it is a valid move.
+        if (fromChipsNum > 0) {
+            Chip movingChip = fromColumn.getChips().remove(fromChipsNum - 1);
+            toColumn.getChips().add(movingChip);
         }
-
-        if(depth % 2 == 0){
-            // chance node - not yet
-            for(int i = 0; i< game.getMoves().size(); i++){
-
-            }
-        }
-        // min node
-        else if(depth % 4 == 1 ){
-
-            double alpha = Double.NEGATIVE_INFINITY;
-
-            for(int i = 0; i<treeNode.getChildren().size()+1; i++){
-                alpha = max(alpha, expectiminimax(treeNode.getChildren().get(i), p ,depth+1));
-            }
-
-       }
-        return moveScore;
-    }
-
-    public int getFrom(){ return from; }
-    public int getTo(){ return to; }
-
-    public void setFrom(int from){
-        this.from = from;
-    }
-
-    public void setTo(int to){
-        this.to = to;
     }
 }
-*/
-
-/**
-
-   General info about expectiminimax:
-
-    - each chance node has 21 distinct children ( 6 doubles, and the 15 others )
-    - max dice(min rolls) min dice(max rolls) max terminal structure
-    - use expected values for chance nodes: Taking the weighted average of the values resulting from all possible dice rolls
-        - over a max node: expectimax(C) = sum_i(P(d_i)*maxvalue(i))
-        - over a min node: expectimin(C) = sum_i(P(d_i)*minvalue(i))
-
-    - Decision with chance:
-        - we want to pick move that leads to best position
-        - resulting values do not have definite minimax values
-        -> we calculate the expected value, where the expectation is taken over by all the possible dice rolls that could occur
-
-
-    Steps (recursive implementation):
-
-    at current tree node
-
-    1. Terminal test -> if we are at the leaf node or depth = MaxDepth
-    2. write a method isTerminalNode, return true if it is (makes things easier)
-    3. if max: get maximum score from evaluation function for all the children of current node
-
-
-
-    --------------------------------------------------------------------------------------------------------------------
-    --------------------------------------------------------------------------------------------------------------------
-
-*/
