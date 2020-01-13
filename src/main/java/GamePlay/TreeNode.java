@@ -173,7 +173,6 @@ public class TreeNode {
     }
 
     public String toString(){
-
         String line = "";
         int counter = 0;
 
@@ -194,23 +193,4 @@ public class TreeNode {
         }
 
     }
-    /*
-    public String toString(){
-
-        String res = "";
-
-        res += "DiceUp GameTree, depth: " + depth();
-
-        int counter = 0;
-
-        TreeNode node = parent;
-        while(node.getChildren().size() > 0){
-            res += "\nMove: " + counter + ", Player: " + node.player.getName() + "\n\tFrom: " + node.from + " to: " + node.to;
-            counter++;
-
-            node = node.getChildren().get(0);
-        }
-
-        return res;
-    }*/
 }

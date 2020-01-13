@@ -21,7 +21,7 @@ public class Player {
     private boolean hasChipsHit;
     private int takenChips;
     private int ID;
-    private static int lastID = 0;
+    private static int lastID = 1;
     private int score;
 
     private Color col;
