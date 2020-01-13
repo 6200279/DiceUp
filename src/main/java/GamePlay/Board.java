@@ -126,4 +126,30 @@ public class Board {
         }
         return newBoard;
     }
+
+    public String toString() {
+        final int LINE_LENGTH = 40;
+        StringBuilder result = new StringBuilder("Board:\n");
+        for (int span = 0; span < LINE_LENGTH + 6; span++) result.append("=");
+        for (int i = 0; i < 12; i++) {
+            result.append("\n");
+            int xSize = columns[i].getChips().size();
+            int oSize = columns[23 - i].getChips().size();
+
+            if (i < 10) result.append(" ");
+            result.append(i + "|");
+            for (int b = 0; b < xSize; b++) result.append("X");
+            for (int s = 0; s < LINE_LENGTH - (xSize + oSize); s++) result.append(" ");
+            for (int w = 0; w < oSize; w++) result.append("O");
+            result.append("|" + (23 - i));
+
+            if (i == 5) {
+                result.append("\n");
+                for (int span = 0; span < LINE_LENGTH + 6; span++) result.append("=");
+            }
+        }
+        result.append("\n");
+        for (int span = 0; span < LINE_LENGTH + 6; span++) result.append("=");
+        return result.toString();
+    }
 }

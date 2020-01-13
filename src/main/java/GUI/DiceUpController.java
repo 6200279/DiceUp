@@ -436,6 +436,7 @@ public class DiceUpController {
 
   // This method is for the roll_it Button to roll dices
     public void rollDice(){
+        updateBoard();
         currGame.rollDices();
         //Dice values
         int num1 = currGame.getDices()[0].getNum();

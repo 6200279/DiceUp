@@ -1,5 +1,7 @@
 package GamePlay;
 
+import GUI.DiceUpController;
+
 import java.util.ArrayList;
 
 public class StraightForward extends AI {
