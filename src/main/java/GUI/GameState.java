@@ -37,4 +37,8 @@ public class GameState {
         return ourInstance;
     }
 
+    public Game getGame(){
+        return game;
+    }
+
 }

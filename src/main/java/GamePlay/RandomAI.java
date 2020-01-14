@@ -13,16 +13,31 @@ public class RandomAI extends AI{
         ArrayList<int[]> possibleCols = new ArrayList<>();
         System.out.println("AI is choosing random move.");
 
-        possibleCols = possibleMoves(game);
+
+        possibleCols = BoardAnalysis.possibleMoves(game.getBoard(),game.getMoves(), game.getP2())[0];
+        possibleCols.addAll(BoardAnalysis.possibleMoves(game.getBoard(),game.getMoves(), game.getP2())[1]);
         Random random = new Random();
 
         int randomMove = random.nextInt(possibleCols.size());
         System.out.println("Random number: " + randomMove);
         System.out.println("Size of possible cols: " + possibleCols.size());
-
-
+        if(game.getBoard().getMiddleColumns()[1].getChips().size()!=0) {
+            possibleCols = removeInvalidMoves(possibleCols);
+        }
 
     return possibleCols.get(randomMove);
+    }
+
+
+
+    public  ArrayList<int[]> removeInvalidMoves(ArrayList<int[]> possibleColumns){
+        ArrayList<int[]> possibleCols = new ArrayList<int[]>();
+        for (int i = 0; i<possibleColumns.size(); i++){
+            if(possibleColumns.get(i)[0]== 25){
+                possibleCols.add(possibleColumns.get(i));
+            }
+        }
+        return possibleCols;
     }
 
     public ArrayList<int[]> possibleMoves(Game game){
@@ -30,6 +45,7 @@ public class RandomAI extends AI{
         ArrayList<int[]> possibleCols = new ArrayList<>();
 
         Board b = game.getBoard();
+
         // gets all possible moves
         for (int i = 0; i < 24; i++) {
             if (b.getColumns()[i].getChips().size() > 0) { //check if unempty col

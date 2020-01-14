@@ -87,8 +87,10 @@ public class Game {
         int toChipsNum = toColumn.getChips().size();
 
         //from column cannot be empty.
-        if (fromChipsNum <= 0)
+        if (fromChipsNum <= 0) {
+            System.out.println("1");
             throw new IllegalArgumentException();
+        }
 
         //get the owners of columns
         //if there is no chip in "to" column consider the column as owned by the player who made the move
@@ -102,19 +104,26 @@ public class Game {
 
 
         //this check must return false for every valid move (move, take, hit)
-        if(checkUniversalConditions(ownerFromColumn, ownerToColumn, fromColumn, toColumn, fromChipsNum, toChipsNum))
+        if(checkUniversalConditions(ownerFromColumn, ownerToColumn, fromColumn, toColumn, fromChipsNum, toChipsNum)){
+            System.out.println("2");
             throw new IllegalArgumentException();
+        }
 
 
         //normal moves check
         if(to>=0 && to<=23){
-           if(checkNormalMoveLegality(ownerFromColumn,ownerToColumn, toChipsNum, from, to, fromColumn, toColumn))
+           if(checkNormalMoveLegality(ownerFromColumn,ownerToColumn, toChipsNum, from, to, fromColumn, toColumn)) {
+               System.out.println("3");
+
                throw new IllegalArgumentException();
+           }
         }
         //take moves check
         else if(to==26){
-            if(checkTakeLegality(from))
+            if(checkTakeLegality(from)) {
+                System.out.println("4");
                 throw new IllegalArgumentException();
+            }
         }
 
 

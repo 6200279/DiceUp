@@ -80,7 +80,7 @@ public class DiceUpController {
 
     private VBox[] columns;
     private GameState State = GameState.getInstance();
-    private Game currGame;
+    private Game currGame = State.getGame();
 
 
 /*....................................METHODS.....................................................*/

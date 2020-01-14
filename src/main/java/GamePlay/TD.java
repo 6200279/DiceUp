@@ -37,12 +37,7 @@ package GamePlay;
  */
 
 
-import com.sun.deploy.util.StringUtils;
-import com.sun.tools.javac.util.ArrayUtils;
-
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 
 
@@ -92,6 +87,8 @@ public class TD {
 
     //Neural network act as evaluation function
     NeuralNetwork nn;
+
+
 
 
     //Constructor

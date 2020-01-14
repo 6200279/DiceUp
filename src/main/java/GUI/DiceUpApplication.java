@@ -131,9 +131,7 @@ public class DiceUpApplication extends Application {
         else if(gameType.equals("AI: Difficult")){
             p1 = new MCSTwCN();
             p2 = new Player(p2Name);
-
         }
-
         else if(gameType.equals("AI: Medium")){
             p1 = new Player(p1Name);
             p2 = new StraightForward();

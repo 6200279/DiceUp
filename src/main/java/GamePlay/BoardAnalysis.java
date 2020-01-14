@@ -178,9 +178,26 @@ public class BoardAnalysis {
 
         ArrayList<int[][]> pC = new ArrayList<>();
         pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC, possibleMoves[1].get(possibleMoves[1].size() - 1), possibleMoves[0].get(possibleMoves[0].size() - 1));
-
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
+        legalize(b,pC, p);
         return pC;
+    }
+
+    private static void legalize(Board board, ArrayList<int[][]> pC, Player p){
+            for(int i=0; i< pC.size(); i++){
+                for(int j=0; j<pC.get(i).length; j++){
+                    int toCol = pC.get(i)[j][1];
+                    if(pC.get(i)[j][0]<0||pC.get(i)[j][1]<0||pC.get(i)[j][0]>23||pC.get(i)[j][1]>23){
+                        pC.remove(i);
+                        i--;
+                    }
+                    else if(board.getColumns()[toCol].getChips().size()>0&&board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
+                        pC.remove(i);
+                        i--;
+                    }
+                }
+            }
+
     }
 
     /**
