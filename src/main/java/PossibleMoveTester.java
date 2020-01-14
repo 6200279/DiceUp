@@ -48,5 +48,9 @@ public class PossibleMoveTester {
             System.out.printf("\n");
         }
 
+        double[] boardInDouble = root.toDoubleArray();
+        for (int i = 0; i < boardInDouble.length; i++) {
+            System.out.println(i+ ": " + boardInDouble[i]);
+        }
     }
 }

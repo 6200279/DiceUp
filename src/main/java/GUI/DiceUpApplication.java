@@ -129,7 +129,7 @@ public class DiceUpApplication extends Application {
             p2 = new Player(p2Name);
         }
         else if(gameType.equals("AI: Difficult")){
-            p1 = new MCSTwCN();
+            p1 = new tdAI();
             p2 = new Player(p2Name);
 
         }

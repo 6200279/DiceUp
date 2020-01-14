@@ -14,6 +14,8 @@
 
 package GamePlay;
 
+import java.util.ArrayList;
+
 public class Board {
 
     //indices 0-23 are the regular spots;
@@ -125,6 +127,27 @@ public class Board {
             }
         }
         return newBoard;
+    }
+
+    public double[] toDoubleArray() {
+        double[] result = new double[29];
+
+        for (int i = 0; i < columns.length - 1; i++) {
+            if (columns[i].getChips().size() > 0) {
+                int turn = columns[i].getChips().get(0).getOwner().getID();
+                result[i] = columns[i].getChips().size() * TD.whiteChip;
+                if (turn == 2) result[i] = columns[i].getChips().size() * TD.blackChip;
+            }
+        }
+        ArrayList<Chip> takens = columns[26].getChips();
+        for (int j = 0; j < takens.size(); j++) {
+            int owner = takens.get(j).getOwner().getID();
+
+            if (owner == 1) result[26] += TD.whiteChip;
+            else result[27] += TD.blackChip;
+        }
+
+        return result;
     }
 
     public String toString() {
