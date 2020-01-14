@@ -85,6 +85,12 @@ public class TreeNode {
         this.move = move;
 
     }
+    public TreeNode(int from, int to, Board aBoard){
+
+        this.from = from;
+        this.to = to;
+        this.board = aBoard;
+    }
 
     // constructor that is called when root is created
     public TreeNode(boolean isRoot, Board aBoard) {
