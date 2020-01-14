@@ -187,7 +187,8 @@ public class BoardAnalysis {
             for(int i=0; i< pC.size(); i++){
                 for(int j=0; j<pC.get(i).length; j++){
                     int toCol = pC.get(i)[j][1];
-                    if(pC.get(i)[j][0]<0||pC.get(i)[j][1]<0||pC.get(i)[j][0]>23||pC.get(i)[j][1]>23){
+                    int fromCol = pC.get(i)[j][0];
+                    if(fromCol<0||toCol<0||fromCol>23||toCol>23){
                         pC.remove(i);
                         i--;
                     }
@@ -195,6 +196,22 @@ public class BoardAnalysis {
                         pC.remove(i);
                         i--;
                     }
+
+                    if(p.getID()==1){
+                        if(fromCol<=toCol){
+                            pC.remove(i);
+                            i--;
+                        }
+                    }
+                    else{
+                        if(fromCol>=toCol){
+                            pC.remove(i);
+                            i--;
+                        }
+
+                    }
+
+
                 }
             }
 
