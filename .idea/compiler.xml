@@ -8,9 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="DiceUp" />
         <module name="DiceUpLast" />
-        <module name="DiceUp2" />
-        <module name="DiceUpLast2" />
         <module name="diceup" />
+        <module name="DiceUp2" />
+        <module name="DiceUpLast" />
+        <module name="DiceUpLast2" />
       </profile>
     </annotationProcessing>
   </component>

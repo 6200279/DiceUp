@@ -169,7 +169,7 @@ public class DiceUpController {
                 try {
                     currGame.move(selectedChipColumn, columnId);
                     LogBox.getItems().add("Move Valid");
-
+                    System.out.println(currGame.getBoard().toString());
                     int movePlayed = 0;
                     if(columnId == 26){
                         if(currGame.getBoard().getColumns()[columnId].getChips().get(0).getOwner()==currGame.getP1())

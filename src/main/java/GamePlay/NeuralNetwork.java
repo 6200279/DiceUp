@@ -447,53 +447,51 @@ class Files {
     public static int trainingTimes = 10;
 
     //parameter that determines how much the update are influenced by the events that occurs later in time.
-    public static double lambda = 0.5;
+    public static double lambda = 0.7;
 
     public static boolean debug = true;
 
 
     public static void main(String[] args) {
-//        int times = 1;
-//        long startTime=System.currentTimeMillis();
-//        trainWhateverTimes(times);
-//        long endTime=System.currentTimeMillis();
-//
-//        System.out.println("It cost ： "+(endTime-startTime)+" ms to train "+times +" games");
+        int times = 1;
+        long startTime=System.currentTimeMillis();
+        trainWhateverTimes(times);
+        long endTime=System.currentTimeMillis();
+
+        System.out.println("It cost ： "+(endTime-startTime)+" ms to train "+times +" games");
 
 //        trainANNByTD();
 
 //        checkInitialResult();
-//        double[] testArray = new double[29];
-//        //td.playAgainstItself();
-//
-//        testArray[0] =3*w;
-//        testArray[1] =4*b;
-//        testArray[2] =2*w;
-//        testArray[3] =0*w;
-//        testArray[4] =0*b;
-//        testArray[5] =6*b;
-//        testArray[6] =0*b;
-//        testArray[7] =0*b;
-//        testArray[8] =0;
-//        testArray[9] =0;
-//        testArray[10] =0*b;
-//        testArray[11] =1;
-//        testArray[12] =0;
-//        testArray[13] =0;
-//        testArray[14] =0;
-//        testArray[15] =0*b;
-//        testArray[16] =0;
-//        testArray[17] =0;
-//        testArray[18] =0*b;
-//        testArray[19] =0*w;
-//        testArray[20] =1;
-//        testArray[21] =0;
-//        testArray[22] =0*b;
-//        testArray[23] =0*b;
-//
-//        NeuralNetwork  nn = new NeuralNetwork(testArray);
+        double[] testArray = new double[29];
+//        td.playAgainstItself();
 
-
+        testArray[0] =1*w;
+        testArray[1] =0*b;
+        testArray[2] =0*w;
+        testArray[3] =0*w;
+        testArray[4] =0*b;
+        testArray[5] =0*b;
+        testArray[6] =0*b;
+        testArray[7] =0*b;
+        testArray[8] =0;
+        testArray[9] =0;
+        testArray[10] =0*b;
+        testArray[11] =0;
+        testArray[12] =0;
+        testArray[13] =0;
+        testArray[14] =0;
+        testArray[15] =0*b;
+        testArray[16] =0;
+        testArray[17] =0;
+        testArray[18] =0*b;
+        testArray[19] =1*w;
+        testArray[20] =0;
+        testArray[21] =0;
+        testArray[22] =6*b;
+        testArray[23] =1*b;
+//
+        NeuralNetwork  nn = new NeuralNetwork(testArray);
 
 
 //        checkResult();
@@ -517,9 +515,9 @@ class Files {
 
 //        double[][] recordOfGame = readRecordOfAGame(sampleForTrainPath).clone();
 
-        double[] sample = td.changeIntoInputVector(database[0]);
-        double[] sample2 = td.changeIntoInputVector(database[1]);
-        double[] sample3 = td.changeIntoInputVector(database[2]);
+        double[] sample = td.changeIntoInputVector(database[database.length-1]);
+        double[] sample2 = td.changeIntoInputVector(database[database.length-2]);
+        double[] sample3 = td.changeIntoInputVector(database[database.length-3]);
 
         NeuralNetwork nn = new NeuralNetwork(sample);
 

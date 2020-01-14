@@ -10,7 +10,7 @@ package GamePlay;
     25 is hit place for white chips.
     26 is hit place for black chips.
     27,28 is the take place for a and b.
-    29 is the reward value of this state. Ignore
+    29 is turn for player.
 
     The basic idea of this implement is let the computer play with computer.
     Record every state during a game and add it into the recording matrix(database).
@@ -48,7 +48,7 @@ public class TD {
     Dice dice1 = new Dice();
     Dice dice2 = new Dice();
 
-    public boolean debug = true;
+    public boolean debug = false;
 
 
 
@@ -75,9 +75,9 @@ public class TD {
 
 
     //2 infinite non-repeating decimal to distinguish 2 players' chip
-    private final double whiteChip = Math.PI-2;
+    public static final double whiteChip = Math.PI-2;
 
-    private final double blackChip = Math.PI-3;
+    public static final double blackChip = Math.PI-3;
 
 
     //check whether the player can take their chips
@@ -936,6 +936,29 @@ public class TD {
         }
         return newState;
     }
+
+
+
+
+
+    //For merging the code with GUI
+    public double[] mergeWithGUIToMakeMove(double[] currState, int diceNum1, int diceNum2){
+
+        if (diceNum1 == diceNum2){
+            double[] newState_1 = move(database, currState, dice1.getNum());
+            double[] newState_2 = move(database, newState_1, dice2.getNum());
+            double[] newState_3 = move(database, newState_2, dice2.getNum());
+            double[] newState_4 = move(database, newState_3, dice2.getNum());
+
+            return newState_4;
+        }else{
+           return moveWithTwo(currState,diceNum1,diceNum2);
+        }
+
+
+    }
+
+
 
     public int findHighestNumber(double[] array){
 
