@@ -181,8 +181,7 @@ public class BoardAnalysis {
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         pC = legalize(b,pC, p);
         for(int i=0; i<pC.size(); i++){
-            for(int j=0; j<pC.get(i).length; i++) {
-
+            for(int j=0; j<pC.get(i).length; j++) {
                 System.out.print(pC.get(i)[j][0]+"  ");
                 System.out.println(pC.get(i)[j][1]);
 
@@ -217,9 +216,11 @@ public class BoardAnalysis {
                         }
 
                     }
-                    if(pass)pC1.add(pC.get(i));
+
 
                 }
+                if(pass)
+                    pC1.add(pC.get(i));
             }
             return pC1;
 
