@@ -9,7 +9,7 @@ public class tdAI extends AI {
     }
 
     public tdAI() {
-        super();
+        super("TemporalDiff");
         tdInstance = new TD();
     }
 }
