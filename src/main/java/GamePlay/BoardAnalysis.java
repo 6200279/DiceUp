@@ -179,51 +179,44 @@ public class BoardAnalysis {
         ArrayList<int[][]> pC = new ArrayList<>();
         pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC, possibleMoves[1].get(possibleMoves[1].size() - 1), possibleMoves[0].get(possibleMoves[0].size() - 1));
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
-        pC = legalize(b,pC, p);
-        for(int i=0; i<pC.size(); i++){
-            for(int j=0; j<pC.get(i).length; i++) {
-
-                System.out.print(pC.get(i)[j][0]+"  ");
-                System.out.println(pC.get(i)[j][1]);
-
-            }
-        }
-
+        legalize(b,pC, p);
         return pC;
     }
 
-    private static ArrayList<int[][]> legalize(Board board, ArrayList<int[][]> pC, Player p){
-            ArrayList<int[][]>pC1 = new ArrayList<int[][]>();
-            boolean pass = true;
+    private static void legalize(Board board, ArrayList<int[][]> pC, Player p){
             for(int i=0; i< pC.size(); i++){
                 for(int j=0; j<pC.get(i).length; j++){
                     int toCol = pC.get(i)[j][1];
                     int fromCol = pC.get(i)[j][0];
                     if(fromCol<0||toCol<0||fromCol>23||toCol>23){
-                       pass = false;
+                        pC.remove(i);
+                        if(i!=0)i--;
                     }
+
                     else if(board.getColumns()[toCol].getChips().size()>0&&board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
-                      pass = false;
+                        pC.remove(i);
+                        if(i!=0)i--;
                     }
 
                     else if(p.getID()==1){
                         if(fromCol<=toCol){
-                           pass = false;
+                            pC.remove(i);
+                            if(i!=0)i--;
                         }
                     }
-                    else{
-                        if(fromCol>=toCol){
-                           pass = false;
+
+                    else if(fromCol>=toCol){
+                            pC.remove(i);
+                           if(i!=0)i--;
                         }
 
                     }
-                    if(pass)pC1.add(pC.get(i));
+
 
                 }
             }
-            return pC1;
 
-    }
+
 
     /**
      * Checks if given boards are of the same state
