@@ -41,9 +41,23 @@ public class MCSTwCN extends AI {
         }
     }
 
-    public TreeNode[] selectUCT() {
+    public TreeNode Select(TreeNode root, Game g) {
 
-        return null;
+        ArrayList<TreeNode> leaves = root.getAllLeafs();
+        TreeNode selectedLeaf = leaves.get(0);
+        double maxScore = leaves.get(0).getMoveScore();
+
+        for (int i = 1; i < leaves.size(); i++) {
+            if (leaves.get(i).getMoveScore() > maxScore) {
+                maxScore = leaves.get(i).getMoveScore();
+                selectedLeaf = leaves.get(i);
+            }
+        }
+        return selectedLeaf;
+    }
+
+    public double UCT(double v, double C, int n, int N){
+        return (v+(C*(Math.sqrt(Math.log(N)/n))));
     }
 
     public MCSTwCN() {
