@@ -103,13 +103,13 @@ public class MiniMax extends AI {
         }
 
         // first max node: this has to be player 2 (the AI)
-        ArrayList<Integer> rollDice = new ArrayList<>();
+        /*ArrayList<Integer> rollDice = new ArrayList<>();
 
         rollDice.add(5);
-        rollDice.add(5);
+        rollDice.add(5);*/
         // chance nodes
         // iterate over all possible moves of the current game
-        possibleMoveCombinations = boardAnalysis.allCombinations(game.getBoard(), rollDice, game.getP2());
+        possibleMoveCombinations = boardAnalysis.allCombinations(game.getBoard(), rolledDice, game.getP2());
         //System.exit(0);
         // iterate over all move combinations
 
@@ -149,11 +149,15 @@ public class MiniMax extends AI {
                     */
             // adding a new node to the tree
             // this board describes one possible move
-            TreeNode firstLayer = new TreeNode(moves, copyBoard, i);
+            TreeNode firstLayer = new TreeNode(moves, copyBoard);
             root.addChild(firstLayer);
             root.addFirstLayer(firstLayer);
+            System.out.println("[Move 1 From: " + firstLayer.getMove()[0][0] + "] [Move 1 To: " + firstLayer.getMove()[0][1] + "] [Move 2 From: " + firstLayer.getMove()[1][0] + "] [Move 2 To: " + firstLayer.getMove()[1][1] + "]");
+            firstLayer.setParent(root);
 
         }
+        System.out.println("");
+
         //System.exit(0);
 
         // min nodes
@@ -192,6 +196,7 @@ public class MiniMax extends AI {
                 // adding the child
                 temp.addChild(child);
                 root.addSecondLayer(child);
+                child.setParent(temp);
 
                 ArrayList<int[][]> possibleCombination2 = boardAnalysis.allCombinations(childBoard, diceComb, game.getP1());
 
@@ -218,9 +223,10 @@ public class MiniMax extends AI {
                         //System.out.println("Move second layer : " + moves[0][0]);
                     }
                     // add the node which describes a possible move to the tree
-                    TreeNode leaf = new TreeNode(moves, copyBoard , k);
+                    TreeNode leaf = new TreeNode(moves, copyBoard);
                     child.addChild(leaf);
                     root.addLeaf(leaf);
+                    leaf.setParent(child);
 
                 }
             }
@@ -291,10 +297,9 @@ public class MiniMax extends AI {
             // it is P1's turn
             double movescore = AI.evaluateGame(game.getP1(), game.getP2(), evaluateBoard);
             leafNodes.get(i).setMoveScore(movescore);
-
+            //System.out.println("score: " + leafNodes.get(i).getMoveScore());
             // covering the case when we reach the last leaf node
             if (i == leafNodes.size() - 1) {
-
                 if (leafNodes.get(i - 1).getParent() == leafNodes.get(i).getParent()) {
                     if (leafNodes.get(i).getParent().getMoveScore() > movescore) {
                         leafNodes.get(i).getParent().setMoveScore(movescore);
@@ -308,29 +313,32 @@ public class MiniMax extends AI {
                 tempMin = movescore;
                 // assign parent a score
                 leafNodes.get(i).getParent().setMoveScore(movescore);
-
                 // if we reach a new subtree -> the chance nodes
+
+            }
+            if((i<leafNodes.size()-1)){
                 if (leafNodes.get(i).getParent() != leafNodes.get(i + 1).getParent()) {
-                    tempMin = Double.POSITIVE_INFINITY;
+                tempMin = Double.POSITIVE_INFINITY;
                 }
             }
+
         }
+
+        // TODO: second layer has no move score
         // iterate over all chance nodes
         for (int i = 0; i < firstLayer.size(); i++) {
 
-            double movescore = 0D;
+            double movescore = 0;
             // iterate over all children of a node
             // the move score: Sum(Prob(d_i)*minScore(i))
             for (int j = 0; j < firstLayer.get(i).getChildren().size(); j++) {
 
                 double dieProb = secondLayer.get(j).getProb();
-                movescore =+ dieProb * secondLayer.get(j).getMoveScore();
-                System.out.println("move score " + secondLayer.get(j).getMoveScore());
-                System.out.println("die prob: " + dieProb);
+                movescore =+ dieProb * firstLayer.get(i).getChildren().get(j).getMoveScore();
+                //System.out.println("move score " + secondLayer.get(j).getMoveScore());
 
             }
             // assigning the score to the chance nodes
-            System.out.println("movescore for node " +  i  + " is " + movescore);
             firstLayer.get(i).setMoveScore(movescore);
         }
         int bestmove = 0;
@@ -338,7 +346,6 @@ public class MiniMax extends AI {
         for (int i = 0; i < firstLayer.size(); i++) {
 
             double movescore = firstLayer.get(i).getMoveScore();
-
             if (movescore > tempMax) {
                 // update the lowest value
                 tempMax = movescore;
@@ -354,7 +361,11 @@ public class MiniMax extends AI {
             int[][] movetest = root.getChildren().get(i).getMove();
             System.out.println("[Move 1 From: " + movetest[0][0] + "] [Move 1 To: " + movetest[0][1] + "] [Move 2 From: " + movetest[1][0] + "] [Move 2 To: " + movetest[1][1] + "]");
         }
+        System.out.println("size of first layer " + root.getFirstLayer().size());
+        System.out.println("size of get children layer " + root.getChildren().size());
 
+        System.out.println("first layer first node id " + root.getFirstLayer().get(0).getId() + " move " + root.getFirstLayer().get(0).getMove()[0][0] + " movescore " + root.getFirstLayer().get(0).getMoveScore() + " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
+        System.out.println("first layer first node id " + root.getChildren().get(0).getId() + " move " + root.getChildren().get(0).getMove()[0][0] + " movescore " + root.getChildren().get(0).getMoveScore()+ " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
 
       move = root.getFirstLayer().get(bestmove).getMove();
 
