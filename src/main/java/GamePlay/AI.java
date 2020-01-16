@@ -189,7 +189,7 @@ public abstract class AI extends Player {
 
         return evaluation;
     }
-
+    //It needs to be P1's turn!!!!!!!!
     public static double evaluateGame(Player p1, Player p2, Board board){
         Player currentPlayer = p1;
         Board currentBoard = board;

@@ -152,11 +152,12 @@ public class MiniMax extends AI {
             TreeNode firstLayer = new TreeNode(moves, copyBoard);
             root.addChild(firstLayer);
             root.addFirstLayer(firstLayer);
-            System.out.println("[Move 1 From: " + firstLayer.getMove()[0][0] + "] [Move 1 To: " + firstLayer.getMove()[0][1] + "] [Move 2 From: " + firstLayer.getMove()[1][0] + "] [Move 2 To: " + firstLayer.getMove()[1][1] + "]");
+            //System.out.println("[Move 1 From: " + firstLayer.getMove()[0][0] + "] [Move 1 To: " + firstLayer.getMove()[0][1] + "] [Move 2 From: " + firstLayer.getMove()[1][0] + "] [Move 2 To: " + firstLayer.getMove()[1][1] + "]");
             firstLayer.setParent(root);
 
+
         }
-        System.out.println("");
+        //System.out.println("");
 
         //System.exit(0);
 
@@ -203,14 +204,12 @@ public class MiniMax extends AI {
                 // chance nodes || terminal leaf nodes
                 // iterate again over the current amount of possible moves
                 for (int k = 0; k < possibleCombination2.size(); k++) {
-
                     // copy the current board
                     Board copyBoard = board.copyBoard(childBoard, game);
                     /**
                      * NOTE: game.getP1() is only working if we start with player 2
                      * and Player 2 is MAX and the AI!!
                      */
-
                     for (int q = 0; q < possibleCombination2.get(k).length; q++) {
 
                         //System.out.println("Amount of tuples " + possibleCombination2.get(k).length);
@@ -247,6 +246,17 @@ public class MiniMax extends AI {
         System.out.println("Size of the second layer:  " + root.getSecondLayer().size());
         System.out.println("Size of the third layer:  " + root.getAllLeafs().size());
 */
+        System.out.println(" ");
+        for (int i = 0; i<root.getChildren().size();i++){
+            System.out.println(root.getChildren().get(i).getId());
+        }
+        System.out.println(" ");
+        for (int i = 0; i<root.getChildren().size();i++){
+            System.out.println(root.getFirstLayer().get(i).getId());
+        }
+
+
+
         return root;
     }
 
@@ -359,13 +369,13 @@ public class MiniMax extends AI {
 
         for(int i =0 ; i< root.getFirstLayer().size(); i++){
             int[][] movetest = root.getChildren().get(i).getMove();
-            System.out.println("[Move 1 From: " + movetest[0][0] + "] [Move 1 To: " + movetest[0][1] + "] [Move 2 From: " + movetest[1][0] + "] [Move 2 To: " + movetest[1][1] + "]");
+            //System.out.println("[Move 1 From: " + movetest[0][0] + "] [Move 1 To: " + movetest[0][1] + "] [Move 2 From: " + movetest[1][0] + "] [Move 2 To: " + movetest[1][1] + "]");
         }
-        System.out.println("size of first layer " + root.getFirstLayer().size());
-        System.out.println("size of get children layer " + root.getChildren().size());
+        //System.out.println("size of first layer " + root.getFirstLayer().size());
+        //System.out.println("size of get children layer " + root.getChildren().size());
 
-        System.out.println("first layer first node id " + root.getFirstLayer().get(0).getId() + " move " + root.getFirstLayer().get(0).getMove()[0][0] + " movescore " + root.getFirstLayer().get(0).getMoveScore() + " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
-        System.out.println("first layer first node id " + root.getChildren().get(0).getId() + " move " + root.getChildren().get(0).getMove()[0][0] + " movescore " + root.getChildren().get(0).getMoveScore()+ " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
+        //System.out.println("first layer first node id " + root.getFirstLayer().get(0).getId() + " move " + root.getFirstLayer().get(0).getMove()[0][0] + " movescore " + root.getFirstLayer().get(0).getMoveScore() + " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
+        //System.out.println("first layer first node id " + root.getChildren().get(0).getId() + " move " + root.getChildren().get(0).getMove()[0][0] + " movescore " + root.getChildren().get(0).getMoveScore()+ " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
 
       move = root.getFirstLayer().get(bestmove).getMove();
 
