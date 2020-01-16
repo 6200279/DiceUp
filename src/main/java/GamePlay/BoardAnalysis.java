@@ -1,6 +1,7 @@
 package GamePlay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class BoardAnalysis {
     public static final int[][] DICE_OUTCOMES = {
@@ -188,6 +189,18 @@ public class BoardAnalysis {
             }
         }
 
+        return pC;
+    }
+
+    public static ArrayList<int[][]> uniquify(ArrayList<int[][]> pC) {
+        for (int i = 0; i < pC.size(); i++) {
+            for (int j = i; j < pC.size(); j++) {
+                if (Arrays.deepEquals(pC.get(i), pC.get(j))) {
+                    pC.remove(j);
+                    j--;
+                }
+            }
+        }
         return pC;
     }
 
