@@ -181,6 +181,16 @@ public class BoardAnalysis {
         pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC, possibleMoves[1].get(possibleMoves[1].size() - 1), possibleMoves[0].get(possibleMoves[0].size() - 1));
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         pC = legalize(b,pC, p);
+
+        printMoves(pC);
+        uniquify(pC);
+        printMoves(pC);
+
+
+        return pC;
+    }
+
+    private static void printMoves(ArrayList<int[][]> pC) {
         for(int i=0; i<pC.size(); i++){
             for(int j=0; j<pC.get(i).length; j++) {
                 System.out.print(pC.get(i)[j][0]+"  ");
@@ -188,14 +198,12 @@ public class BoardAnalysis {
 
             }
         }
-
-        return pC;
     }
 
     public static ArrayList<int[][]> uniquify(ArrayList<int[][]> pC) {
         for (int i = 0; i < pC.size(); i++) {
             for (int j = i; j < pC.size(); j++) {
-                if (Arrays.deepEquals(pC.get(i), pC.get(j))) {
+                if (i!=j && Arrays.deepEquals(pC.get(i), pC.get(j))) {
                     pC.remove(j);
                     j--;
                 }
