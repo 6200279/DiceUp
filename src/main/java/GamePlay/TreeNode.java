@@ -62,7 +62,9 @@ public class TreeNode {
 
     private int[][] move;
 
-    private int id;
+    private static int counter;
+
+    private int id = 0;
 
 // constructors
 
@@ -79,12 +81,13 @@ public class TreeNode {
     }
 
 
-    public TreeNode(int[][] move, Board aBoard, int id) {
+    public TreeNode(int[][] move, Board aBoard) {
 
 
         this.board  = aBoard;
         this.move = move;
-        this.id = id;
+        this.id = counter;
+        counter++;
         //System.out.println("[Move 1 From: " + move[0][0] + "] [Move 1 To: " + move[0][1] + "] [Move 2 From: " + move[1][0] + "] [Move 2 To: " + move[1][1] + "]");
 
 
@@ -146,11 +149,10 @@ public class TreeNode {
 
     // some basic method we might need
     public void setParent(TreeNode parent) {
-
         this.parent = parent;
     }
-    public TreeNode getParent() {
 
+    public TreeNode getParent() {
         return parent;
     }
 
@@ -169,6 +171,8 @@ public class TreeNode {
 
     public void setBoard(Board aBoard){ this.board = aBoard; }
 
+    public int getId(){ return id; }
+
 
     // returns depth of the tree
     public int depth() {
@@ -184,7 +188,7 @@ public class TreeNode {
         }
     }
 
-    public String toString(){
+    /*public String toString(){
         String line = "";
         int counter = 0;
 
@@ -204,5 +208,5 @@ public class TreeNode {
             return "[Root: " + this.parent + "]";
         }
 
-    }
+    }*/
 }

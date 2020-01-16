@@ -282,14 +282,13 @@ public class Game {
 
     private boolean checkUniversalConditions(Player ownerFromColumn, Player ownerToColumn, Column fromColumn, Column toColumn, int fromChipsNum, int toChipsNum){
 
-
-
         if (getTurn() == p1) {
             if (board.getMiddleColumns()[0].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[0]) {
                 aState.LOG_BOX.getItems().add("you have hitten chips");
                 return true;
             }
         }
+
         if (getTurn() == p2) {
             if (board.getMiddleColumns()[1].getChips().size() != 0 && fromColumn != board.getMiddleColumns()[1]) {
                 aState.LOG_BOX.getItems().add("you have hitten chips");
@@ -400,6 +399,7 @@ public class Game {
 
         moves.add(dice1.getNum());
         moves.add(dice2.getNum());
+
         if(dice1.getNum()==dice2.getNum()) {
             moves.add(dice1.getNum());
             moves.add(dice2.getNum());

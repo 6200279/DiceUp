@@ -98,7 +98,6 @@ public class DiceUpApplication extends Application {
         Window window = mainScene.getWindow();
         Stage primaryStage = (Stage)window;
 
-
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
         // Path to the FXML File
@@ -107,7 +106,6 @@ public class DiceUpApplication extends Application {
         //load the new root
         HBox root = loader.load(fxmlStream);
         Scene scene = new Scene(root);
-
 
         // Initialize the root entry (HBox)
         primaryStage.setScene(scene);
