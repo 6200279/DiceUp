@@ -287,7 +287,11 @@ public abstract class AI extends Player {
         return evaluation;
     }
 
+
     public AI(){
         super("Mr. A.I.");
+    }
+    public AI(String name){
+        super(name);
     }
 }

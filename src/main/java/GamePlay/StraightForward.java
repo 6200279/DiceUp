@@ -126,6 +126,6 @@ public class StraightForward extends AI {
     }
 
     public StraightForward() {
-        super();
+        super("Best-Evaluation");
     }
 }

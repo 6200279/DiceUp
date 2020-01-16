@@ -14,4 +14,8 @@ public class MCSTwCN extends AI {
     int[] decisionAlgorithm(Game g) {
         return new int[0];
     }
+
+    public MCSTwCN() {
+        super("MonteCarlo");
+    }
 }

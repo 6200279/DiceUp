@@ -70,6 +70,6 @@ public class RandomAI extends AI{
         return possibleCols;
     }
 
-    public RandomAI(){ super(); }
+    public RandomAI(){ super("Random"); }
 
 }
