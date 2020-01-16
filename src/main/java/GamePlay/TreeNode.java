@@ -78,6 +78,8 @@ public class TreeNode {
 
         this.board = aBoard;
         this.prob = prob;
+        this.id = counter;
+        counter++;
     }
 
 
@@ -97,6 +99,8 @@ public class TreeNode {
         this.from = from;
         this.to = to;
         this.board = aBoard;
+        this.id = counter;
+        counter++;
     }
 
     // constructor that is called when root is created
@@ -104,6 +108,8 @@ public class TreeNode {
         this.isRoot = isRoot;
         this.board = aBoard;
         player = GameState.p1;
+        this.id = counter;
+        counter++;
     }
 
 // mutator methods

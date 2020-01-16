@@ -46,7 +46,7 @@ public class MiniMax extends AI {
             {1, 6},
     };
 
-   /* public static void main(String[] args) {
+    public static void main(String[] args) {
 
         Player p1 = new Player();
         Player p2 = new Player();
@@ -60,7 +60,7 @@ public class MiniMax extends AI {
 
 
     }
-*/
+
     int[][] moves = null;
     @Override
     public int[] decisionAlgorithm(Game game) {
@@ -168,7 +168,7 @@ public class MiniMax extends AI {
             firstLayer.setParent(root);
 
         }
-        System.out.println("");
+        //System.out.println("");
 
         //System.exit(0);
 
@@ -256,7 +256,56 @@ public class MiniMax extends AI {
         }
         System.out.println("Size of the second layer:  " + root.getSecondLayer().size());
         System.out.println("Size of the third layer:  " + root.getAllLeafs().size());
+
+
+        //These prints compares root.getchildern to firstlayer, success
+        /*
+        System.out.println(" ");
+        for (int i = 0; i<root.getChildren().size();i++){
+            System.out.println(root.getChildren().get(i).getId());
+            System.out.println(root.getChildren().get(i).getMoveScore());
+        }
+        System.out.println(" ");
+        for (int i = 0; i<root.getChildren().size();i++){
+            System.out.println(root.getFirstLayer().get(i).getId());
+            System.out.println(root.getFirstLayer().get(i).getMoveScore());
+        }
+
+
+
+        //This code checks if secondlayer is constructed correctly, success
+
+        System.out.println("Layer 2 ID's: ");
+        System.out.println(" ");
+        /*
+        for (int i = 0; i < root.getChildren().size(); i++){
+            for (int j = 0; j<root.getChildren().get(i).getChildren().size();j++){
+                System.out.println(root.getChildren().get(i).getChildren().get(j).getId());
+            }
+        }
+        System.out.println(" ");
+
+        for (int i = 0; i < root.getSecondLayer().size();i++){
+            System.out.println(root.getSecondLayer().get(i).getId());
+        }
 */
+//This code checks third layer, success
+/*
+        System.out.println("Layer 3 ID's: ");
+        System.out.println(" ");
+        for (int i = 0; i < root.getChildren().size(); i++){
+            for (int j = 0; j<root.getChildren().get(i).getChildren().size();j++){
+                for (int k = 0; k<root.getChildren().get(i).getChildren().get(j).getChildren().size();k++){
+                    System.out.println(root.getChildren().get(i).getChildren().get(j).getChildren().get(k).getMoveScore());
+                }
+
+            }
+        }
+
+ */
+
+
+
         return root;
     }
 
@@ -305,7 +354,7 @@ public class MiniMax extends AI {
             // it is P1's turn
             double movescore = AI.evaluateGame(game.getP1(), game.getP2(), evaluateBoard);
             leafNodes.get(i).setMoveScore(movescore);
-            System.out.println("score of leaf nodes: " + leafNodes.get(i).getMoveScore());
+            //System.out.println("score of leaf nodes: " + leafNodes.get(i).getMoveScore());
             // covering the case when we reach the last leaf node
             if (i == leafNodes.size() - 1) {
                 if (leafNodes.get(i - 1).getParent() == leafNodes.get(i).getParent()) {
@@ -341,12 +390,20 @@ public class MiniMax extends AI {
             // the move score: Sum(Prob(d_i)*minScore(i))
             for (int j = 0; j < firstLayer.get(i).getChildren().size(); j++) {
 
-                double dieProb = secondLayer.get(j).getProb();
-                movescore =+ dieProb * firstLayer.get(i).getChildren().get(j).getMoveScore();
+                double dieProb = firstLayer.get(i).getChildren().get(j).getProb();
+                double addition = dieProb * firstLayer.get(i).getChildren().get(j).getMoveScore();
+                movescore += addition;
                 //System.out.println("move score " + secondLayer.get(j).getMoveScore());
+                if(i==0) {
+                    System.out.println(addition + " was added");
+                    System.out.println(movescore + " was the result");
+                }
 
             }
             // assigning the score to the chance nodes
+            if(i==0) {
+                //System.out.println(movescore + " was the result");
+            }
             firstLayer.get(i).setMoveScore(movescore);
         }
         int bestmove = 0;
@@ -365,16 +422,23 @@ public class MiniMax extends AI {
 
         // return the best current move
         int[][] move = root.getFirstLayer().get(bestmove).getMove();
-
+/*
         // printing all movescores of the first layer
         for(int i = 0; i<root.getFirstLayer().size(); i++){
 
             double movescoreprint = root.getFirstLayer().get(i).getMoveScore();
-            System.out.println("ever movescore  " + movescoreprint);
+            //System.out.println("ever movescore  " + movescoreprint);
         }
-        // the best move
-        System.out.println("score of best move " + root.getFirstLayer().get(bestmove).getMoveScore());
-        System.out.println("[Move 1 From: " + move[0][0] + "] [Move 1 To: " + move[0][1] + "] [Move 2 From: " + move[1][0] + "] [Move 2 To: " + move[1][1] + "]");
+ */
+
+
+        //This prints the movescore of all the children of a certain parent and the movescore of the parents
+        //TODO: check if the values multiplied by the probabilities add up to the same number as being printed
+        System.out.println(" ");
+        for (int j = 0; j<root.getChildren().get(0).getChildren().size();j++){
+            System.out.println("Add: " + root.getChildren().get(0).getChildren().get(j).getMoveScore()*root.getChildren().get(0).getChildren().get(j).getProb());
+        }
+        System.out.println("Sum is: " + root.getChildren().get(0).getMoveScore());
 
         return move;
     }
