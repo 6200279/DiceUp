@@ -449,11 +449,11 @@ class Files {
     //parameter that determines how much the update are influenced by the events that occurs later in time.
     public static double lambda = 0.7;
 
-    public static boolean debug = true;
+    public static boolean debug = false;
 
 
     public static void main(String[] args) {
-        int times = 1;
+        int times = 1000;
         long startTime=System.currentTimeMillis();
         trainWhateverTimes(times);
         long endTime=System.currentTimeMillis();
@@ -491,10 +491,15 @@ class Files {
         testArray[22] =6*b;
         testArray[23] =1*b;
 //
-        NeuralNetwork  nn = new NeuralNetwork(testArray);
 
 
-//        checkResult();
+//        TD td = new TD();
+//        double[] arr = td.database[0].clone();
+//
+//        NeuralNetwork  nn = new NeuralNetwork(arr);
+//
+//
+////        checkResult();
 //        System.out.println(nn.forward());
 //        trainANNByTD();
 
@@ -515,9 +520,9 @@ class Files {
 
 //        double[][] recordOfGame = readRecordOfAGame(sampleForTrainPath).clone();
 
-        double[] sample = td.changeIntoInputVector(database[database.length-1]);
-        double[] sample2 = td.changeIntoInputVector(database[database.length-2]);
-        double[] sample3 = td.changeIntoInputVector(database[database.length-3]);
+        double[] sample = td.changeIntoInputVector(database[0]);
+        double[] sample2 = td.changeIntoInputVector(database[1]);
+        double[] sample3 = td.changeIntoInputVector(database[2]);
 
         NeuralNetwork nn = new NeuralNetwork(sample);
 
@@ -718,9 +723,6 @@ class Files {
                 System.out.println("reward of this game is "+reward);
 
                 //First train the TERMINAL statement with reward given
-
-
-
                 NeuralNetwork nn = new NeuralNetwork(td.changeIntoInputVector(database[database.length - 1]), reward);
 
 
@@ -774,7 +776,7 @@ class Files {
 
 
                 //Using a for loop to train all the statements occurred in this game.
-                for (int i = database.length - 2; i > 0; i--) {
+                for (int i = database.length - 2; i > 1; i--) {
 
 
                     //First, it will train the currState I set before the for loop, then, after the changing of parameter, the currState and currentDesired output would change, too
