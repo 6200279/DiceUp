@@ -60,27 +60,31 @@ public class TreeNode {
 
     private int[][] move;
 
+    private int id;
 
 // constructors
 
 
     //chance Tree node
-    public TreeNode(int[] diceCombination, Board aBoard){
+    public TreeNode(int[] diceCombination, Board aBoard, Double prob){
 
 
         this.die1 = diceCombination[0];
         this.die2 = diceCombination[1];
 
         this.board = aBoard;
-        //this.prob = prob;
+        this.prob = prob;
     }
 
 
-    public TreeNode(int[][] move, Board aBoard) {
+    public TreeNode(int[][] move, Board aBoard, int id) {
 
 
         this.board  = aBoard;
         this.move = move;
+        this.id = id;
+        //System.out.println("[Move 1 From: " + move[0][0] + "] [Move 1 To: " + move[0][1] + "] [Move 2 From: " + move[1][0] + "] [Move 2 To: " + move[1][1] + "]");
+
 
     }
     public TreeNode(int from, int to, Board aBoard){
@@ -154,7 +158,10 @@ public class TreeNode {
 
     public Double getProb(){ return prob; }
 
-    public void setProb(double prob){ this.prob = prob; }
+    public void setProb(double prob){
+        this.prob = prob;
+        System.out.println("probability: " + prob);
+    }
 
     public Board getBoard(){ return board; }
 
