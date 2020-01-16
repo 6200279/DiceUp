@@ -31,6 +31,8 @@ public class TreeNode {
     private int die1;
     private int die2;
 
+    //Evaluated score
+    public double score;
     //From-to column ID's
     int from;
     int to;
