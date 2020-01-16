@@ -1,9 +1,6 @@
 package GamePlay;
 
-import java.math.BigDecimal;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import java.math.BigDecimal;
 
 
 /**
@@ -49,11 +46,12 @@ public class MiniMax extends AI {
             {1, 6},
     };
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
 
         Player p1 = new Player();
         Player p2 = new Player();
         Game game = new Game(p1, p2);
+
         game.rollDices();
         expectiminimax(game);
        // buildTree(game);
@@ -62,12 +60,28 @@ public class MiniMax extends AI {
 
 
     }
-
+*/
+    int[][] moves = null;
+    @Override
     public int[] decisionAlgorithm(Game game) {
-
-        int[] fromToMove = new int[2];
-        // move from column to column
-        return fromToMove;
+        if (moves == null) moves = expectiminimax(game);
+        else {
+            boolean updateMoves = true;
+            for (int i = 0; i < moves.length; i++){
+                if (moves[i][0] != -1) {
+                    updateMoves = false;
+                }
+            }
+            if (updateMoves) moves = expectiminimax(game);
+        }
+        for (int i = 0; i < moves.length; i++){
+            if (moves[i][0] != -1) {
+                int[] res = {moves[i][0], moves[i][1]};
+                moves[i][0] = -1;
+                return res;
+            }
+        }
+        return null; //if this happens we're doomed....
     }
 
     // constructor - inherits from AI (Player constructor)
@@ -90,17 +104,18 @@ public class MiniMax extends AI {
 
         }
 
-        int[][] moves;
+        int[][] movesFirstLayer = new int[2][2];
+        int[][] movesSecondLayer = new int[2][2];
 
         int[] dice = game.getDicesNum();
 
         // if we rolled a double then we make 4 moves
-        if (dice[0] == dice[1]) {
+        /*if (dice[0] == dice[1]) {
             moves = new int[4][2];
 
         } else {
             moves = new int[2][2];
-        }
+        }*/
 
         // first max node: this has to be player 2 (the AI)
         /*ArrayList<Integer> rollDice = new ArrayList<>();
@@ -109,7 +124,7 @@ public class MiniMax extends AI {
         rollDice.add(5);*/
         // chance nodes
         // iterate over all possible moves of the current game
-        possibleMoveCombinations = boardAnalysis.allCombinations(game.getBoard(), rolledDice, game.getP2());
+        possibleMoveCombinations = boardAnalysis.allCombinations(game.getBoard(), rolledDice, game.getP1());
         //System.exit(0);
         // iterate over all move combinations
 
@@ -132,9 +147,7 @@ public class MiniMax extends AI {
                 executeMove(move, copyBoard);
               //  System.out.println("Move executed for board " + i + " from " + from + " to " + to);
                 // store all tuples
-                moves[q] = move;
-             //   System.out.println("Move: " + moves[0][0]);
-
+                movesFirstLayer[q] = move;
             }
 
             // printing out the board
@@ -149,15 +162,13 @@ public class MiniMax extends AI {
                     */
             // adding a new node to the tree
             // this board describes one possible move
-            TreeNode firstLayer = new TreeNode(moves, copyBoard);
+            TreeNode firstLayer = new TreeNode(movesFirstLayer, copyBoard);
             root.addChild(firstLayer);
             root.addFirstLayer(firstLayer);
-            //System.out.println("[Move 1 From: " + firstLayer.getMove()[0][0] + "] [Move 1 To: " + firstLayer.getMove()[0][1] + "] [Move 2 From: " + firstLayer.getMove()[1][0] + "] [Move 2 To: " + firstLayer.getMove()[1][1] + "]");
             firstLayer.setParent(root);
 
-
         }
-        //System.out.println("");
+        System.out.println("");
 
         //System.exit(0);
 
@@ -198,18 +209,19 @@ public class MiniMax extends AI {
                 temp.addChild(child);
                 root.addSecondLayer(child);
                 child.setParent(temp);
-
-                ArrayList<int[][]> possibleCombination2 = boardAnalysis.allCombinations(childBoard, diceComb, game.getP1());
+                ArrayList<int[][]> possibleCombination2 = boardAnalysis.allCombinations(childBoard, diceComb, game.getP2());
 
                 // chance nodes || terminal leaf nodes
                 // iterate again over the current amount of possible moves
                 for (int k = 0; k < possibleCombination2.size(); k++) {
+
                     // copy the current board
                     Board copyBoard = board.copyBoard(childBoard, game);
                     /**
                      * NOTE: game.getP1() is only working if we start with player 2
                      * and Player 2 is MAX and the AI!!
                      */
+
                     for (int q = 0; q < possibleCombination2.get(k).length; q++) {
 
                         //System.out.println("Amount of tuples " + possibleCombination2.get(k).length);
@@ -218,11 +230,10 @@ public class MiniMax extends AI {
 
                         executeMove(move, copyBoard);
 
-                        moves[q] = move;
-                        //System.out.println("Move second layer : " + moves[0][0]);
+                        movesSecondLayer[q] = move;
                     }
                     // add the node which describes a possible move to the tree
-                    TreeNode leaf = new TreeNode(moves, copyBoard);
+                    TreeNode leaf = new TreeNode(movesSecondLayer, copyBoard);
                     child.addChild(leaf);
                     root.addLeaf(leaf);
                     leaf.setParent(child);
@@ -246,17 +257,6 @@ public class MiniMax extends AI {
         System.out.println("Size of the second layer:  " + root.getSecondLayer().size());
         System.out.println("Size of the third layer:  " + root.getAllLeafs().size());
 */
-        System.out.println(" ");
-        for (int i = 0; i<root.getChildren().size();i++){
-            System.out.println(root.getChildren().get(i).getId());
-        }
-        System.out.println(" ");
-        for (int i = 0; i<root.getChildren().size();i++){
-            System.out.println(root.getFirstLayer().get(i).getId());
-        }
-
-
-
         return root;
     }
 
@@ -279,14 +279,12 @@ public class MiniMax extends AI {
         int die1 = die[0];
         int die2 = die[1];
 
-        int[][] move;
-
         // if we rolled a double then we make 4 moves
-        if (die1 == die2) {
+       /* if (die1 == die2) {
             move = new int[4][2];
         } else {
             move = new int[2][2];
-        }
+        }*/
         TreeNode root = buildTree(game);
 
         // chance layer
@@ -307,7 +305,7 @@ public class MiniMax extends AI {
             // it is P1's turn
             double movescore = AI.evaluateGame(game.getP1(), game.getP2(), evaluateBoard);
             leafNodes.get(i).setMoveScore(movescore);
-            //System.out.println("score: " + leafNodes.get(i).getMoveScore());
+            System.out.println("score of leaf nodes: " + leafNodes.get(i).getMoveScore());
             // covering the case when we reach the last leaf node
             if (i == leafNodes.size() - 1) {
                 if (leafNodes.get(i - 1).getParent() == leafNodes.get(i).getParent()) {
@@ -366,18 +364,17 @@ public class MiniMax extends AI {
         }
 
         // return the best current move
+        int[][] move = root.getFirstLayer().get(bestmove).getMove();
 
-        for(int i =0 ; i< root.getFirstLayer().size(); i++){
-            int[][] movetest = root.getChildren().get(i).getMove();
-            //System.out.println("[Move 1 From: " + movetest[0][0] + "] [Move 1 To: " + movetest[0][1] + "] [Move 2 From: " + movetest[1][0] + "] [Move 2 To: " + movetest[1][1] + "]");
+        // printing all movescores of the first layer
+        for(int i = 0; i<root.getFirstLayer().size(); i++){
+
+            double movescoreprint = root.getFirstLayer().get(i).getMoveScore();
+            System.out.println("ever movescore  " + movescoreprint);
         }
-        //System.out.println("size of first layer " + root.getFirstLayer().size());
-        //System.out.println("size of get children layer " + root.getChildren().size());
-
-        //System.out.println("first layer first node id " + root.getFirstLayer().get(0).getId() + " move " + root.getFirstLayer().get(0).getMove()[0][0] + " movescore " + root.getFirstLayer().get(0).getMoveScore() + " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
-        //System.out.println("first layer first node id " + root.getChildren().get(0).getId() + " move " + root.getChildren().get(0).getMove()[0][0] + " movescore " + root.getChildren().get(0).getMoveScore()+ " move to " + root.getFirstLayer().get(0).getMove()[0][1]);
-
-      move = root.getFirstLayer().get(bestmove).getMove();
+        // the best move
+        System.out.println("score of best move " + root.getFirstLayer().get(bestmove).getMoveScore());
+        System.out.println("[Move 1 From: " + move[0][0] + "] [Move 1 To: " + move[0][1] + "] [Move 2 From: " + move[1][0] + "] [Move 2 To: " + move[1][1] + "]");
 
         return move;
     }
