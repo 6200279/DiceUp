@@ -14,13 +14,23 @@ import java.util.ArrayList;
 
 public class MCSTwCN extends AI {
   static double C = 0.4;
+    TreeNode selectedNode;
 
     @Override
     int[] decisionAlgorithm(Game g) {
         TreeNode tree = MiniMax.buildTree(g);
-        exploreTree(tree, g);
+        if(selectedNode.getChildren().size()==0){
+            if(selectedNode.getn()==0){
+               // exploreTree(tree, g);
+            }
+            else{
+                //decisionAlgorithm(g);
+            }
+        }
         backPropagation(tree, g);
-        TreeNode selectedNode = select(tree, g);
+        selectedNode = select(tree, g);
+
+
 
         return new int[0];
     }
@@ -33,7 +43,7 @@ public class MCSTwCN extends AI {
     public TreeNode select(TreeNode root, Game g) {
 
         ArrayList<TreeNode> leaves = root.getAllLeafs();
-
+        if(leaves.size()==0)return root;
         TreeNode selectedLeaf=leaves.get(0);
         double maxUCT = selectedLeaf.getUCTValue();
         for (int i=1; i<leaves.size();i++) {

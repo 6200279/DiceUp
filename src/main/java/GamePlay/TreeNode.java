@@ -204,7 +204,7 @@ public class TreeNode {
         return n;
     }
     public int getN(){
-        if (!this.isRoot) {
+        if (!this.isRoot && this.getParent()!= null) {
             return this.getParent().getn();
         }
         return 0;
