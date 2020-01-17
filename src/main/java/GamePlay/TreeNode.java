@@ -31,6 +31,7 @@ public class TreeNode {
     private int die1;
     private int die2;
 
+
     //Evaluated score
     public double score;
     //From-to column ID's
@@ -65,6 +66,11 @@ public class TreeNode {
     private static int counter;
 
     private int id = 0;
+
+    private int n=0;
+    private int N = getN();
+    private double UCTValue = 0;
+
 
 // constructors
 
@@ -193,6 +199,29 @@ public class TreeNode {
             return 0;
         }
     }
+
+    public int getn(){
+        return n;
+    }
+    public int getN(){
+        return getParent().getn();
+    }
+
+    public void visited(){
+        n++;
+        if(!this.isRoot)
+         this.getParent().visited();
+    }
+
+
+
+    public double getUCTValue(){
+        return UCTValue;
+    }
+    public void setUCTValue(double UCT){
+        UCTValue = UCT;
+    }
+
 
     /*public String toString(){
         String line = "";

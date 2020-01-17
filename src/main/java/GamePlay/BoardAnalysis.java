@@ -194,10 +194,11 @@ public class BoardAnalysis {
         for(int i=0; i<pC.size(); i++){
             for(int j=0; j<pC.get(i).length; j++) {
                 System.out.print(pC.get(i)[j][0]+"  ");
-                System.out.println(pC.get(i)[j][1]);
-
+                System.out.print(pC.get(i)[j][1]+"      ");
             }
+            System.out.println();
         }
+        System.out.println("\n\n\n\n\n");
     }
 
     public static ArrayList<int[][]> uniquify(ArrayList<int[][]> pC) {

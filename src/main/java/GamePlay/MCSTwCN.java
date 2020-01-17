@@ -1,5 +1,7 @@
 package GamePlay;
 
+import sun.reflect.generics.tree.Tree;
+
 import java.util.ArrayList;
 
 /**
@@ -11,11 +13,14 @@ import java.util.ArrayList;
  */
 
 public class MCSTwCN extends AI {
+  static double C = 0.4;
 
     @Override
     int[] decisionAlgorithm(Game g) {
+
         TreeNode tree = MiniMax.buildTree(g);
         exploreTree(tree, g);
+        TreeNode selectedNode = select(tree, g);
 
         return new int[0];
     }
@@ -41,23 +46,38 @@ public class MCSTwCN extends AI {
         }
     }
 
-    public TreeNode Select(TreeNode root, Game g) {
+    public TreeNode select(TreeNode root, Game g) {
 
         ArrayList<TreeNode> leaves = root.getAllLeafs();
-        TreeNode selectedLeaf = leaves.get(0);
-        double maxScore = leaves.get(0).getMoveScore();
 
-        for (int i = 1; i < leaves.size(); i++) {
-            if (leaves.get(i).getMoveScore() > maxScore) {
-                maxScore = leaves.get(i).getMoveScore();
+        double score;
+        for (int i = 0; i < leaves.size(); i++) {
+            score = leaves.get(i).getMoveScore();
+            leaves.get(i).setUCTValue(UCT(score, C, leaves.get(i).getn(), leaves.get(i).getN()));
+        }
+
+        TreeNode selectedLeaf=leaves.get(0);
+        double maxUCT = selectedLeaf.getUCTValue();
+        for (int i=1; i<leaves.size();i++) {
+            if (leaves.get(i).getUCTValue() > maxUCT) {
+                maxUCT = leaves.get(i).getUCTValue();
                 selectedLeaf = leaves.get(i);
             }
         }
+        selectedLeaf.visited();
+
+
+
+
         return selectedLeaf;
     }
 
+
     public double UCT(double v, double C, int n, int N){
-        return (v+(C*(Math.sqrt(Math.log(N)/n))));
+        double UCT = (v+(C*(Math.sqrt(Math.log(N)/n))));
+        if(n==0)
+            UCT = 999999999;
+        return UCT;
     }
 
     public MCSTwCN() {
