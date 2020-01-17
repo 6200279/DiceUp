@@ -17,9 +17,9 @@ public class MCSTwCN extends AI {
 
     @Override
     int[] decisionAlgorithm(Game g) {
-
         TreeNode tree = MiniMax.buildTree(g);
         exploreTree(tree, g);
+        backPropagation(tree, g);
         TreeNode selectedNode = select(tree, g);
 
         return new int[0];
@@ -32,17 +32,17 @@ public class MCSTwCN extends AI {
 
         for (int i = 0; i < firstLayer.size(); i++) {
             TreeNode curr = firstLayer.get(i);
-            curr.score = AI.evaluateGame(this, g.getP2(), curr.getBoard());
+            curr.setScoreMCTS(AI.evaluateGame(this, g.getP2(), curr.getBoard()));
         }
 
         for (int i = 0; i < secondLayer.size(); i++) {
             TreeNode curr = secondLayer.get(i);
-            curr.score = AI.evaluateGame(this, g.getP2(), curr.getBoard());
+            curr.setScoreMCTS(AI.evaluateGame(this, g.getP2(), curr.getBoard()));
         }
 
         for (int i = 0; i < leaves.size(); i++) {
             TreeNode curr = leaves.get(i);
-            curr.score = AI.evaluateGame(this, g.getP2(), curr.getBoard());
+            curr.setScoreMCTS(AI.evaluateGame(this, g.getP2(), curr.getBoard()));
         }
     }
 
@@ -50,15 +50,10 @@ public class MCSTwCN extends AI {
 
         ArrayList<TreeNode> leaves = root.getAllLeafs();
 
-        double score;
-        for (int i = 0; i < leaves.size(); i++) {
-            score = leaves.get(i).getMoveScore();
-            leaves.get(i).setUCTValue(UCT(score, C, leaves.get(i).getn(), leaves.get(i).getN()));
-        }
-
         TreeNode selectedLeaf=leaves.get(0);
         double maxUCT = selectedLeaf.getUCTValue();
         for (int i=1; i<leaves.size();i++) {
+            leaves.get(i).setUCTValue(UCT(leaves.get(i).getMoveScore(), C, leaves.get(i).getn(), leaves.get(i).getN()));
             if (leaves.get(i).getUCTValue() > maxUCT) {
                 maxUCT = leaves.get(i).getUCTValue();
                 selectedLeaf = leaves.get(i);
@@ -66,10 +61,20 @@ public class MCSTwCN extends AI {
         }
         selectedLeaf.visited();
 
-
-
-
         return selectedLeaf;
+    }
+
+
+    public void backPropagation(TreeNode selected, Game g) {
+
+        //  ArrayList<TreeNode> leaves = root.getAllLeafs();
+
+        selected.setScoreMCTS(AI.evaluateGame(this, g.getP2(), selected.getBoard()));
+
+        if (!selected.isRoot()) backPropagation(selected.getParent(), g);
+
+        //     for (int i = 0; i < leaves.size(); i++) {
+        //       leaves.get(i).setScoreMCTS(AI.evaluateGame(this, g.getP2(), leaves.get(i).getBoard()));
     }
 
 

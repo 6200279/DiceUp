@@ -204,7 +204,9 @@ public class TreeNode {
         return n;
     }
     public int getN(){
-        return getParent().getn();
+        if (!this.isRoot) {
+            return this.getParent().getn();
+        }
     }
 
     public void visited(){
@@ -220,6 +222,11 @@ public class TreeNode {
     }
     public void setUCTValue(double UCT){
         UCTValue = UCT;
+    }
+
+    public void setScoreMCTS(double score){
+        this.moveScore  = score;
+        if (!this.isRoot) this.getParent().setScoreMCTS(this.getParent().getMoveScore() + this.getMoveScore());
     }
 
 
