@@ -68,7 +68,7 @@ public class TreeNode {
     private int id = 0;
 
     private int n=0;
-    private int N = getN();
+    private int N = 0;
     private double UCTValue = 0;
 
 
@@ -212,8 +212,8 @@ public class TreeNode {
 
     public void visited(){
         n++;
-        if(!this.isRoot)
-         this.getParent().visited();
+    //    if(!this.isRoot)
+      //   this.getParent().visited();
     }
 
 
@@ -227,7 +227,10 @@ public class TreeNode {
 
     public void setScoreMCTS(double score){
         this.moveScore  = score;
-        if (!this.isRoot) this.getParent().setScoreMCTS(this.getParent().getMoveScore() + this.getMoveScore());
+        if (!this.isRoot) {
+            this.getParent().setMoveScore(this.getParent().getMoveScore() + score);
+            this.getParent().setScoreMCTS(score);
+        }
     }
 
 

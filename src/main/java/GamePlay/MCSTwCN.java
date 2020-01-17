@@ -25,25 +25,9 @@ public class MCSTwCN extends AI {
         return new int[0];
     }
 
-    public void exploreTree(TreeNode rootNode, Game g) {
-        ArrayList<TreeNode> firstLayer = rootNode.getFirstLayer();
-        ArrayList<TreeNode> secondLayer = rootNode.getSecondLayer();
-        ArrayList<TreeNode> leaves = rootNode.getAllLeafs();
+    public void exploreTree(TreeNode node, Game g) {
 
-        for (int i = 0; i < firstLayer.size(); i++) {
-            TreeNode curr = firstLayer.get(i);
-            curr.setScoreMCTS(AI.evaluateGame(this, g.getP2(), curr.getBoard()));
-        }
 
-        for (int i = 0; i < secondLayer.size(); i++) {
-            TreeNode curr = secondLayer.get(i);
-            curr.setScoreMCTS(AI.evaluateGame(this, g.getP2(), curr.getBoard()));
-        }
-
-        for (int i = 0; i < leaves.size(); i++) {
-            TreeNode curr = leaves.get(i);
-            curr.setScoreMCTS(AI.evaluateGame(this, g.getP2(), curr.getBoard()));
-        }
     }
 
     public TreeNode select(TreeNode root, Game g) {
@@ -59,22 +43,15 @@ public class MCSTwCN extends AI {
                 selectedLeaf = leaves.get(i);
             }
         }
-        selectedLeaf.visited();
-
         return selectedLeaf;
     }
 
 
     public void backPropagation(TreeNode selected, Game g) {
-
-        //  ArrayList<TreeNode> leaves = root.getAllLeafs();
-
         selected.setScoreMCTS(AI.evaluateGame(this, g.getP2(), selected.getBoard()));
+        selected.visited();
 
         if (!selected.isRoot()) backPropagation(selected.getParent(), g);
-
-        //     for (int i = 0; i < leaves.size(); i++) {
-        //       leaves.get(i).setScoreMCTS(AI.evaluateGame(this, g.getP2(), leaves.get(i).getBoard()));
     }
 
 

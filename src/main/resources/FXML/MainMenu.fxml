@@ -206,12 +206,14 @@
             <Font name="Gabriola" size="13.0" />
          </font>
       </Button>
-      <RadioButton id="RB1" accessibleText="Human" layoutX="514.0" layoutY="177.0" mnemonicParsing="false" selected="true" text="Human Player">
+      <RadioButton id="RB1" accessibleText="Human" layoutX="514.0" layoutY="107.0" mnemonicParsing="false" selected="true" text="Human Player">
          <toggleGroup>
             <ToggleGroup fx:id="AISelection" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton id="RB2" accessibleText="AI: Difficult" layoutX="514.0" layoutY="215.0" mnemonicParsing="false" text="AI: Difficult" toggleGroup="$AISelection" />
+      <RadioButton id="RB2" accessibleText="AI: Difficult" layoutX="514.0" layoutY="215.0" mnemonicParsing="false" text="AI: Difficult - MM" toggleGroup="$AISelection" />
+      <RadioButton id="RB1" accessibleText="AI: Difficult" layoutX="514.0" layoutY="179.0" mnemonicParsing="false" text="AI: Difficult - TD" toggleGroup="$AISelection" />
+      <RadioButton id="RB0" accessibleText="AI: Difficult" layoutX="514.0" layoutY="143.0" mnemonicParsing="false" text="AI: Difficult - MCTS" toggleGroup="$AISelection" />
       <RadioButton id="RB3" accessibleText="AI: Medium" layoutX="514.0" layoutY="251.0" mnemonicParsing="false" text="AI: Medium" toggleGroup="$AISelection" />
       <RadioButton id="RB4" accessibleText="AI: Simple" layoutX="514.0" layoutY="287.0" mnemonicParsing="false" text="AI: Simple" toggleGroup="$AISelection" />
    </children>

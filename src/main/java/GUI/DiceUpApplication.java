@@ -126,8 +126,16 @@ public class DiceUpApplication extends Application {
             p1 = new Player(p1Name);
             p2 = new Player(p2Name);
         }
-        else if(gameType.equals("AI: Difficult")){
+        else if(gameType.equals("AI: Difficult - MM")){
             p1 = new MiniMax();
+            p2 = new Player(p2Name);
+        }
+        else if(gameType.equals("AI: Difficult - TD")){
+            p1 = new tdAI();
+            p2 = new Player(p2Name);
+        }
+        else if(gameType.equals("AI: Difficult - MCTS")){
+            p1 = new MCSTwCN();
             p2 = new Player(p2Name);
         }
         else if(gameType.equals("AI: Medium")){
