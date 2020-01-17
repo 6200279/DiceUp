@@ -29,9 +29,7 @@ public class MCSTwCN extends AI {
         }
         backPropagation(tree, g);
         selectedNode = select(tree, g);
-
-
-
+        
         return new int[0];
     }
 
