@@ -207,6 +207,7 @@ public class TreeNode {
         if (!this.isRoot) {
             return this.getParent().getn();
         }
+        return 0;
     }
 
     public void visited(){
