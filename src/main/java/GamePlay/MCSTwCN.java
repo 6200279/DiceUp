@@ -1,6 +1,5 @@
 package GamePlay;
 
-import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 
@@ -34,7 +33,29 @@ public class MCSTwCN extends AI {
     }
 
     public void exploreTree(TreeNode node, Game g) {
+        Game newInstance = new Game(g.getP1(), g.getP2());
+        newInstance.setBoard(node.getBoard());
 
+        boolean gameEnded = true;
+
+        while(!gameEnded) {
+            TreeNode newRootNode = MiniMax.buildTree(newInstance);
+            ArrayList<TreeNode> firstLayer = newRootNode.getFirstLayer();
+
+            TreeNode bestFirstLayer = firstLayer.get(0);
+            double bestFirstLayerScore = AI.evaluateGame(this, g.getP2(), bestFirstLayer.getBoard());
+            for (int i = 1; i < firstLayer.size(); i++){
+                TreeNode currentNode = firstLayer.get(i);
+                double currentScore = AI.evaluateGame(this, g.getP2(), currentNode.getBoard());
+
+                if (currentScore > bestFirstLayerScore) {
+                    bestFirstLayer = currentNode;
+                    bestFirstLayerScore = currentScore;
+                }
+            }
+            if (BoardAnalysis.gameEnded(bestFirstLayer.getBoard()))
+            newInstance.setBoard(node.getBoard());
+        }
 
     }
 

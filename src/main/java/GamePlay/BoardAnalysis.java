@@ -262,5 +262,19 @@ public class BoardAnalysis {
         return true;
     }
 
+    public static boolean gameEnded(Board b) {
+        ArrayList<Chip> takenChips = b.getTakenChips().getChips();
+        int takenW = 0;
+        int takenB = 0;
+
+        for (int i = 0; i < takenChips.size(); i++) {
+            if (takenChips.get(i).getOwner().getID() == 1) takenW++;
+            else takenB++;
+        }
+
+        if (takenW == 15 || takenB == 15) return true;
+        return false;
+    }
+
 
 }
