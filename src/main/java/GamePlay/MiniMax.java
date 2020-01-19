@@ -82,7 +82,7 @@ public class MiniMax extends AI {
 
     // constructor - inherits from AI (Player constructor)
     public MiniMax() {
-        super();
+        super("MiniMax");
     }
 
     private static BoardAnalysis boardAnalysis;

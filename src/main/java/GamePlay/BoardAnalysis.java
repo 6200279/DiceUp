@@ -26,7 +26,7 @@ public class BoardAnalysis {
         for (int i = 0; i < midColumn.getChips().size(); i++) { //for every hit chip, get it out!
             if (moves.size() > 0) {
                 //if p1 test columns [0:5]
-                if (player == 1) {
+                if (player == 2) {
                     for (int j = 0; j < moves.size(); j++) {
                         Column to = b.getColumns()[moves.get(j) - 1];
                         if (to.getChips().size() < 2) {

@@ -445,11 +445,15 @@ public class Game {
         return res;
     }
 
-    public Dice[] getDices(){
+    public Dice[] getDices() {
         Dice[] dices = new Dice[2];
         dices[0] = dice1;
-        dices[1]= dice2;
+        dices[1] = dice2;
         return dices;
+    }
+    public void setDices(Dice[] in) {
+        dice1 = in[0];
+        dice2 = in[1];
     }
 
     public ArrayList<Integer> getMoves(){
