@@ -4,8 +4,11 @@ import GUI.DiceUpController;
 
 import java.util.ArrayList;
 
+
+
 public class StraightForward extends AI {
-    @Override
+
+
     int[] decisionAlgorithm(Game g) {
         ArrayList<int[]> possibleCols = new ArrayList<>();
         Board b = g.getBoard();
@@ -124,6 +127,7 @@ public class StraightForward extends AI {
         }
         return new int[2]; // there's no legal move to make- still crashes man!
     }
+
 
     public StraightForward() {
         super("Best-Evaluation");

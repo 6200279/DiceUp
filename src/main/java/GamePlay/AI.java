@@ -88,7 +88,6 @@ public abstract class AI extends Player {
         newBoard.emptyBoard();
         newBoard = newBoard.copyBoard(board, g1);
 
-
         //Save columns involved
         Column fromColumn = newBoard.getColumns()[from];
         Column toColumn = newBoard.getColumns()[to];
@@ -287,6 +286,7 @@ public abstract class AI extends Player {
                 evaluation--;
             }
         }
+        //System.out.println("The evaluation is: " + evaluation);
 
         return evaluation;
     }
