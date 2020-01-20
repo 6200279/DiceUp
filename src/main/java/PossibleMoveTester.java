@@ -14,6 +14,8 @@ public class PossibleMoveTester {
         ArrayList<Integer> moves = new ArrayList<>();
         moves.add(5);
         moves.add(5);
+        moves.add(5);
+        moves.add(5);
 
         ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(root, moves, a);
         for (int ma = 0; ma < possibleMoves.length; ma++) {
@@ -24,11 +26,22 @@ public class PossibleMoveTester {
 
         ArrayList<int[][]> pC = new ArrayList<int[][]>();
         BoardAnalysis newb = new BoardAnalysis();
-        pC = newb.possibleCombinations(root, moves, a, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC, possibleMoves[1].get(possibleMoves[1].size() - 1), possibleMoves[0].get(possibleMoves[0].size() - 1));
-        for (int i = 0; i < pC.size(); i++) {
-            System.out.println(pC.get(i)[0][0] + "-"+ pC.get(i)[0][1] +" " + pC.get(i)[1][0] + "-" + pC.get(i)[1][1]);
+        if (moves.size() == 2) {
+            pC = newb.possibleCombinations(root, moves, a, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size() - 1, pC);
+            for (int i = 0; i < pC.size(); i++) {
+                System.out.println(pC.get(i)[0][0] + "-" + pC.get(i)[0][1] + " " + pC.get(i)[1][0] + "-" + pC.get(i)[1][1]);
+            }
         }
-        System.out.println(root.toString());
+        if (moves.size() == 4) {
+            double index = Math.pow(4, possibleMoves[0].size());
+            pC = newb.possibleCombinationsdouble(root, moves, a, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, index);
+            for (int i = 0; i < pC.size(); i++) {
+                for (int j = 0; j < pC.get(i).length; j++) System.out.println(pC.get(i)[j][0] + "-" + pC.get(i)[j][1]);
+                System.out.println("next move");
+            }
+        }
+
+      /*  System.out.println(root.toString());
 
         System.out.println("\nSingle Chips Method:");
         pC = newb.possibleSingleChipCombinations(root, moves, a);
@@ -72,7 +85,7 @@ public class PossibleMoveTester {
         }*/
 
 
-        TreeNode tree = MiniMax.buildTree(oG);
+      /*  TreeNode tree = MiniMax.buildTree(oG);
         System.out.println("1. Layer children first node: " + tree.getChildren().size());
         System.out.println("2. Layer children first node: " + tree.getChildren().get(0).getChildren().size());
         System.out.println("3. Layer children first node: " + tree.getChildren().get(0).getChildren().get(0).getChildren().size());
@@ -87,5 +100,6 @@ public class PossibleMoveTester {
         System.out.println("Size of the second layer:  " + tree.getSecondLayer().size());
         System.out.println("Size of the third layer:  " + tree.getAllLeafs().size());
 
+    }*/
     }
 }

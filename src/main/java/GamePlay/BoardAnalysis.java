@@ -26,7 +26,7 @@ public class BoardAnalysis {
         for (int i = 0; i < midColumn.getChips().size(); i++) { //for every hit chip, get it out!
             if (moves.size() > 0) {
                 //if p1 test columns [0:5]
-                if (player == 1) {
+                if (player == 2) {
                     for (int j = 0; j < moves.size(); j++) {
                         Column to = b.getColumns()[moves.get(j) - 1];
                         if (to.getChips().size() < 2) {
@@ -128,20 +128,45 @@ public class BoardAnalysis {
         return possibleCols;
     }
 
-    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int lengthfirst, int lengthsecond, ArrayList<int[][]> pC, int[] current, int[] checked) {
+    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int lengthfirst, int lengthsecond, ArrayList<int[][]> pC) {
 
         if (lengthfirst>0) {
             lengthfirst--;
             pC.add(new int[][]{possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst)});
-            return possibleCombinations(b, moves, p, possibleMoves,lengthfirst, lengthsecond, pC, possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst));
+            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst, lengthsecond, pC);
         }
         else if (lengthsecond> 0) {
             lengthfirst = possibleMoves[0].size();
             lengthsecond--;
-            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst ,lengthsecond, pC, possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst-1));
+            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst ,lengthsecond, pC);
         }
 
 
+        return pC;
+    }
+
+    public static ArrayList<int[][]> possibleCombinationsdouble (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int length1, int length2, int length3, int length4, ArrayList<int[][]> pC, double indicator) {
+        if (indicator > 0) {
+            if (length1 > 0) {
+                length1--;
+            } else if (length2 > 0) {
+                length1 = possibleMoves[0].size() - 1;
+                length2--;
+            } else if (length3 > 0) {
+                length1 = possibleMoves[0].size() - 1;
+                length2 = possibleMoves[1].size() - 1;
+                length3--;
+            } else if (length4 > 0) {
+                length1 = possibleMoves[0].size() - 1;
+                length2 = possibleMoves[1].size() - 1;
+                length3 = possibleMoves[2].size() - 1;
+                length4--;
+            }
+
+            indicator--;
+            pC.add(new int[][]{possibleMoves[0].get(length1), possibleMoves[1].get(length2), possibleMoves[2].get(length3), possibleMoves[3].get(length4)});
+            return possibleCombinationsdouble(b, moves, p, possibleMoves, length1, length2, length3, length4, pC, indicator);
+        }
         return pC;
     }
 
@@ -178,7 +203,7 @@ public class BoardAnalysis {
         ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(b, moves, p);
 
         ArrayList<int[][]> pC = new ArrayList<>();
-        pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC, possibleMoves[1].get(possibleMoves[1].size() - 1), possibleMoves[0].get(possibleMoves[0].size() - 1));
+        pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         pC = legalize(b,pC, p);
 

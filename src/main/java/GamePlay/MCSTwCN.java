@@ -1,6 +1,5 @@
 package GamePlay;
 
-import sun.reflect.generics.tree.Tree;
 
 import java.util.ArrayList;
 
@@ -15,49 +14,83 @@ import java.util.ArrayList;
 public class MCSTwCN extends AI {
   static double C = 0.4;
     TreeNode selectedNode;
+    TreeNode rootTree;
+    @Override
+    public void initialize(Game g) {
+        //some initialization which is called once it's our turn.
+        rootTree = MiniMax.buildTree(g);
+
+        selectedNode = select(rootTree, g);
+    }
 
     @Override
     int[] decisionAlgorithm(Game g) {
-        TreeNode tree = MiniMax.buildTree(g);
+
         if(selectedNode.getChildren().size()==0){
             if(selectedNode.getn()==0){
-               // exploreTree(tree, g);
+                exploreTree(selectedNode, g);
             }
             else{
-                //decisionAlgorithm(g);
+                return decisionAlgorithm(g);
             }
         }
-        backPropagation(tree, g);
-        selectedNode = select(tree, g);
-
+        backPropagation(rootTree, g);
+        selectedNode = select(rootTree, g);
+        
         return new int[0];
     }
 
-    public void exploreTree(TreeNode node, Game g) {
-        Game newInstance = new Game(g.getP1(), g.getP2());
+    public TreeNode exploreTree(TreeNode node, Game g) {
+        Game newInstance = new Game(this, g.getP2());
+        newInstance.getMoves().clear();
+        newInstance.getMoves().addAll(g.getMoves());
+        newInstance.setDices(g.getDices());
+
         newInstance.setBoard(node.getBoard());
 
-        boolean gameEnded = true;
+        boolean gameEnded = false;
+        int runtime = 0;
 
         while(!gameEnded) {
+            System.out.println("runtime: " + runtime++);
             TreeNode newRootNode = MiniMax.buildTree(newInstance);
-            ArrayList<TreeNode> firstLayer = newRootNode.getFirstLayer();
+            System.out.println("root node children size: " + newRootNode.getChildren().size());
+            ArrayList<TreeNode>[] layers = new ArrayList[3];
 
-            TreeNode bestFirstLayer = firstLayer.get(0);
-            double bestFirstLayerScore = AI.evaluateGame(this, g.getP2(), bestFirstLayer.getBoard());
-            for (int i = 1; i < firstLayer.size(); i++){
-                TreeNode currentNode = firstLayer.get(i);
-                double currentScore = AI.evaluateGame(this, g.getP2(), currentNode.getBoard());
+            layers[0] = newRootNode.getFirstLayer();
+            layers[1] = newRootNode.getSecondLayer();
+            layers[2] = newRootNode.getAllLeafs();
 
-                if (currentScore > bestFirstLayerScore) {
-                    bestFirstLayer = currentNode;
-                    bestFirstLayerScore = currentScore;
+            for (int i = 0; i < layers.length; i++) { //through all layers
+                //Imitate Player playing backgammon entrusting eval func to shrink tree size
+                System.out.println("Current tree depth: " + i + ", containing " + layers[i].size() + " nodes.");
+                TreeNode bestCurrLayer = layers[i].get(0);
+                double bestCurrLayerScore = AI.evaluateGame(this, g.getP2(), bestCurrLayer.getBoard());
+
+                for (int j = 1; j < layers[i].size(); j++) {
+                    TreeNode currentNode = layers[i].get(j);
+                    double currentScore = AI.evaluateGame(this, g.getP2(), currentNode.getBoard());
+
+                    if (currentScore > bestCurrLayerScore) {
+                        bestCurrLayer = currentNode;
+                        bestCurrLayerScore = currentScore;
+                    }
                 }
-            }
-            if (BoardAnalysis.gameEnded(bestFirstLayer.getBoard()))
-            newInstance.setBoard(node.getBoard());
-        }
+                //add currently selected node to main tree
+                System.out.println("Selected board from layer " + i);
+                System.out.println(bestCurrLayer.getBoard().toString());
+                node.getAllLeafs().get(0).addChild(bestCurrLayer);
 
+                //if game is done return current state for backprop
+                if (BoardAnalysis.gameEnded(bestCurrLayer.getBoard())) {
+                    gameEnded = true; //unnecessary- for readibility
+                    return node;
+                }
+                newInstance.setBoard(bestCurrLayer.getBoard());
+            }
+            newInstance.rollDices();
+        }
+        return null; //this should never happen.
     }
 
     public TreeNode select(TreeNode root, Game g) {

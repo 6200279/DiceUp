@@ -53,10 +53,14 @@ public abstract class AI extends Player {
     public void setGameInstance(Game g) { game = g; }
 
     abstract int[] decisionAlgorithm(Game g);
+    public void initialize(Game g){
+        //some initialization to be @override'n.
+    }
 
     public void executeMoves() throws Exception {
         game = GameState.game;
         game.rollDices();
+        initialize(game);
 
         aState.LOG_BOX.getItems().add("Rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));
 
