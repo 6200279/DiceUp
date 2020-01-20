@@ -1,5 +1,7 @@
 package GamePlay;
 
+import com.sun.xml.internal.bind.v2.runtime.output.Pcdata;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -207,14 +209,21 @@ public class BoardAnalysis {
         else pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         printMoves(pC);
-        pC = legalize(b,pC, p);
+        ArrayList<int[][]> pC1 = legalize(b,pC, p);
+        ArrayList<int[][]> pC2 = uniquify(pC1);
 
+
+        System.out.println("ORIGINAL--->");
         printMoves(pC);
-        uniquify(pC);
-        printMoves(pC);
+        System.out.println("LEGALIZED--->");
+        printMoves(pC1);
+        System.out.println("UNIQUIFIED--->");
+
+        printMoves(pC2);
 
 
-        return pC;
+
+        return pC2;
     }
 
     private static void printMoves(ArrayList<int[][]> pC) {
@@ -244,13 +253,17 @@ public class BoardAnalysis {
             ArrayList<int[][]>pC1 = new ArrayList<int[][]>();
             boolean pass = true;
             for(int i=0; i< pC.size(); i++){
+                pass = true;
                 for(int j=1; j<pC.get(i).length; j++){
                     int toCol = pC.get(i)[j][1];
                     if(toCol<0||toCol>23){
                        pass = false;
+                       System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
                     }
                     else if(board.getColumns()[toCol].getChips().size()>0 && board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
                       pass = false;
+                        System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
+
                     }
                     /*
                     else if(p.getID()==1){
@@ -275,6 +288,13 @@ public class BoardAnalysis {
             return pC1;
 
     }
+
+
+    public void printRow(int [][]  a){
+       System.out.println(a);
+
+
+}
 
     /**
      * Checks if given boards are of the same state
