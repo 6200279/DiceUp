@@ -1,24 +1,23 @@
 package GamePlay;
-
 import java.util.ArrayList;
 
 
 /**
  * General info about expectiminimax:
- * <p>
+ *
  * - each chance node has 21 distinct children ( 6 doubles, and the 15 others )
  * - max dice(min rolls) min dice(max rolls) max terminal structure
  * - use expected values for chance nodes: Taking the weighted average of the values resulting from all possible dice rolls
  * - over a max node: expectimax(C) = sum_i(P(d_i)*maxvalue(i))
  * - over a min node: expectimin(C) = sum_i(P(d_i)*minvalue(i))
- * <p>
+ *
  * - Decision with chance:
  * - we want to pick move that leads to best position
  * - resulting values do not have definite minimax values
  * -> we calculate the expected value, where the expectation is taken over by all the possible dice rolls that could occur
  * <p>
  * <p>
- * Steps (recursive implementation):
+ * Steps:
  * <p>
  * at current tree node
  * <p>
@@ -55,6 +54,7 @@ public class MiniMax extends AI {
         game.rollDices();
         expectiminimax(game);
        // buildTree(game);
+
     }
 
     int[][] moves = null;
@@ -85,6 +85,17 @@ public class MiniMax extends AI {
         super("MiniMax");
     }
 
+    public static boolean isDouble(int[] rolledDice ){
+
+        int[] dice = rolledDice;
+
+        if(dice[0] == dice[1]){
+            return true;
+        }
+
+        return false;
+    }
+
     private static BoardAnalysis boardAnalysis;
     private static ArrayList<int[][]> possibleMoveCombinations = new ArrayList<>();
 
@@ -94,140 +105,137 @@ public class MiniMax extends AI {
 
         TreeNode root = new TreeNode(true, board);
 
+        int[] dice = game.getDicesNum();
+
         ArrayList<Integer> rolledDice = new ArrayList<>();
-        for (int i = 0; i < game.getDicesNum().length; i++) {
-            rolledDice.add(game.getDicesNum()[i]);
+        for (int i = 0; i < dice.length; i++) {
+            rolledDice.add(dice[i]);
 
         }
 
-        int[][] movesFirstLayer = new int[2][2];
+        int[][] movesFirstLayer;
         int[][] movesSecondLayer = new int[2][2];
 
-        int[] dice = game.getDicesNum();
 
         // if we rolled a double then we make 4 moves
-        /*if (dice[0] == dice[1]) {
-            moves = new int[4][2];
+        if (isDouble(dice)) {
+            movesFirstLayer = new int[4][2];
+            rolledDice.add(dice[0]);
+            rolledDice.add(dice[0]);
 
         } else {
-            moves = new int[2][2];
-        }*/
-
+            movesFirstLayer = new int[2][2];
+        }
         /**
          * Note that player one is MAX and with that the AI;
          * If we change that we also have to change the AI to player 2
          */
-
         // chance nodes
         // iterate over all possible moves of the current game
         possibleMoveCombinations = boardAnalysis.allCombinations(game.getBoard(), rolledDice, game.getP1());
-        //System.exit(0);
-        // iterate over all move combinations
 
+        System.out.println("Size of rolled dice " + rolledDice);
+
+        // iterate over all move combinations
         for (int i = 0; i < possibleMoveCombinations.size(); i++) {
             // create a copy of each board
             Board copyBoard = board.copyBoard(board, game);
 
-            int from = 0;
-            int to = 0;
-
             // iterate over all tuples
-            for (int q = 0; q < possibleMoveCombinations.get(i).length; q++) {
+                for (int q = 0; q < possibleMoveCombinations.get(i).length; q++) {
 
-                // store the move
-                int[] move = possibleMoveCombinations.get(i)[q];
+                    // store the move
+                    int[] move = possibleMoveCombinations.get(i)[q];
+                    executeMove(move, copyBoard);
 
-                executeMove(move, copyBoard);
+                    // store all tuples
+                    movesFirstLayer[q] = move;
 
-                // store all tuples
-                movesFirstLayer[q] = move;
+                }
+
+                // adding a new node to the tree
+                // this board describes one possible move
+                TreeNode firstLayer = new TreeNode(movesFirstLayer, copyBoard);
+                root.addChild(firstLayer);
+                // adding to a list that stores all nodes of that level
+                root.addFirstLayer(firstLayer);
+                firstLayer.setParent(root);
             }
 
-          /*  // printing out the board
 
-                        System.out.println("From " + from);
-                        System.out.println("To: " + to);
-                        System.out.println("This is board: " + i);
+            // min nodes
+            // iterate over all tree nodes (except the root)
+            for (int i = 0; i < root.getChildren().size(); i++) {
 
-                        for (int k = 0; k < copyBoard.getColumns().length; k++) {
-                            System.out.println(" Column size for each board: " + copyBoard.getColumns()[k].getChips().size() + " column " + k);
-                        }
-                    */
-            // adding a new node to the tree
-            // this board describes one possible move
-            TreeNode firstLayer = new TreeNode(movesFirstLayer, copyBoard);
-            root.addChild(firstLayer);
-            // adding to a list that stores all nodes of that level
-            root.addFirstLayer(firstLayer);
-            firstLayer.setParent(root);
+                TreeNode temp = root.getChildren().get(i);
+                // iterating over 21 distinct dice combinations
+                for (int j = 0; j < 21; j++) {
 
-        }
+                    // create a new board
+                    Board childBoard = temp.getBoard().copyBoard(temp.getBoard(), game);
 
-        // min nodes
-        // iterate over all tree nodes (except the root)
-        for (int i = 0; i < root.getChildren().size(); i++) {
+                    // storing a possible dice combination
+                    dice = diceCombinations[j];
 
-            TreeNode temp = root.getChildren().get(i);
-            // iterating over 21 distinct dice combinations
-            for (int j = 0; j < 21; j++) {
+                    // array list of all possible combinations
+                    ArrayList<Integer> diceComb = new ArrayList<>(diceCombinations.length);
 
-                // create a new board
-                Board childBoard = temp.getBoard().copyBoard(temp.getBoard(), game);
+                    for (int p : diceCombinations[j]) {
+                        diceComb.add(p);
+                        //  System.out.println("Dice comb 2 size: " + diceComb.size());
 
-                // storing a possible dice combination
-                dice = diceCombinations[j];
-                int die1 = dice[0];
-                int die2 = dice[1];
-
-                // array list of all possible combinations
-                ArrayList<Integer> diceComb = new ArrayList<>(diceCombinations.length);
-
-                for (int p : diceCombinations[j]) {
-                    diceComb.add(p);
-                    //  System.out.println("Dice comb 2 size: " + diceComb.size());
-
-                }
-                double prob;
-                // setting the probability for each dice combination
-                if (die1 == die2) {
-                    prob = 1/36D;
-                } else {
-                    prob = 1/18D;
-                }
-                // create a new node, which stores a distinct dice combination and the current board
-                TreeNode child = new TreeNode(diceCombinations[j], childBoard, prob);
-                // adding the child
-                temp.addChild(child);
-                root.addSecondLayer(child);
-                child.setParent(temp);
-
-                // get all possible moves
-                ArrayList<int[][]> possibleCombination2 = boardAnalysis.allCombinations(childBoard, diceComb, game.getP2());
-
-                // chance nodes || terminal leaf nodes
-                // iterate again over the current amount of possible moves
-                for (int k = 0; k < possibleCombination2.size(); k++) {
-
-                    // copy the current board
-                    Board copyBoard = board.copyBoard(childBoard, game);
-
-                    for (int q = 0; q < possibleCombination2.get(k).length; q++) {
-
-                        // storing the moves and executing it
-                        int move[] = possibleCombination2.get(k)[q];
-                        executeMove(move, copyBoard);
-                        movesSecondLayer[q] = move;
                     }
-                    // add the node which describes a possible move to the tree
-                    TreeNode leaf = new TreeNode(movesSecondLayer, copyBoard);
-                    child.addChild(leaf);
-                    root.addLeaf(leaf);
-                    leaf.setParent(child);
+                    double prob;
 
+                    // setting the probability for each dice combination
+                    if (isDouble(dice)) {
+                        prob = 1 / 36D;
+                        diceComb.add(dice[0]);
+                        diceComb.add(dice[0]);
+                        movesSecondLayer = new int[4][2];
+
+                    } else {
+                        prob = 1 / 18D;
+                        movesSecondLayer = new int[2][2];
+                    }
+                    // get all possible moves
+                    ArrayList<int[][]> possibleCombination2 = boardAnalysis.allCombinations(childBoard, diceComb, game.getP2());;
+
+                    // create a new node, which stores a distinct dice combination and the current board
+                    TreeNode child = new TreeNode(diceCombinations[j], childBoard, prob);
+                    // adding the child
+                    temp.addChild(child);
+                    root.addSecondLayer(child);
+                    child.setParent(temp);
+
+
+                    // chance nodes || terminal leaf nodes
+                    // iterate again over the current amount of possible moves
+                    for (int k = 0; k < possibleCombination2.size(); k++) {
+
+                        // copy the current board
+                        Board copyBoard = board.copyBoard(childBoard, game);
+
+                        for (int q = 0; q < possibleCombination2.get(k).length; q++) {
+
+
+                                int[] move = possibleCombination2.get(k)[q];
+                                executeMove(move, copyBoard);
+                                movesSecondLayer[q] = move;
+
+
+                        }
+                        // add the node which describes a possible move to the tree
+                        TreeNode leaf = new TreeNode(movesSecondLayer, copyBoard);
+                        child.addChild(leaf);
+                        root.addLeaf(leaf);
+                        leaf.setParent(child);
+
+                    }
                 }
+
             }
 
-        }
         return root;
     }
 
@@ -246,17 +254,6 @@ public class MiniMax extends AI {
     public static int[][] expectiminimax(Game game) {
 
 
-        // get the rolled dice
-        int die[] = game.getDicesNum();
-        int die1 = die[0];
-        int die2 = die[1];
-
-        // if we rolled a double then we make 4 moves
-       /* if (die1 == die2) {
-            move = new int[4][2];
-        } else {
-            move = new int[2][2];
-        }*/
         TreeNode root = buildTree(game);
 
         // chance layer
@@ -333,13 +330,16 @@ public class MiniMax extends AI {
                 bestmove = i;
             }
         }
+        System.out.println("the best move holds index " + bestmove);
+        System.out.println("must be smaller than: " + root.getFirstLayer().size());
 
         // return the best current move
         int[][] move = root.getFirstLayer().get(bestmove).getMove();
 
         // the best move
         System.out.println("score of best move " + root.getFirstLayer().get(bestmove).getMoveScore());
-        System.out.println("[Move 1 From: " + move[0][0] + "] [Move 1 To: " + move[0][1] + "] [Move 2 From: " + move[1][0] + "] [Move 2 To: " + move[1][1] + "]");
+        //System.out.println("[Move 1 From: " + move[0][0] + "] [Move 1 To: " + move[0][1] + "] [Move 2 From: " + move[1][0] + "] [Move 2 To: " + move[1][1] + "]" +
+          //      "[Move 3 From: " + move[2][0] + "] [Move 3 To: " + move[2][1] + "]" + "[Move 4 From: " + move[3][0] + "] [Move 4 To: " + move[3][1] + "]");
 
         return move;
     }
