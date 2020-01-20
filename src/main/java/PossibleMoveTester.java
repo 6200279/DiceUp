@@ -41,6 +41,11 @@ public class PossibleMoveTester {
             }
         }
 
+        ArrayList<int[][]> aC = BoardAnalysis.allCombinations(root, moves, a);
+
+
+
+
       /*  System.out.println(root.toString());
 
         System.out.println("\nSingle Chips Method:");
@@ -87,8 +92,8 @@ public class PossibleMoveTester {
 
       /*  TreeNode tree = MiniMax.buildTree(oG);
         System.out.println("1. Layer children first node: " + tree.getChildren().size());
-        System.out.println("2. Layer children first node: " + tree.getChildren().get(0).getChildren().size());
-        System.out.println("3. Layer children first node: " + tree.getChildren().get(0).getChildren().get(0).getChildren().size());
+        //System.out.println("2. Layer children first node: " + tree.getChildren().get(0).getChildren().size());
+        //System.out.println("3. Layer children first node: " + tree.getChildren().get(0).getChildren().get(0).getChildren().size());
 
         System.out.println("Size of the first layer:  " + tree.getFirstLayer().size());
         for (int i = 0; i < tree.getFirstLayer().size(); i++) {

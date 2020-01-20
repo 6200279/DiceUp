@@ -206,11 +206,12 @@ public class BoardAnalysis {
         if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, moves.size()^possibleMoves[0].size());
         else pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
+        printMoves(pC);
         pC = legalize(b,pC, p);
 
-        //printMoves(pC);
+        printMoves(pC);
         uniquify(pC);
-        //printMoves(pC);
+        printMoves(pC);
 
 
         return pC;
@@ -243,16 +244,15 @@ public class BoardAnalysis {
             ArrayList<int[][]>pC1 = new ArrayList<int[][]>();
             boolean pass = true;
             for(int i=0; i< pC.size(); i++){
-                for(int j=0; j<pC.get(i).length; j++){
+                for(int j=1; j<pC.get(i).length; j++){
                     int toCol = pC.get(i)[j][1];
-                    int fromCol = pC.get(i)[j][0];
-                    if(fromCol<0||toCol<0||fromCol>23||toCol>23){
+                    if(toCol<0||toCol>23){
                        pass = false;
                     }
-                    else if(board.getColumns()[toCol].getChips().size()>0&&board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
+                    else if(board.getColumns()[toCol].getChips().size()>0 && board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
                       pass = false;
                     }
-
+                    /*
                     else if(p.getID()==1){
                         if(fromCol<=toCol){
                            pass = false;
@@ -262,8 +262,10 @@ public class BoardAnalysis {
                         if(fromCol>=toCol){
                            pass = false;
                         }
+                      }
+                     */
 
-                    }
+
 
 
                 }
