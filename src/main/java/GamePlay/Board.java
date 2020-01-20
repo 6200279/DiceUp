@@ -32,8 +32,9 @@ public class Board {
      * @return <code>null</code>
      */
     private void init(Column[] columns, Player a, Player b) {
-        for(int i=0; i<columns.length; i++)
+        for(int i=0; i<columns.length; i++) {
             columns[i] = new Column();
+        }
 
         for (int j = 0; j < 2; j++)
             columns[0].getChips().add(new Chip(b));

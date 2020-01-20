@@ -208,18 +208,18 @@ public class BoardAnalysis {
         if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, moves.size()^possibleMoves[0].size());
         else pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
-        printMoves(pC);
+        //printMoves(pC);
         ArrayList<int[][]> pC1 = legalize(b,pC, p);
         ArrayList<int[][]> pC2 = uniquify(pC1);
 
 
-        System.out.println("ORIGINAL--->");
-        printMoves(pC);
-        System.out.println("LEGALIZED--->");
-        printMoves(pC1);
-        System.out.println("UNIQUIFIED--->");
+        //System.out.println("ORIGINAL--->");
+        //printMoves(pC);
+        //System.out.println("LEGALIZED--->");
+        //printMoves(pC1);
+        //System.out.println("UNIQUIFIED--->");
 
-        printMoves(pC2);
+        //printMoves(pC2);
 
 
 
@@ -292,16 +292,14 @@ public class BoardAnalysis {
 
     public void printRow(int [][]  a){
        System.out.println(a);
-
-
-}
+    }
 
     /**
      * Checks if given boards are of the same state
      * @return true/false
      */
-    public boolean compare(Board a, Board b) {
-        for (int i = 0; i < a.getColumns().length; i++) {
+    public static boolean compare(Board a, Board b) {
+            for (int i = 0; i < a.getColumns().length; i++) {
             if (a.getColumns()[i].getChips().size() != b.getColumns()[i].getChips().size()) return false;
             if (a.getColumns()[i].getChips().size() > 0) {
                 if (!a.getColumns()[i].getChips().get(0).getOwner().equals(b.getColumns()[i].getChips().get(0).getOwner())) return false;

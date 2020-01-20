@@ -40,10 +40,72 @@ public class MCSTwCN extends AI {
     }
 
     public TreeNode exploreTree(TreeNode node, Game g) {
-        node.getBoard();
+        TreeNode currLeaf = node;
+        Player turn = this;
+        Player opponent = g.getP2();
+        if (opponent == turn) opponent = g.getP1();
 
+        int runtime = 0;
+        while (!BoardAnalysis.gameEnded(currLeaf.getBoard())) {
+            System.out.println("runtime: " + runtime++);
+            int diceIndex = (int) Math.round((BoardAnalysis.DICE_OUTCOMES.length-1) * Math.random());
+            int[] selectedDices = BoardAnalysis.DICE_OUTCOMES[diceIndex];
+            ArrayList<Integer> moves = new ArrayList<>();
+            moves.add(selectedDices[0]);
+            moves.add(selectedDices[1]);
 
-        return null;
+            if (selectedDices[0] == selectedDices[1]) {
+                moves.add(selectedDices[0]);
+                moves.add(selectedDices[0]);
+            }
+
+            ArrayList<int[][]> aC = BoardAnalysis.allCombinations(node.getBoard(), moves, turn);
+            Board bestBoard = null;
+            double bestScore = Double.NEGATIVE_INFINITY;
+            int[][] bestMove = null;
+
+            Board[] playouts = new Board[aC.size()];
+            //Generate playout board instances to then evaluate
+            for (int i = 0; i < playouts.length; i++) {
+                Board tempBoard = currLeaf.getBoard().copyBoard(currLeaf.getBoard(), g);
+
+                int[][] moveToCommence = aC.get(i);
+                Column[] cols = tempBoard.getColumns();
+                for (int j = 0; j < moveToCommence.length; j++) {
+                    Column currentFrom = cols[moveToCommence[j][0]];
+                    Column currentTo = cols[moveToCommence[j][1]];
+
+                    if(currentFrom.getChips().size() > 0) {
+                        Chip chipOnHand = currentFrom.getChips().get(0);
+                        currentFrom.getChips().remove(chipOnHand);
+
+                        currentTo.getChips().add(chipOnHand);
+                    }
+                }
+                playouts[i] = tempBoard;
+                double tempScore = AI.evaluateGame(turn, opponent, tempBoard);
+                if (tempScore > bestScore) {
+                    bestBoard = tempBoard;
+                    bestScore = tempScore;
+                    bestMove = moveToCommence;
+                }
+            }
+            System.out.println("the for loop ends up...");
+            if (BoardAnalysis.compare(bestBoard, currLeaf.getBoard())) System.out.println("it's the same board, man!");
+            TreeNode newLeaf = new TreeNode(bestMove, bestBoard);
+            newLeaf.setParent(currLeaf);
+            currLeaf.addChild(newLeaf);
+
+            //finally, done with the move.
+            currLeaf = newLeaf;
+
+            //change turn so that we compute for opponent
+                Player temp = turn;
+                turn = opponent;
+                opponent = temp;
+        }
+
+        return node;
     }
 
     public TreeNode select(TreeNode root, Game g) {
