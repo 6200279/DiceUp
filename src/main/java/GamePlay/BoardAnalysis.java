@@ -203,13 +203,14 @@ public class BoardAnalysis {
         ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(b, moves, p);
 
         ArrayList<int[][]> pC = new ArrayList<>();
-        pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
+        if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, moves.size()^possibleMoves[0].size());
+        else pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         pC = legalize(b,pC, p);
 
-        printMoves(pC);
+        //printMoves(pC);
         uniquify(pC);
-        printMoves(pC);
+        //printMoves(pC);
 
 
         return pC;
