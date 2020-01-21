@@ -1,7 +1,9 @@
 package GamePlay;
 
 import com.sun.xml.internal.bind.v2.runtime.output.Pcdata;
+import sun.plugin.net.proxy.PluginAutoProxyHandler;
 
+import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -263,6 +265,9 @@ public class BoardAnalysis {
                     if(toCol<0||toCol>23){
                        pass = false;
                        //System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
+                        pass = false;
+
+                       System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
                     }
                     else if(board.getColumns()[toCol].getChips().size()>0 && board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
                       pass = false;
@@ -270,6 +275,26 @@ public class BoardAnalysis {
 
                     }
                 }
+                        System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
+
+                    }
+
+                }
+
+                if(board.getMiddleColumns()[p.getID()-1].getChips().size()!=0) {
+                    int hitChipsNum = board.getMiddleColumns()[p.getID()-1].getChips().size();
+
+                    for (int j = 0; i < pC.get(i).length; i++) {
+                        int fromCol = pC.get(i)[j][0];
+                        if(fromCol  != 25){
+
+                            pass = false;
+                        }
+
+                    }
+                }
+
+
                 if(pass)
                     pC1.add(pC.get(i));
             }
@@ -286,9 +311,8 @@ public class BoardAnalysis {
      * Checks if given boards are of the same state
      * @return true/false
      */
-    public static boolean compare(Board a, Board b) {
-        if (a==null) return false;
-            for (int i = 0; i < a.getColumns().length; i++) {
+    public boolean compare(Board a, Board b) {
+        for (int i = 0; i < a.getColumns().length; i++) {
             if (a.getColumns()[i].getChips().size() != b.getColumns()[i].getChips().size()) return false;
             if (a.getColumns()[i].getChips().size() > 0) {
                 if (!a.getColumns()[i].getChips().get(0).getOwner().equals(b.getColumns()[i].getChips().get(0).getOwner())) return false;

@@ -149,7 +149,7 @@ public class Game {
      }
 
 
-    private boolean checkTakeLegality(int from){
+    public boolean checkTakeLegality(int from){
         //check if you can start taking chips
         if(checkTake()){
 

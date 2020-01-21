@@ -26,6 +26,8 @@ public class MCSTwCN extends AI {
 
     @Override
     int[] decisionAlgorithm(Game g) {
+        rootTree = MiniMax.buildTree(g);
+        selectedNode = select(rootTree, g);
 
         if(selectedNode.getChildren().size()==0){
             if(selectedNode.getn()==0){
@@ -36,8 +38,7 @@ public class MCSTwCN extends AI {
             }
         }
         backPropagation(rootTree, g);
-        selectedNode = select(rootTree, g);
-        
+
         return new int[0];
     }
 
@@ -94,7 +95,7 @@ public class MCSTwCN extends AI {
                 }
             }
             System.out.println("the for loop ends up...");
-            if (BoardAnalysis.compare(bestBoard, currLeaf.getBoard())) System.out.println("it's the same board, man!");
+          //  if (BoardAnalysis.compare(bestBoard, currLeaf.getBoard())) System.out.println("it's the same board, man!");
             TreeNode newLeaf = new TreeNode(bestMove, bestBoard);
             newLeaf.setParent(currLeaf);
             currLeaf.addChild(newLeaf);
@@ -114,7 +115,7 @@ public class MCSTwCN extends AI {
     public TreeNode select(TreeNode root, Game g) {
 
         ArrayList<TreeNode> leaves = root.getAllLeafs();
-        if(leaves.size()==0)return root;
+
         TreeNode selectedLeaf=leaves.get(0);
         double maxUCT = selectedLeaf.getUCTValue();
         for (int i=1; i<leaves.size();i++) {
