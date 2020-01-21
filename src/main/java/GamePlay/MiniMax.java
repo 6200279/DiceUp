@@ -154,7 +154,8 @@ public class MiniMax extends AI {
         if (isDouble(dice)) {
             movesFirstLayer = new int[4][2];
             rolledDice.add(dice[0]);
-            rolledDice.add(dice[0]);
+            rolledDice.add(dice[1]);
+
 
         } else {
             movesFirstLayer = new int[2][2];

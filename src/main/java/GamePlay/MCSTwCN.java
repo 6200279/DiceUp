@@ -20,6 +20,8 @@ public class MCSTwCN extends AI {
         //some initialization which is called once it's our turn.
         rootTree = MiniMax.buildTree(g);
         selectedNode = select(rootTree, g);
+        Board b= g.getBoard();
+
     }
 
     @Override
@@ -40,13 +42,14 @@ public class MCSTwCN extends AI {
     }
 
     public TreeNode exploreTree(TreeNode node, Game g) {
+
         TreeNode currLeaf = node;
         Player turn = this;
         Player opponent = g.getP2();
         if (opponent == turn) opponent = g.getP1();
 
         int runtime = 0;
-        while (!BoardAnalysis.gameEnded(currLeaf.getBoard())) {
+        while (!BoardAnalysis.gameEnded(g.getBoard())) {
             System.out.println("runtime: " + runtime++);
             int diceIndex = (int) Math.round((BoardAnalysis.DICE_OUTCOMES.length-1) * Math.random());
             int[] selectedDices = BoardAnalysis.DICE_OUTCOMES[diceIndex];
@@ -67,7 +70,7 @@ public class MCSTwCN extends AI {
             Board[] playouts = new Board[aC.size()];
             //Generate playout board instances to then evaluate
             for (int i = 0; i < playouts.length; i++) {
-                Board tempBoard = currLeaf.getBoard().copyBoard(currLeaf.getBoard(), g);
+                Board tempBoard = g.getBoard().copyBoard(currLeaf.getBoard(), g);
 
                 int[][] moveToCommence = aC.get(i);
                 Column[] cols = tempBoard.getColumns();

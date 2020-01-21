@@ -255,7 +255,11 @@ public class BoardAnalysis {
             for(int i=0; i< pC.size(); i++){
                 pass = true;
                 for(int j=1; j<pC.get(i).length; j++){
+                    int fromCol = pC.get(i)[j][0];
+                    Column from= board.getColumns()[fromCol];
+
                     int toCol = pC.get(i)[j][1];
+                    if (from.getChips().size()==0) pass= false;
                     if(toCol<0||toCol>23){
                        pass = false;
                        System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
@@ -265,22 +269,6 @@ public class BoardAnalysis {
                         System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
 
                     }
-                    /*
-                    else if(p.getID()==1){
-                        if(fromCol<=toCol){
-                           pass = false;
-                        }
-                    }
-                    else{
-                        if(fromCol>=toCol){
-                           pass = false;
-                        }
-                      }
-                     */
-
-
-
-
                 }
                 if(pass)
                     pC1.add(pC.get(i));
@@ -299,6 +287,7 @@ public class BoardAnalysis {
      * @return true/false
      */
     public static boolean compare(Board a, Board b) {
+        if (a==null) return false;
             for (int i = 0; i < a.getColumns().length; i++) {
             if (a.getColumns()[i].getChips().size() != b.getColumns()[i].getChips().size()) return false;
             if (a.getColumns()[i].getChips().size() > 0) {
