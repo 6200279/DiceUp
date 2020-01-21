@@ -205,7 +205,7 @@ public class BoardAnalysis {
         ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(b, moves, p);
 
         ArrayList<int[][]> pC = new ArrayList<>();
-        if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, moves.size()^possibleMoves[0].size());
+        if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, Math.pow(moves.size(), possibleMoves[0].size()));
         else pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         //printMoves(pC);
@@ -213,10 +213,10 @@ public class BoardAnalysis {
         ArrayList<int[][]> pC2 = uniquify(pC1);
 
 
-        //System.out.println("ORIGINAL--->");
-        //printMoves(pC);
-        //System.out.println("LEGALIZED--->");
-        //printMoves(pC1);
+        System.out.println("ORIGINAL--->");
+        printMoves(pC);
+        System.out.println("LEGALIZED--->");
+        printMoves(pC1);
         //System.out.println("UNIQUIFIED--->");
 
         //printMoves(pC2);
@@ -251,11 +251,18 @@ public class BoardAnalysis {
 
     private static ArrayList<int[][]> legalize(Board board, ArrayList<int[][]> pC, Player p){
             ArrayList<int[][]>pC1 = new ArrayList<int[][]>();
+            int[] check = new int[25];
+
+        for(int i=0; i< pC.size(); i++){
+            for (int k=0; k<check.length; k++){
+                check[k]=board.getColumns()[k].getChips().size();
+            }
+
             boolean pass = true;
-            for(int i=0; i< pC.size(); i++){
                 pass = true;
                 for(int j=1; j<pC.get(i).length; j++){
                     int fromCol = pC.get(i)[j][0];
+                    //save=fromCol;
                     int toCol = pC.get(i)[j][1];
 
                     if(toCol<0||toCol>23){
@@ -267,12 +274,17 @@ public class BoardAnalysis {
                         //System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
 
                     }
-                    else {
-                        Column from = board.getColumns()[fromCol];
+                    else if (fromCol>0) {
+                        check[fromCol]--;
 
-                        if (from.getChips().size() == 0) pass = false;
                     }
+
                 }
+
+            for (int k=0; k<check.length; k++){
+                if (check[k]<0) {pass=false;}
+                }
+
                 if(pass)
                     pC1.add(pC.get(i));
             }
