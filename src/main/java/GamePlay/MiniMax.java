@@ -60,6 +60,39 @@ public class MiniMax extends AI {
     int[][] moves = null;
     @Override
     public int[] decisionAlgorithm(Game game) {
+
+        Board b = game.getBoard();
+        Player p = game.getP1();
+        int[] movesDice = game.getDicesNum();
+
+        // if a chip of the AI is taken
+        if(b.getColumns()[24].getChips().size() > 0) {
+
+            System.out.println("Test if our if statement fucks up");
+
+            int[] temp = new int[2];
+
+            if ((b.getColumns()[24 - movesDice[0]].getChips().size() > 0 && (b.getColumns()[24 - movesDice[0]].getChips().get(0).getOwner() == p)) ||
+                    (b.getColumns()[24 - movesDice[0]].getChips().size() == 0)) {
+
+                int from = 24;
+                int to = 24 - movesDice[0];
+
+                temp[0] = from;
+                temp[1] = to;
+
+            } else if ((b.getColumns()[24 - movesDice[1]].getChips().size() > 0 && (b.getColumns()[24 - movesDice[1]].getChips().get(0).getOwner() == p)) ||
+                    (b.getColumns()[24 - movesDice[1]].getChips().size() == 0)) {
+
+                int from = 24;
+                int to = 24 - movesDice[1];
+                temp[0] = from;
+                temp[1] = to;
+
+            }
+            return temp;
+        }
+
         if (moves == null) moves = expectiminimax(game);
         else {
             boolean updateMoves = true;
