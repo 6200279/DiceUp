@@ -12,19 +12,21 @@ public class PossibleMoveTester {
         Board root = oG.getBoard();
 
         ArrayList<Integer> moves = new ArrayList<>();
-        moves.add(5);
-        moves.add(5);
-        moves.add(5);
-        moves.add(5);
+        moves.add(6);
+        moves.add(6);
+        moves.add(6);
+        moves.add(6);
 
-        ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(root, moves, a);
+        /*ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(root, moves, a);
         for (int ma = 0; ma < possibleMoves.length; ma++) {
             System.out.println("-- MOVES FOR DICE " + ma + " --");
             for (int mk = 0; mk < possibleMoves[ma].size(); mk++)
                 System.out.println("\tFrom: " + possibleMoves[ma].get(mk)[0] + ", To: " + possibleMoves[ma].get(mk)[1]);
-        }
+        }*/
 
+        /*
         ArrayList<int[][]> pC = new ArrayList<int[][]>();
+
         BoardAnalysis newb = new BoardAnalysis();
         if (moves.size() == 2) {
             pC = newb.possibleCombinations(root, moves, a, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size() - 1, pC);
@@ -40,11 +42,15 @@ public class PossibleMoveTester {
                 System.out.println("next move");
             }
         }
-
+        */
+        System.out.println(root.toString());
         ArrayList<int[][]> aC = BoardAnalysis.allCombinations(root, moves, a);
-
-
-
+        for (int i = 0; i < aC.size(); i++) {
+            System.out.println();
+            for (int j = 0; j < aC.get(i).length; j++) {
+                System.out.printf("[" + aC.get(i)[j][0] + ", " + aC.get(i)[j][1] + "]");
+            }
+        }
 
       /*  System.out.println(root.toString());
 

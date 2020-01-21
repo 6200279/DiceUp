@@ -262,11 +262,11 @@ public class BoardAnalysis {
                     if (from.getChips().size()==0) pass= false;
                     if(toCol<0||toCol>23){
                        pass = false;
-                       System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
+                       //System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
                     }
                     else if(board.getColumns()[toCol].getChips().size()>0 && board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
                       pass = false;
-                        System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
+                        //System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
 
                     }
                 }

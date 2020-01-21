@@ -62,7 +62,7 @@ public abstract class AI extends Player {
         game.rollDices();
         initialize(game);
 
-        aState.LOG_BOX.getItems().add("Rolled " + game.getMoves().get(0) + " and " +game.getMoves().get(1));
+        aState.LOG_BOX.getItems().add("Rolled " + game.getDicesNum()[0] + " and " +game.getDicesNum()[1]);
 
         for(int i = 0; i < game.getMoves().size();) {
             System.out.println("- - > Executing move " + (i + 1));

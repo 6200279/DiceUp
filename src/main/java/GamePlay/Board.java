@@ -159,12 +159,20 @@ public class Board {
             result.append("\n");
             int xSize = columns[i].getChips().size();
             int oSize = columns[23 - i].getChips().size();
+            String xChar = "X";
+            String oChar = "O";
 
+            if (xSize > 0) {
+                if (columns[i].getChips().get(0).getOwner().getID() == 2) xChar = "O";
+            }
+            if (oSize > 0) {
+                if (columns[23 - i].getChips().get(0).getOwner().getID() == 1) oChar = "X";
+            }
             if (i < 10) result.append(" ");
             result.append(i + "|");
-            for (int b = 0; b < xSize; b++) result.append("X");
+            for (int b = 0; b < xSize; b++) result.append(xChar);
             for (int s = 0; s < LINE_LENGTH - (xSize + oSize); s++) result.append(" ");
-            for (int w = 0; w < oSize; w++) result.append("O");
+            for (int w = 0; w < oSize; w++) result.append(oChar);
             result.append("|" + (23 - i));
 
             if (i == 5) {

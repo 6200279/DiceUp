@@ -103,11 +103,18 @@ public class DiceUpController {
 
         //set the initial players, game, colors, and logbox.
         setInitialPlayers();
+        State.LOG_BOX = LogBox;
 
+        if (currGame.turn instanceof AI) {
+            try {
+                ((AI) currGame.turn).executeMoves();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         //update the board
         updateBoard();
 
-        State.LOG_BOX = LogBox;
     }
 
     /*.................................PRIVATE METHODS................................................. */
