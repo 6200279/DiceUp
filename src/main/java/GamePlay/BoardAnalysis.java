@@ -251,10 +251,10 @@ public class BoardAnalysis {
 
     private static ArrayList<int[][]> legalize(Board board, ArrayList<int[][]> pC, Player p) {
         ArrayList<int[][]> pC1 = new ArrayList<int[][]>();
-        int[] check = new int[27];
+        int[] check = new int[30];
 
         for (int i = 0; i < pC.size(); i++) {
-            for (int k = 0; k < check.length; k++) {
+            for (int k = 0; k < 27; k++) {
                 check[k] = board.getColumns()[k].getChips().size();
             }
 
@@ -263,11 +263,12 @@ public class BoardAnalysis {
             for (int j = 0; j < pC.get(i).length; j++) {
                 int fromCol = pC.get(i)[j][0];
                 int toCol = pC.get(i)[j][1];
-                if (fromCol > -1) check[fromCol]--;
+
 
                 if (toCol < 0 || toCol > 23) {
-                    pass = false;
-                } else if (board.getColumns()[toCol].getChips().size() > 0 && board.getColumns()[toCol].getChips().get(0).getOwner() != p) {
+                    pass = false;}
+                    else if (fromCol > -1) check[fromCol]--;
+                else if (board.getColumns()[toCol].getChips().size() > 0 && board.getColumns()[toCol].getChips().get(0).getOwner() != p) {
                     pass = false;
                 }
             }
