@@ -207,7 +207,7 @@ public class BoardAnalysis {
         ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(b, moves, p);
 
         ArrayList<int[][]> pC = new ArrayList<>();
-        if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, moves.size()^possibleMoves[0].size());
+        if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, Math.pow(moves.size(), possibleMoves[0].size()));
         else pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         //printMoves(pC);
@@ -215,10 +215,10 @@ public class BoardAnalysis {
         ArrayList<int[][]> pC2 = uniquify(pC1);
 
 
-        //System.out.println("ORIGINAL--->");
-        //printMoves(pC);
-        //System.out.println("LEGALIZED--->");
-        //printMoves(pC1);
+        System.out.println("ORIGINAL--->");
+        printMoves(pC);
+        System.out.println("LEGALIZED--->");
+        printMoves(pC1);
         //System.out.println("UNIQUIFIED--->");
 
         //printMoves(pC2);
@@ -253,50 +253,39 @@ public class BoardAnalysis {
 
     private static ArrayList<int[][]> legalize(Board board, ArrayList<int[][]> pC, Player p){
             ArrayList<int[][]>pC1 = new ArrayList<int[][]>();
+            int[] check = new int[25];
+
+        for(int i=0; i< pC.size(); i++){
+            for (int k=0; k<check.length; k++){
+                check[k]=board.getColumns()[k].getChips().size();
+            }
+
             boolean pass = true;
-            for(int i=0; i< pC.size(); i++){
                 pass = true;
                 for(int j=1; j<pC.get(i).length; j++){
                     int fromCol = pC.get(i)[j][0];
+                    //save=fromCol;
                     int toCol = pC.get(i)[j][1];
 
                     if(toCol<0||toCol>23){
                        pass = false;
                        //System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
-                        pass = false;
-
-                       System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
                     }
                     else if(board.getColumns()[toCol].getChips().size()>0 && board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
                       pass = false;
                         //System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
 
                     }
-                    else {
-                        Column from = board.getColumns()[fromCol];
-
-                        if (from.getChips().size() == 0) pass = false;
-                    }
-                }
-                        System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
+                    else if (fromCol>0) {
+                        check[fromCol]--;
 
                     }
 
                 }
 
-                if(board.getMiddleColumns()[p.getID()-1].getChips().size()!=0) {
-                    int hitChipsNum = board.getMiddleColumns()[p.getID()-1].getChips().size();
-
-                    for (int j = 0; i < pC.get(i).length; i++) {
-                        int fromCol = pC.get(i)[j][0];
-                        if(fromCol  != 25){
-
-                            pass = false;
-                        }
-
-                    }
+            for (int k=0; k<check.length; k++){
+                if (check[k]<0) {pass=false;}
                 }
-
 
                 if(pass)
                     pC1.add(pC.get(i));
@@ -314,8 +303,9 @@ public class BoardAnalysis {
      * Checks if given boards are of the same state
      * @return true/false
      */
-    public boolean compare(Board a, Board b) {
-        for (int i = 0; i < a.getColumns().length; i++) {
+    public static boolean compare(Board a, Board b) {
+        if (a==null) return false;
+            for (int i = 0; i < a.getColumns().length; i++) {
             if (a.getColumns()[i].getChips().size() != b.getColumns()[i].getChips().size()) return false;
             if (a.getColumns()[i].getChips().size() > 0) {
                 if (!a.getColumns()[i].getChips().get(0).getOwner().equals(b.getColumns()[i].getChips().get(0).getOwner())) return false;
