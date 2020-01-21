@@ -13,7 +13,9 @@ public class PossibleMoveTester {
 
         ArrayList<Integer> moves = new ArrayList<>();
         moves.add(6);
-        moves.add(5);
+        moves.add(6);
+        moves.add(6);
+        moves.add(6);
 
         ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(root, moves, a);
         /*for (int ma = 0; ma < possibleMoves.length; ma++) {
