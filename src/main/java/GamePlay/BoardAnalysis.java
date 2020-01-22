@@ -166,10 +166,47 @@ public class BoardAnalysis {
             }
 
             indicator--;
-            pC.add(new int[][]{possibleMoves[0].get(length1), possibleMoves[1].get(length2), possibleMoves[2].get(length3), possibleMoves[3].get(length4)});
+            int[][] addition = new int[][]{possibleMoves[0].get(length1), possibleMoves[1].get(length2), possibleMoves[2].get(length3), possibleMoves[3].get(length4)};
+            if (!checkingsimilar(addition, pC)) pC.add(addition);
             return possibleCombinationsdouble(moves, possibleMoves, length1, length2, length3, length4, pC, indicator);
         }
         return pC;
+    }
+
+    public static boolean checkingsimilar(int[][] checking, ArrayList<int[][]> pC){
+        int sum=0;
+        int blah=1;
+        boolean same=false;
+        int[] check=new int[4];
+        int[] save= new int[4];
+
+        for (int i=0; i<checking.length; i++){
+            for (int j=0; j<checking.length; j++){
+                if (checking[i][0]==checking[j][0] || checking[i][1]==checking[j][1]) save[i]++;
+            }
+        }
+
+        for (int i=0; i<save.length; i++){
+            if (save[i]==1) blah++;
+            if (save[i]==2) blah+=0.5;
+            if (save[i]==3) blah+=0.33;
+            if (save[i]==4) blah+=0.25;
+        }
+
+        for (int i=0; i<pC.size(); i++){
+            sum=0;
+            for (int j=0; j<checking.length; j++){
+                for (int k=0; k<pC.get(i).length; k++) {
+                    if (checking[j][0] == pC.get(i)[k][0] && checking[j][1] == pC.get(i)[k][1]) {
+                        sum++;
+                    }
+                } //if (check[0]==save[0] && check[1]==save[1] && check[2]==save[2] && check[3]==save[3]) same=true;
+            }
+        }
+
+        double hhh=sum/blah;
+        if (hhh>1.8) same=true;
+        return same;
     }
 
     public static ArrayList<int[][]> possibleSingleChipCombinations(Board b, ArrayList<Integer> moves, Player p) {
