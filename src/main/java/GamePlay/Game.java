@@ -268,7 +268,6 @@ public class Game {
             from = -1;
         if (!checkDiceLegality(moves, Math.abs(to - from))) {
             aState.LOG_BOX.getItems().add("dice Illegality accured");
-            changeTurn();
             return true;
         }
 

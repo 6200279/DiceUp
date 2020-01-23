@@ -66,6 +66,7 @@ public class MiniMax extends AI {
         int[] movesDice = game.getDicesNum();
 
         // if a chip of the AI is taken
+        /*
         if(b.getColumns()[24].getChips().size() > 0) {
 
             System.out.println("Test if our if statement fucks up");
@@ -92,7 +93,7 @@ public class MiniMax extends AI {
             }
             return temp;
         }
-
+*/
         if (moves == null) moves = expectiminimax(game);
         else {
             boolean updateMoves = true;

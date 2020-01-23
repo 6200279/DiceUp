@@ -296,10 +296,10 @@ public class BoardAnalysis {
         ArrayList<int[][]> pC2 = uniquify(pC1);
 
 
-        //System.out.println("ORIGINAL--->");
-        //printMoves(pC);
-        //System.out.println("LEGALIZED--->");
-        //printMoves(pC1);
+        System.out.println("ORIGINAL--->");
+        printMoves(pC);
+        System.out.println("LEGALIZED--->");
+        printMoves(pC1);
         //System.out.println("UNIQUIFIED--->");
 
         //printMoves(pC2);
