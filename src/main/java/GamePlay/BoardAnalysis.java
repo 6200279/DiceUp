@@ -33,7 +33,7 @@ public class BoardAnalysis {
                     for (int j = 0; j < moves.size(); j++) {
                         Column to = b.getColumns()[moves.get(j) - 1];
                         if (to.getChips().size() < 2) {
-                            int[] currMove = {24, moves.get(j)};
+                            int[] currMove = {25, moves.get(j)};
                             possibleCols[j].add(currMove);
                         }
                     }
@@ -41,7 +41,7 @@ public class BoardAnalysis {
                     for (int j = 0; j < moves.size(); j++) {
                         Column to = b.getColumns()[moves.get(j) - 1];
                         if (to.getChips().size() < 2) {
-                            int[] currMove = {25, 24 - moves.get(j)};
+                            int[] currMove = {21, 24 - moves.get(j)};
                             possibleCols[j].add(currMove);
                         }
                     }
