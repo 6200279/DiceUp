@@ -115,7 +115,16 @@ public class NeuralNetwork {
          weightOfBias =f.readBiasWeightForUse(biasWeightPath);
     }
 
-
+     //this constructor use the TD weight trained by 10 thousand times
+    public NeuralNetwork(double[] inputVector, char c){
+      Files f = new Files();
+      this.inputVector = inputVector;
+      hiddenLayer = new double[hiddenNumber];
+      weightOfInputVector = f.readInputWeightForUse(I10t);
+      weightOfHiddenLayer = f.readHiddenWeightForUse(H10t);
+      weightOfBias =f.readBiasWeightForUse(B10t);
+    }
+    
 
     public NeuralNetwork(){
         hiddenLayer = new double[hiddenNumber];
