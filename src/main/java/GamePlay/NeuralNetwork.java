@@ -45,7 +45,7 @@ public class NeuralNetwork {
     private double[] weightOfBias;
 
     public boolean DEBUG = true;
-
+    //30 thousands times
     public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight30t.txt";
     public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight30t.txt";
     public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight30t.txt";
@@ -55,6 +55,7 @@ public class NeuralNetwork {
     public static String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
     public static String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
 
+    //60 thousands times
     public static String H60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight60t.txt";
     public static String B60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight60t.txt";
     public static String I60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight60t.txt";

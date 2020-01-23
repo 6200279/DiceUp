@@ -900,12 +900,13 @@ public class TD {
 
             int numOfChoices = cutArray(possibleColumnForWhite).length;
 
-//            Random randomGenerator = new Random();
+            Random randomGenerator = new Random();
             if (numOfChoices == 0) {
                 movesFromAndTo[0] = 0;
                 movesFromAndTo[1] = 0;
 
             } else {
+                //use random AI
 //                int num = randomGenerator.nextInt(numOfChoices);
 //
 //                movesFromAndTo[0] = possibleChoice[num];
@@ -919,7 +920,11 @@ public class TD {
 
                 for (int i = 0;i<possibleChoice.length;i++){
                     possibleMoves[i] = simpleMoves(stateCurr,possibleChoice[i],possibleChoice[i] - diceNumber);
-                    nn = new NeuralNetwork(possibleMoves[i]);
+                    //use TD trained 60 thousand times: open next line
+//                    nn = new NeuralNetwork(possibleMoves[i]);
+
+                    //use TD trained 30 thousand times: open next line
+                    nn = new NeuralNetwork(possibleMoves[i],1);
                     evaluationVal[i] = nn.forward();
                 }
 
@@ -1652,13 +1657,13 @@ public class TD {
         System.out.println();
         System.out.println();
         System.out.println();
-        System.out.println("The white chip uses the Random AI");
+        System.out.println("The white chip uses TD trained 60 thousand times");
         System.out.println("The black chip uses the Random AI");
-        System.out.println("It plans to play 1 games");
+        System.out.println("It plans to play 20 games");
         System.out.println("There are "+(winsForBlackChips+winsForWhiteChips)+" valid games in total");
         System.out.println("White chips wins "+winsForWhiteChips+" games");
         System.out.println("Black chips wins "+winsForBlackChips+" games");
-//        System.out.println("The winning rate for white chips is "+prob+"%");
+        System.out.println("The winning rate for white chips is "+prob+"%");
 
 
 
@@ -1708,7 +1713,7 @@ class Test{
 
         //This method is let to AI play many times to see their performance. Choose the debug true or false to see detail.
         //Experiment part, before doing it, make sure to check and modify what AI technique the chip is using.
-        td.test(1);
+        td.test(20);
 
         //use thid method to see a single simulation of game.
 //      td.playAgainstItself();
