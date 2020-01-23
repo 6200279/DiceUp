@@ -44,17 +44,24 @@ public class NeuralNetwork {
     //bias' weight
     private double[] weightOfBias;
 
-    public boolean DEBUG = false;
+    public boolean DEBUG = true;
 
-    public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight.txt";
-    public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight.txt";
-    public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight.txt";
+    public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight30t.txt";
+    public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight30t.txt";
+    public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight30t.txt";
+
     public static String sampleForTrainPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/sampleForTrain.txt";
     public static String initial_InputWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_InputWeight.txt";
     public static String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
     public static String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
 
+    public static String H60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight60t.txt";
+    public static String B60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight60t.txt";
+    public static String I60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight60t.txt";
 
+    public static String H10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight10t.txt";
+    public static String B10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight10t.txt";
+    public static String I10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight10t.txt";
 
     Test t =  new Test();
 
@@ -64,28 +71,50 @@ public class NeuralNetwork {
         hiddenLayer = new double[hiddenNumber];
         this.inputVector = inputVector;
         this.target = target;
+
+        //choose to use random initialization
 //        weightOfInputVector = new double[hiddenNumber][inputVector.length];
 //        weightOfHiddenLayer = new double[hiddenNumber];
 //        weightOfBias = new double[hiddenNumber];
-        weightOfInputVector = f.readInputWeightForUse(inputWeightPath).clone();
-        weightOfHiddenLayer = f.readHiddenWeightForUse(hiddenWeightPath).clone();
-        weightOfBias =f.readBiasWeightForUse(biasWeightPath).clone();
-
 //        initialization();
+
+          //use the initial weight
+        weightOfInputVector = f.readInputWeightForUse(initial_InputWeight).clone();
+        weightOfHiddenLayer = f.readHiddenWeightForUse(initial_HiddenWeight).clone();
+        weightOfBias =f.readBiasWeightForUse(initial_BiasWeight).clone();
+
+
     }
 
 
     //td use this constructor to feed forward to calculate the probability of winning
+    
+    //this constructor use the TD weight trained by 60 thousand times
     public NeuralNetwork(double[] inputVector) {
 
         Files f = new Files();
         this.inputVector = inputVector;
         hiddenLayer = new double[hiddenNumber];
-        weightOfInputVector = f.readInputWeightForUse(inputWeightPath);
-        weightOfHiddenLayer = f.readHiddenWeightForUse(hiddenWeightPath);
-        weightOfBias =f.readBiasWeightForUse(biasWeightPath);
+        weightOfInputVector = f.readInputWeightForUse(I60t);
+        weightOfHiddenLayer = f.readHiddenWeightForUse(H60t);
+        weightOfBias =f.readBiasWeightForUse(B60t);
 
     }
+
+
+
+    //this constructor use the TD weight trained by 30 thousand times
+    public NeuralNetwork(double[] inputVector, int i){
+
+        Files f = new Files();
+        this.inputVector = inputVector;
+        hiddenLayer = new double[hiddenNumber];
+         weightOfInputVector = f.readInputWeightForUse(inputWeightPath);
+         weightOfHiddenLayer = f.readHiddenWeightForUse(hiddenWeightPath);
+         weightOfBias =f.readBiasWeightForUse(biasWeightPath);
+    }
+
+
 
     public NeuralNetwork(){
         hiddenLayer = new double[hiddenNumber];
@@ -97,6 +126,8 @@ public class NeuralNetwork {
 
         initialization();
     }
+
+
 
 
     /**
@@ -118,33 +149,6 @@ public class NeuralNetwork {
             weightOfBias[i] = Math.random()/1000;
         }
 
-    }
-
-
-    public double activationFunction(double[] inputVector, double[][] weightOfInputVector, int index) {
-        double val = 0;
-        double sum = 0;
-        double[] separatProduct = new double[198];
-        double[] temp = weightOfInputVector[index];
-
-        for (int i = 0; i < separatProduct.length; i++) {
-
-            separatProduct[i] = inputVector[i] * temp[i];
-
-        }
-
-
-        for (int i = 0; i < separatProduct.length; i++) {
-
-            sum = sum + separatProduct[i];
-
-        }
-
-
-        //目前为止，sigmoid输出正常
-        val = 1 / (1 + Math.pow(Math.E, -sum));
-
-        return val;
     }
 
 
@@ -205,6 +209,7 @@ public class NeuralNetwork {
         return output;
     }
 
+    //a full forward and backward procedure
     public void forwardAndBackward(){
         double sum = 0;
         double[] tempInputHiddenLayer = new double[hiddenLayer.length];
@@ -298,7 +303,7 @@ public class NeuralNetwork {
         setWeightOfInputVector(weightOfInputVector);
         setWeightOfBias(weightOfBias);
 
-        if (DEBUG) {
+        if (!DEBUG) {
             for (int i = 0; i < weightOfInputVector.length; i++) {
                 for (int j = 0; j < weightOfInputVector[0].length; j++) {
 
@@ -308,10 +313,11 @@ public class NeuralNetwork {
 
             }
         }
-//        System.out.println(Error);
+        if (DEBUG) System.out.println(Error);
 
     }
 
+    // method to train the network.
     public void train(int iterationTimes){
         int ctr = 0;
         while (ctr<iterationTimes){
@@ -325,7 +331,7 @@ public class NeuralNetwork {
 
 
 
-
+    //setter and getter part
     public int getHiddenNumber(){
         return  hiddenNumber;
     }
@@ -390,125 +396,75 @@ public class NeuralNetwork {
 
 
 }
-
+/*
+This test class is to see the standard Neural Network is working
+ */
 class Test1{
 
     public static void main(String[] args){
 
 //        //just test. no meaning, you can see the result of training
-//        TD td = new TD();
-//        double[] temp = td.database[0];
-//        double[] input = td.changeIntoInputVector(temp);
-//        NeuralNetwork bp = new NeuralNetwork(input,0.5);
-//        System.out.println("Showing the error");
-//        bp.train(100);
+        TD td = new TD();
+        double[] temp = td.database[0];
+        double[] input = td.changeIntoInputVector(temp);      //an example of input vector
+        NeuralNetwork bp = new NeuralNetwork(input,0.5);
+        System.out.println("Showing the error");
+        bp.train(10);
 
-        double[] arr = new double[]{1,2,3,4,5};
-        for (int i = arr.length-1;i>=0;i--){
-            System.out.println(arr[i]);
-        }
-
-
-
-
-
-
-//        System.out.println(bp.activationFunction(inputVector,weightOfInputVector));
     }
 }
 
 /**
- * You have to set the path of 3 weight .txt documents
+ * This class is the class that about IO and where we train the ANN
  */
 class Files {
 
 
     //now, IO part works good
-
-    public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight.txt";
-    public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight.txt";
-    public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight.txt";
+    //path for ANN trained 30 thousands times
+    public static String hiddenWeightPath= "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight30t.txt";
+    public static String biasWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight30t.txt";
+    public static String inputWeightPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight30t.txt";
+    //path for initial random weight
     public static String sampleForTrainPath = "/Users/luotianchen/DiceUp/src/main/resources/ANN/sampleForTrain.txt";
     public static String initial_InputWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_InputWeight.txt";
     public static String initial_HiddenWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_HiddenWeight.txt";
     public static String initial_BiasWeight = "/Users/luotianchen/DiceUp/src/main/resources/ANN/initial_BiasWeight.txt";
-
+    //path for ANN trained 60 thousands times
+    public static String H60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight60t.txt";
+    public static String B60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight60t.txt";
+    public static String I60t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight60t.txt";
+     //path for ANN trained 10 thousands times
     public static String H10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/hiddenWeight10t.txt";
     public static String B10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/biasWeight10t.txt";
     public static String I10t = "/Users/luotianchen/DiceUp/src/main/resources/ANN/inputWeight10t.txt";
-
-
-
 
     private static final double w = Math.PI-2;
 
     private static final double b = Math.PI -3;
 
+    //training times for ANN
     public static int trainingTimes = 10;
 
     //parameter that determines how much the update are influenced by the events that occurs later in time.
     public static double lambda = 0.7;
 
-    public static boolean debug = false;
+    //switcher to see debug message
+    public static boolean debug = true;
 
 
     public static void main(String[] args) {
-        int times = 1000;
+
+        int times = 1;//choose how many times you want to train it.
         long startTime=System.currentTimeMillis();
         trainWhateverTimes(times);
         long endTime=System.currentTimeMillis();
 
         System.out.println("It cost ： "+(endTime-startTime)+" ms to train "+times +" games");
 
-//        trainANNByTD();
-
-//        checkInitialResult();
-        double[] testArray = new double[29];
-//        td.playAgainstItself();
-
-        testArray[0] =1*w;
-        testArray[1] =0*b;
-        testArray[2] =0*w;
-        testArray[3] =0*w;
-        testArray[4] =0*b;
-        testArray[5] =0*b;
-        testArray[6] =0*b;
-        testArray[7] =0*b;
-        testArray[8] =0;
-        testArray[9] =0;
-        testArray[10] =0*b;
-        testArray[11] =0;
-        testArray[12] =0;
-        testArray[13] =0;
-        testArray[14] =0;
-        testArray[15] =0*b;
-        testArray[16] =0;
-        testArray[17] =0;
-        testArray[18] =0*b;
-        testArray[19] =1*w;
-        testArray[20] =0;
-        testArray[21] =0;
-        testArray[22] =6*b;
-        testArray[23] =1*b;
-//
-
-
-//        TD td = new TD();
-//        double[] arr = td.database[0].clone();
-//
-//        NeuralNetwork  nn = new NeuralNetwork(arr);
-//
-//
-////        checkResult();
-//        System.out.println(nn.forward());
-//        trainANNByTD();
-
-//        checkInitialResult();
-
-
-
     }
 
+    //method to debug
     public static void checkResult(){
         TD td = new TD();
 
@@ -581,7 +537,7 @@ class Files {
     }
 
 
-
+    //method to start training the ANN
     public static void trainWhateverTimes(int times){
         int ctr = 0;
 
@@ -593,6 +549,7 @@ class Files {
 
     }
 
+    //train only one time.
     public static void trainAfterOneGame(){
         TD td = new TD();
 
@@ -840,6 +797,7 @@ class Files {
     }
 
 
+    //method for IO stream
     public static double[] readHiddenWeight(String fileName) {
         File file = new File(fileName);
         BufferedReader reader = null;
@@ -1113,7 +1071,6 @@ class Files {
             }
             return  cut;
     }
-
 
     public  double[][] readInputWeightForUse(String fileName) {
         File file = new File(fileName);
