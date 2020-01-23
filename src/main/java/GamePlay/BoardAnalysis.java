@@ -1,11 +1,10 @@
 package GamePlay;
 
 import com.sun.xml.internal.bind.v2.runtime.output.Pcdata;
-import sun.plugin.net.proxy.PluginAutoProxyHandler;
 
-import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class BoardAnalysis {
     public static final int[][] DICE_OUTCOMES = {
@@ -132,24 +131,24 @@ public class BoardAnalysis {
         return possibleCols;
     }
 
-    public static ArrayList<int[][]> possibleCombinations (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int lengthfirst, int lengthsecond, ArrayList<int[][]> pC) {
+    public static ArrayList<int[][]> possibleCombinations (ArrayList<Integer> moves, ArrayList<int[]>[] possibleMoves, int lengthfirst, int lengthsecond, ArrayList<int[][]> pC) {
 
         if (lengthfirst>0) {
             lengthfirst--;
             pC.add(new int[][]{possibleMoves[1].get(lengthsecond), possibleMoves[0].get(lengthfirst)});
-            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst, lengthsecond, pC);
+            return possibleCombinations(moves, possibleMoves, lengthfirst, lengthsecond, pC);
         }
         else if (lengthsecond> 0) {
             lengthfirst = possibleMoves[0].size();
             lengthsecond--;
-            return possibleCombinations(b, moves, p, possibleMoves, lengthfirst ,lengthsecond, pC);
+            return possibleCombinations(moves, possibleMoves, lengthfirst ,lengthsecond, pC);
         }
 
 
         return pC;
     }
 
-    public static ArrayList<int[][]> possibleCombinationsdouble (Board b, ArrayList<Integer> moves, Player p, ArrayList<int[]>[] possibleMoves, int length1, int length2, int length3, int length4, ArrayList<int[][]> pC, double indicator) {
+    public static ArrayList<int[][]> possibleCombinationsdouble (ArrayList<Integer> moves, ArrayList<int[]>[] possibleMoves, int length1, int length2, int length3, int length4, ArrayList<int[][]> pC, double indicator) {
         if (indicator > 0) {
             if (length1 > 0) {
                 length1--;
@@ -207,8 +206,8 @@ public class BoardAnalysis {
         ArrayList<int[]>[] possibleMoves = BoardAnalysis.possibleMoves(b, moves, p);
 
         ArrayList<int[][]> pC = new ArrayList<>();
-        if (moves.size() == 4) pC = possibleCombinationsdouble(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, Math.pow(moves.size(), possibleMoves[0].size()));
-        else pC = possibleCombinations(b, moves, p, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
+        if (moves.size() == 4) pC = possibleCombinationsdouble(moves, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, possibleMoves[2].size()-1, possibleMoves[3].size()-1, pC, Math.pow(moves.size(), possibleMoves[0].size()));
+        else pC = possibleCombinations(moves, possibleMoves, possibleMoves[0].size(), possibleMoves[1].size()-1, pC);
         pC.addAll(possibleSingleChipCombinations(b, moves, p));
         //printMoves(pC);
         ArrayList<int[][]> pC1 = legalize(b,pC, p);
@@ -251,46 +250,39 @@ public class BoardAnalysis {
         return pC;
     }
 
-    private static ArrayList<int[][]> legalize(Board board, ArrayList<int[][]> pC, Player p){
-            ArrayList<int[][]>pC1 = new ArrayList<int[][]>();
-            int[] check = new int[25];
+    private static ArrayList<int[][]> legalize(Board board, ArrayList<int[][]> pC, Player p) {
+        ArrayList<int[][]> pC1 = new ArrayList<int[][]>();
+        int[] check = new int[30];
 
-        for(int i=0; i< pC.size(); i++){
-            for (int k=0; k<check.length; k++){
-                check[k]=board.getColumns()[k].getChips().size();
+        for (int i = 0; i < pC.size(); i++) {
+            for (int k = 0; k < 27; k++) {
+                check[k] = board.getColumns()[k].getChips().size();
             }
 
             boolean pass = true;
-                pass = true;
-                for(int j=1; j<pC.get(i).length; j++){
-                    int fromCol = pC.get(i)[j][0];
-                    //save=fromCol;
-                    int toCol = pC.get(i)[j][1];
+            pass = true;
+            for (int j = 0; j < pC.get(i).length; j++) {
+                int fromCol = pC.get(i)[j][0];
+                int toCol = pC.get(i)[j][1];
 
-                    if(toCol<0||toCol>23){
-                       pass = false;
-                       //System.out.println("remove column: "+ pC.get(i)[j][1]+"  out of bounds");
-                    }
-                    else if(board.getColumns()[toCol].getChips().size()>0 && board.getColumns()[toCol].getChips().get(0).getOwner()!=p){
-                      pass = false;
-                        //System.out.println("remove column: "+ pC.get(i)[j][1]+"  other player's column");
 
-                    }
-                    else if (fromCol>0) {
-                        check[fromCol]--;
-
-                    }
-
+                if (toCol < 0 || toCol > 23) {
+                    pass = false;}
+                    else if (fromCol > -1) check[fromCol]--;
+                else if (board.getColumns()[toCol].getChips().size() > 0 && board.getColumns()[toCol].getChips().get(0).getOwner() != p) {
+                    pass = false;
                 }
-
-            for (int k=0; k<check.length; k++){
-                if (check[k]<0) {pass=false;}
-                }
-
-                if(pass)
-                    pC1.add(pC.get(i));
             }
-            return pC1;
+
+            for (int k = 0; k < check.length; k++) {
+                if (check[k] < 0) {
+                    pass = false;
+                }
+            }
+
+            if (pass) pC1.add(pC.get(i));
+        }
+        return pC1;
 
     }
 
