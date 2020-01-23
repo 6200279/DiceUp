@@ -921,10 +921,13 @@ public class TD {
                 for (int i = 0;i<possibleChoice.length;i++){
                     possibleMoves[i] = simpleMoves(stateCurr,possibleChoice[i],possibleChoice[i] - diceNumber);
                     //use TD trained 60 thousand times: open next line
-//                    nn = new NeuralNetwork(possibleMoves[i]);
+                    nn = new NeuralNetwork(possibleMoves[i]);
 
                     //use TD trained 30 thousand times: open next line
-                    nn = new NeuralNetwork(possibleMoves[i],1);
+//                    nn = new NeuralNetwork(possibleMoves[i],1);
+                    //use TD trained 10 thousand times: open next line
+//                    nn = new NeuralNetwork(possibleMoves[i],c);
+
                     evaluationVal[i] = nn.forward();
                 }
 

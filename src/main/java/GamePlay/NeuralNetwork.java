@@ -102,8 +102,6 @@ public class NeuralNetwork {
 
     }
 
-
-
     //this constructor use the TD weight trained by 30 thousand times
     public NeuralNetwork(double[] inputVector, int i){
 
