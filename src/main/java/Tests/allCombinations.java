@@ -35,6 +35,7 @@ public class allCombinations {
             System.out.println("Testing for dices " + BoardAnalysis.DICE_OUTCOMES[i][0] + " and " + BoardAnalysis.DICE_OUTCOMES[i][1] + ".");
             Game oG = new Game(a, b);
             state.initGameState(oG);
+            oG.getBoard().takeinit(oG.getBoard().getColumns(), a, b);
             Board root = oG.getBoard();
             oG.setDices(BoardAnalysis.DICE_OUTCOMES[i][0], BoardAnalysis.DICE_OUTCOMES[i][1]);
 
@@ -67,5 +68,13 @@ public class allCombinations {
 
         //kill fx
         com.sun.javafx.application.PlatformImpl.exit();
+    }
+
+    //TODO
+    private Board randomBoard(Player a, Player b) {
+        Board res = new Board(a, b);
+
+        res.getColumns();
+        return res;
     }
 }

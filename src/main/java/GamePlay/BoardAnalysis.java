@@ -99,11 +99,17 @@ public class BoardAnalysis {
          * P2 [0:6) on S|.
          *
          */
+        boolean p1Takeable = true;
+        boolean p2Takeable = true;
 
         //Calculate moves available from all columns AI has a chip on
         for (int i = 0; i < 24; i++) {
             Column column = b.getColumns()[i];
             if (!column.empty()) { //check if unempty col
+                //update takeable status
+                if (i > 5 && column.getChips().get(0).getOwner().getID() == 1) p1Takeable = false;
+                if (i < 18 && column.getChips().get(0).getOwner().getID() == 2) p2Takeable = false;
+
                 Player occupier = b.getColumns()[i].getChips().get(0).getOwner();
                 if (occupier.equals(p)) { //if AI owns the chips
                     for (int j = 0; j < moves.size(); j++) {
@@ -121,6 +127,82 @@ public class BoardAnalysis {
                                 int[] move = {i, moveTo};
                                 possibleCols[j].add(move);
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        //add in p1 take moves
+        if (p1Takeable && p.getID() == 1) {
+            System.out.println("P1 TAKEABLE!!!!!!!!");
+            for (int i = 0; i < moves.size(); i++) {
+                int tookFromSmallerCol = -1;
+                for (int j = moves.get(i); j > 0; j--) {
+                    boolean leftEmpty = true;
+                    for (int l = j; l <= 5; l++) { //check left side
+                        if (b.getColumns()[l].getChips().size() > 0) { //ouch... we found a left chip! only we can take from j
+                            if (b.getColumns()[l].getChips().get(0).getOwner().getID() == 1) {
+                                leftEmpty = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (leftEmpty && b.getColumns()[j].getChips().size() > 0) { //first takeable column
+                        if (b.getColumns()[j].getChips().get(0).getOwner().getID() == 1) { //if p1 own:
+                            int[] move = {j, 26};
+                            System.out.println("yattaa! we can take from column" + j);
+                            System.out.println(b.toString());
+                            possibleCols[i].add(move);
+                            tookFromSmallerCol = j;
+                            break; //this is the only time we can take!
+                        }
+                    }
+                }
+
+                //try taking from the rolled dice directly
+                if (moves.get(i) != tookFromSmallerCol) {
+                    if (b.getColumns()[moves.get(i) - 1].getChips().size() > 0) {
+                        if (b.getColumns()[moves.get(i) - 1].getChips().get(0).getOwner().getID() == 1) {
+                            int[] move = {moves.get(i) - 1, 26};
+                            possibleCols[i].add(move);
+                        }
+                    }
+                }
+            }
+        }
+
+        //add in p2 take moves
+        if (p2Takeable && p.getID() == 2) {
+            System.out.println("P2 TAKEABLE!!!!!!!!");
+            for (int i = 0; i < moves.size(); i++) {
+                int tookFromSmallerCol = -1;
+                for (int j = 24 - moves.get(i); j <= 23; j++) {
+                    boolean leftEmpty = true;
+                    for (int l = j; l >= 18; l--) { //check left side
+                        if (b.getColumns()[l].getChips().size() > 0) { //ouch... we found a left chip! only we can take from j
+                            if (b.getColumns()[l].getChips().get(0).getOwner().getID() == 2) {
+                                leftEmpty = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (leftEmpty && b.getColumns()[j].getChips().size() > 0) { //first takeable column
+                        if (b.getColumns()[j].getChips().get(0).getOwner().getID() == 2) { //if p1 own:
+                            int[] move = {j, 26};
+                            possibleCols[i].add(move);
+                            tookFromSmallerCol = j;
+                            break; //this is the only time we can take!
+                        }
+                    }
+                }
+
+                //try taking from the rolled dice directly
+                if (moves.get(i) != tookFromSmallerCol) {
+                    if (b.getColumns()[24 - moves.get(i)].getChips().size() > 0) {
+                        if (b.getColumns()[24 - moves.get(i)].getChips().get(0).getOwner().getID() == 2) {
+                            int[] move = {24 - moves.get(i), 26};
+                            possibleCols[i].add(move);
                         }
                     }
                 }
