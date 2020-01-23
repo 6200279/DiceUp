@@ -88,7 +88,6 @@ public class Game {
 
         //from column cannot be empty.
         if (fromChipsNum <= 0) {
-            System.out.println("1");
             throw new IllegalArgumentException();
         }
 
@@ -105,7 +104,6 @@ public class Game {
 
         //this check must return false for every valid move (move, take, hit)
         if(checkUniversalConditions(ownerFromColumn, ownerToColumn, fromColumn, toColumn, fromChipsNum, toChipsNum)){
-            System.out.println("2");
             throw new IllegalArgumentException();
         }
 
@@ -113,15 +111,12 @@ public class Game {
         //normal moves check
         if(to>=0 && to<=23){
            if(checkNormalMoveLegality(ownerFromColumn,ownerToColumn, toChipsNum, from, to, fromColumn, toColumn)) {
-               System.out.println("3");
-
                throw new IllegalArgumentException();
            }
         }
         //take moves check
         else if(to==26){
             if(checkTakeLegality(from)) {
-                System.out.println("4");
                 throw new IllegalArgumentException();
             }
         }
@@ -137,15 +132,15 @@ public class Game {
         //Valid move, add move to the game tree.
         if (tree.getParent() != null) {
             TreeNode leaf = new TreeNode(from, to, this.getBoard());
-            System.out.println("This is the move score: " + AI.evaluateMove(from, to, this));
+           // System.out.println("This is the move score: " + AI.evaluateMove(from, to, this));
 
             tree.getChildren().add(leaf);
-            System.out.println(tree.getChildren().size());
-            System.out.println("Added a new child to tree.");
+            //System.out.println(tree.getChildren().size());
+            //System.out.println("Added a new child to tree.");
 
         }
-        System.out.println(tree.toString());
-        System.out.println("Move success");
+        //System.out.println(tree.toString());
+        //System.out.println("Move success");
      }
 
 
@@ -406,6 +401,16 @@ public class Game {
         }
     }
 
+    public void setDices(int a, int b) {
+        moves.clear();
+        moves.add(a);
+        moves.add(b);
+
+        if(a == b) {
+            moves.add(a);
+            moves.add(a);
+        }
+    }
 
     /*......................GETTERS AND SETTERS...................................................*/
 

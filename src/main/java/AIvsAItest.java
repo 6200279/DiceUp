@@ -56,5 +56,5 @@ public class AIvsAItest {
 
         //kill fx
         com.sun.javafx.application.PlatformImpl.exit();
-    }
+}
 }
