@@ -1,44 +1,28 @@
 package GamePlay;
 /*
-    My idea is using an array to record very Board state.
-    Using pi - Player a
-          e  - Player b
+    My idea is using an array to record very Board state and do all the operation based on the array
+    Using Math.PI-2 - Player a
+          Math.PI-3  - Player b
 
-    Using a matrix to store all the states。
-    Every row represents a state, which contains 29 columns
+    Using an array to store the detail of board position。
     1-24 is the normal column.
     25 is hit place for white chips.
     26 is hit place for black chips.
     27,28 is the take place for a and b.
     29 is turn for player.
 
-    The basic idea of this implement is let the computer play with computer.
-    Record every state during a game and add it into the recording matrix(database).
-    If it already exist, then, no need to add again.
-    At the end of the game, according to the result, give the states appeared in this game a reward.
-    After thousands of games, we can gain a database with reward value.
-    Then, let the AI choosing their moves according to this database.
+    This class made a framework to let the computer play against itself.
+    Actually, this is not only useful for TD, it can use whatever AI techniques to simulate playing a game.
+    For example, white chip use TD and black use Random.
+    Just need to overwrite a few method, this would be also very useful to do the experiments to test and compare the performance
 
-    If I am not wrong, this is a TD(0) technique using Q-learning to think one step ahead.
-    The database matrix in this code is the Q-table.
-    After some training, the action AI choose to do is according to the Q-table to choose a best action.
-    Now, I am doing the data structure part and try to let the Q-table works.
 
-    The Q-table is about insert and update.
 
-    Now: Hit is done.
-
-    !!!!!In this phase, don't consider take actions. The condition that one win is it move all the chips into its place
-    Now, I am doing take actions
-
-    TODO: double dice. Finished
-    TODO: make a whole match. Finished
-    TODO: implement neural network. Finished
  */
 
 
 import java.util.Map;
-
+import java.util.Random;
 
 
 public class TD {
@@ -48,7 +32,7 @@ public class TD {
     Dice dice1 = new Dice();
     Dice dice2 = new Dice();
 
-    public boolean debug = false;
+    public boolean debug = true;
 
 
 
@@ -87,9 +71,6 @@ public class TD {
 
     //Neural network act as evaluation function
     NeuralNetwork nn;
-
-
-
 
     //Constructor
     public TD() {
@@ -147,7 +128,7 @@ public class TD {
 
         }
 
-        System.out.println("Finished gjhghjbhjbjhvjhvhjvhhjvjhvhjvhjjhjhbjhkjjkbkjbjk");
+        System.out.println("\"------------------------------------ Finished -----------------------------------------------\"");
 
         if (whiteChipsNumber(database[getStatesNumber() - 1]) > 15 ||blackChipsNumber(database[getStatesNumber() - 1]) > 15) {
             System.out.println("Invalid simulation");
@@ -191,6 +172,82 @@ public class TD {
 
     }
 
+    public int playAgainstItself2() {
+        //test for only one game.
+        double[] initialState = database[0];
+        double[] currState = initialState.clone();
+        int val = 0;
+
+        while(someoneWon(currState) != true){
+            playATurn(currState);
+            changeTurn();
+            currState = database[getStatesNumber()-1].clone();
+            if (debug == true) {
+                System.out.println("There are " + getStatesNumber() + " states have been stored");
+                System.out.println("----------------------------------------------");
+                printBoard(currState);
+                System.out.println("----------------------------------------------");
+                System.out.println("White chips' number: " + whiteChipsNumber(currState));
+                System.out.println("Black chips' number: " + blackChipsNumber(currState));
+            }
+
+        }
+
+        System.out.println("------------------------------------ Finished -----------------------------------------------");
+
+        if (whiteChipsNumber(database[getStatesNumber() - 1]) > 15 ||blackChipsNumber(database[getStatesNumber() - 1]) > 15) {
+            System.out.println("Invalid simulation");
+            return 100;
+        }
+
+        while (!someOneWonEventually()) {
+
+            if (whiteCanTake && database[getStatesNumber() - 1][25] != 0) {
+                System.out.println("White lose");
+                break;
+            }
+            if (blackCantake && database[getStatesNumber() - 1][26] != 0) {
+                System.out.println("Black lose");
+                break;
+            }
+
+
+            take();
+            changeTurn();
+
+            if (whiteChipsNumber(database[getStatesNumber() - 1]) > 15) {
+                System.out.println("Invalid simulation");
+                break;
+            } else if (blackChipsNumber(database[getStatesNumber() - 1]) > 15) {
+                System.out.println("Invalid simulation");
+                break;
+            }
+
+            if (debug == true) {
+                System.out.println("There are " + getStatesNumber() + " states have been stored");
+                System.out.println("----------------------------------------------");
+                printBoard(database[getStatesNumber() - 1]);
+                System.out.println("----------------------------------------------");
+                System.out.println("White chips' number: " + whiteChipsNumber(database[getStatesNumber() - 1]));
+                System.out.println("Black chips' number: " + blackChipsNumber(database[getStatesNumber() - 1]));
+                System.out.println("----------------------------------------------");
+            }
+        }
+
+        //white chip wins
+        if ( whiteChipsNumber(database[getStatesNumber() - 1])==0){
+            val = 1;
+        }else if(blackChipsNumber(database[getStatesNumber()-1]) == 0){
+            val = 2;
+        }
+            return val;
+
+    }
+
+
+
+
+
     //someone took all the chips
     public boolean someOneWonEventually(){
         boolean val = false;
@@ -219,10 +276,11 @@ public class TD {
 
             int num1 = dice1.getNum();
             int num2 = dice2.getNum();
-            System.out.println("The first dice num is: " + num1);
-            System.out.println("The second dice num is: " + num2);
-            System.out.println("----------------------------");
-
+            if (debug) {
+                System.out.println("The first dice num is: " + num1);
+                System.out.println("The second dice num is: " + num2);
+                System.out.println("----------------------------");
+            }
             if (num1 == num2) {
                 double[] newState1 = playATake(newState, num1);
                 double[] newState2 = playATake(newState1, num1);
@@ -268,9 +326,11 @@ public class TD {
 
                 int num1 = dice1.getNum();
                 int num2 = dice2.getNum();
-                System.out.println("The first dice num is: " + num1);
-                System.out.println("The second dice num is: " + num2);
-                System.out.println("----------------------------");
+                if (debug) {
+                    System.out.println("The first dice num is: " + num1);
+                    System.out.println("The second dice num is: " + num2);
+                    System.out.println("----------------------------");
+                }
                 double[] newState1 = playATake(newState, num1);
                 double[] newState2 = playATake(newState1, num2);
 
@@ -288,8 +348,10 @@ public class TD {
 
                 dice1.roll();
                 int num1 = dice1.getNum();
-                System.out.println("The first dice num is: " + num1);
-                System.out.println("----------------------------");
+                if (debug) {
+                    System.out.println("The first dice num is: " + num1);
+                    System.out.println("----------------------------");
+                }
                 double[] newState1 = playATake(newState, num1);
                 if (turn == 0){
                     newState1[28] = 2;
@@ -574,9 +636,11 @@ public class TD {
         //roll dice
         dice1.roll();
         dice2.roll();
-        System.out.println("The first dice num is: "+dice1.getNum());
-        System.out.println("The second dice num is: "+dice2.getNum());
-        System.out.println("----------------------------");
+        if (debug) {
+            System.out.println("The first dice num is: " + dice1.getNum());
+            System.out.println("The second dice num is: " + dice2.getNum());
+            System.out.println("----------------------------");
+        }
 
         //if rolled two same dice, the move will double.
         if (dice1.getNum() == dice2.getNum()){
@@ -629,34 +693,9 @@ public class TD {
     }
 
 
+
     /**
-     * To traverse the Q-table, if the state is not there, insert it.
-     * @param database Q-table
-     * @param state a new state in the game to be updated or inserted
-     * @return if the state is already in Q-table. If yes, return true.
      *
-     */
-    public boolean isInQ_Table(double[][] database,double[] state){
-        //Assume this state is not there
-        boolean there = false;
-
-        outer:for (int i = 0;i<database.length;i++){
-
-                for (int j = 0;j<database[0].length;j++){
-
-                    if (state[j] != database[i][j]){
-                        continue outer;
-                    }
-                }
-
-                there = true;
-        }
-
-        return there;
-    }
-
-    /**
-     * After check if it is in Q-table, if not, use this method to insert it into.
      * @param database Q-table
      * @param state state to be inserted
      */
@@ -719,7 +758,8 @@ public class TD {
 //                if (fromColumn == toColumn){
 //                    return newState;
 //                }
-            System.out.println("It move from "+fromColumn+" column to "+toColumn);
+
+             if (debug) System.out.println("It move from "+fromColumn+" column to "+toColumn);
 
             newState = currState.clone();
 
@@ -759,6 +799,7 @@ public class TD {
 //                if (fromColumn == toColumn){
 ////                    return newState;
 ////                }
+
 
             System.out.println("It move from "+fromColumn+" column to "+toColumn);
             newState = currState.clone();
@@ -866,7 +907,7 @@ public class TD {
 
             } else {
 //                int num = randomGenerator.nextInt(numOfChoices);
-
+//
 //                movesFromAndTo[0] = possibleChoice[num];
 //                movesFromAndTo[1] = possibleChoice[num] - diceNumber;
 
@@ -1022,6 +1063,8 @@ public class TD {
    White chip move from 0-23
 
     */
+
+
     public int[] chooseColumnToMoveBlackChips(double[] stateCurr, int diceNumber) {
         int[] movesFromAndTo = new int[2];
 
@@ -1065,33 +1108,57 @@ public class TD {
 
             int[] possibleChoice = cutArray(possibleColumnForBlack);
             int numOfChoices = cutArray(possibleColumnForBlack).length;
-//            Random randomGenerator = new Random();
+            //Random AI
+            Random randomGenerator = new Random();
             if (numOfChoices == 0) {
                 movesFromAndTo[0] = 0;
                 movesFromAndTo[1] = 0;
             } else {
-//                int num = randomGenerator.nextInt(numOfChoices);
-//
-//                movesFromAndTo[0] = possibleChoice[num];
-//                movesFromAndTo[1] = possibleChoice[num] + diceNumber;
+                //Random AI
+                int num = randomGenerator.nextInt(numOfChoices);
+
+                movesFromAndTo[0] = possibleChoice[num];
+                movesFromAndTo[1] = possibleChoice[num] + diceNumber;
+
                 //use neural network
                 //put all possible states together
-                double[][] possibleMoves = new double[possibleChoice.length][29];
-                double[] evaluationVal = new double[possibleChoice.length];
-                for (int i = 0;i<possibleChoice.length;i++){
-                    possibleMoves[i] = simpleMoves(stateCurr,possibleChoice[i],possibleChoice[i] + diceNumber);
-                    nn = new NeuralNetwork(possibleMoves[i]);
-                    evaluationVal[i] = nn.forward();
-                }
-                //black choose the move with lowest probability
-                int index = findLowestNumber(evaluationVal);
-                movesFromAndTo[0] = possibleChoice[index];
-                movesFromAndTo[1] = possibleChoice[index] + diceNumber;
+
+
+//                double[][] possibleMoves = new double[possibleChoice.length][29];
+//                double[] evaluationVal = new double[possibleChoice.length];
+//                for (int i = 0;i<possibleChoice.length;i++){
+//                    possibleMoves[i] = simpleMoves(stateCurr,possibleChoice[i],possibleChoice[i] + diceNumber);
+//                    nn = new NeuralNetwork(possibleMoves[i],1);
+//                    evaluationVal[i] = nn.forward();
+//                }
+//                //black choose the move with lowest probability
+//                int index = findLowestNumber(evaluationVal);
+//                movesFromAndTo[0] = possibleChoice[index];
+//                movesFromAndTo[1] = possibleChoice[index] + diceNumber;
+
+
+
+
             }
 
 
 
         }
+        return movesFromAndTo;
+    }
+
+
+    /*
+    In the current board statement, roll the two dices first, get the dice number, and make move.
+     */
+    public int[] chooseColumnToMoveBlackChips2(double[] stateCurr, int diceNumber) {
+        //[0] is from, [1] is to
+        int[] movesFromAndTo = new int[2];
+
+
+        //TODO: finish here with how minimax is making moves
+
+
         return movesFromAndTo;
     }
 
@@ -1457,7 +1524,7 @@ public class TD {
 
     }
 
-
+    //Use to make sure the simulation is valid, aviod noisy
     public boolean validData(double[] finalState) {
         boolean val = true;
 
@@ -1475,7 +1542,7 @@ public class TD {
             return val;
 
     }
-
+    //These two method is to make sure the simulation is valid, used to delete noisy
     public boolean validAndWhiteWon(double[] finalState) {
 
         boolean val = true;
@@ -1515,6 +1582,7 @@ public class TD {
     }
 
     //length is the number of statements in a game
+    //Bad!!!! method, delete it in the end
     public double[] targetGivenByQLearning(int length){
         double learningRate = 0.5;
 
@@ -1543,30 +1611,57 @@ public class TD {
             }
         }
 
-
-
         return target;
     }
 
-    public double[] fakeTarget(int length){
-        double[] target = new double[length];
 
 
-        target[0] = 0.5;
+    /**
+     * Experiment method
+     * @param gamesNumber #games want to simulate
+     */
 
-        target[target.length-1] = 1;
+    public void test(int gamesNumber){
 
-        double step = 0.5/length;
 
-        for (int i = 1;i<target.length-1;i++){
 
-            target[i] = target[i-1] + step;
+        int ctr = 0;
+
+        double winsForWhiteChips = 0;
+
+        double winsForBlackChips = 0;
+
+        while(ctr<gamesNumber){
+            TD t = new TD();
+            int temp = t.playAgainstItself2();
+
+           if (temp== 1){
+               winsForWhiteChips++;
+           }else if (temp == 2){
+               winsForBlackChips++;
+           }
+
+           ctr++;
 
         }
 
+        double prob = (winsForWhiteChips/(winsForBlackChips+winsForWhiteChips))*100;
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("The white chip uses the Random AI");
+        System.out.println("The black chip uses the Random AI");
+        System.out.println("It plans to play 1 games");
+        System.out.println("There are "+(winsForBlackChips+winsForWhiteChips)+" valid games in total");
+        System.out.println("White chips wins "+winsForWhiteChips+" games");
+        System.out.println("Black chips wins "+winsForBlackChips+" games");
+//        System.out.println("The winning rate for white chips is "+prob+"%");
 
 
-        return target;
+
     }
 
 }
@@ -1583,14 +1678,14 @@ class Test{
         TD td = new TD();
 
         double[] testArray = new double[29];
-       //td.playAgainstItself();
-
-       testArray[0] =3*w;
-       testArray[1] =4*b;
-       testArray[2] =2*w;
-       testArray[3] =4*w;
-       testArray[4] =0*b;
-       testArray[5] =6*b;
+       //To set the test array as we want
+        /*
+        testArray[0] =3*w;
+        testArray[1] =4*b;
+        testArray[2] =2*w;
+        testArray[3] =4*w;
+        testArray[4] =0*b;
+        testArray[5] =6*b;
         testArray[6] =1*b;
         testArray[7] =0*b;
         testArray[8] =0;
@@ -1609,50 +1704,24 @@ class Test{
         testArray[21] =0;
         testArray[22] =0*b;
         testArray[23] =0*b;
+        */
+
+        //This method is let to AI play many times to see their performance. Choose the debug true or false to see detail.
+        //Experiment part, before doing it, make sure to check and modify what AI technique the chip is using.
+        td.test(1);
+
+        //use thid method to see a single simulation of game.
+//      td.playAgainstItself();
 
 
-//        double[] arr = new double[]{1,4,-2,3,1,-9};
-//
-//        double[] a = td.targetGivenByQLearning(60);
-//
-//        for (int i = 0;i<a.length;i++){
-//            System.out.println(a[i]);
-//        }
 
-        td.playAgainstItself();
-
-//        double learningRate = 0.5;
-//
-//        double discountValue = 1;
-//
-//        double[] target = new double[5];
-//
-//        double reward = 0;
-//
-//        int numberOfVisit = 1;
-//
-//        //if white won, and the final statement get utility 1
-//        target[5-1] = 1;
-//
-//
-//        for (int i = 0;i<target.length-1;i++){
-//
-//            double  a= (1/(numberOfVisit+1));
-//
-//            target[i] = target[i] + a*(reward+(discountValue*target[i+1]) - target[i]);
-//
-//        }
-//        target[3] = target[3] + 0.5*(reward+(discountValue*target[4]) - target[3]);
-////        System.out.println(0.5*(reward+(discountValue*target[4]) - target[3]));
-//
-//        System.out.println(target[3]);
 
 
 
 }
 
 
-//debug to see decision by AI
+//debug method
         public static void printArray(int[] array){
             int length = array.length;
 
@@ -1662,8 +1731,6 @@ class Test{
 
 
         }
-
-
 
         public static void printArray(double[] array){
         int length = array.length;
@@ -1676,7 +1743,8 @@ class Test{
 
 
     }
-    public static void printLastState(double[][] database,int stateNumber){
+
+        public static void printLastState(double[][] database,int stateNumber){
                 TD td = new TD();
                 td.printBoard(database[stateNumber]);
     }
