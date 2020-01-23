@@ -167,7 +167,7 @@ public class BoardAnalysis {
 
             indicator--;
             pC.add(new int[][]{possibleMoves[0].get(length1), possibleMoves[1].get(length2), possibleMoves[2].get(length3), possibleMoves[3].get(length4)});
-            return possibleCombinationsdouble(b, moves, p, possibleMoves, length1, length2, length3, length4, pC, indicator);
+            return possibleCombinationsdouble(moves, possibleMoves, length1, length2, length3, length4, pC, indicator);
         }
         return pC;
     }
@@ -253,6 +253,7 @@ public class BoardAnalysis {
         ArrayList<int[][]> pC1 = new ArrayList<int[][]>();
         int[] check = new int[30];
 
+
         for (int i = 0; i < pC.size(); i++) {
             for (int k = 0; k < 27; k++) {
                 check[k] = board.getColumns()[k].getChips().size();
@@ -263,14 +264,13 @@ public class BoardAnalysis {
             for (int j = 0; j < pC.get(i).length; j++) {
                 int fromCol = pC.get(i)[j][0];
                 int toCol = pC.get(i)[j][1];
-
-
                 if (toCol < 0 || toCol > 23) {
                     pass = false;}
-                    else if (fromCol > -1) check[fromCol]--;
                 else if (board.getColumns()[toCol].getChips().size() > 0 && board.getColumns()[toCol].getChips().get(0).getOwner() != p) {
                     pass = false;
                 }
+                if (fromCol > -1)
+                    check[fromCol]--;
             }
 
             for (int k = 0; k < check.length; k++) {
