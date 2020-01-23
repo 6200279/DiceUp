@@ -10,13 +10,12 @@ import java.util.Collections;
 
 public class BoardAnalysis {
     public static final int[][] DICE_OUTCOMES = {
-            {0, 0}, {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5},  {6, 6},
-            {0, 1}, {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6},
-            {0, 2}, {1, 3}, {2, 4}, {3, 5}, {4, 6},
-            {0, 3}, {1, 4}, {2, 5}, {3, 6},
-            {0, 4}, {1, 5}, {2, 6},
-            {0, 5}, {1, 6},
-            {0, 6}
+            {1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5},  {6, 6},
+            {1, 2}, {2, 3}, {3, 4}, {4, 5}, {5, 6},
+            {1, 3}, {2, 4}, {3, 5}, {4, 6},
+            {1, 4}, {2, 5}, {3, 6},
+            {1, 5}, {2, 6},
+            {1, 6}
     };
 
     public static ArrayList<int[]>[] possibleMoves (Board b, ArrayList<Integer> moves, Player p) {
@@ -225,10 +224,10 @@ public class BoardAnalysis {
         ArrayList<int[][]> pC2 = uniquify(pC1);
 
 
-        System.out.println("ORIGINAL--->");
-        printMoves(pC);
-        System.out.println("LEGALIZED--->");
-        printMoves(pC1);
+        //System.out.println("ORIGINAL--->");
+        //printMoves(pC);
+        //System.out.println("LEGALIZED--->");
+        //printMoves(pC1);
         //System.out.println("UNIQUIFIED--->");
 
         //printMoves(pC2);
