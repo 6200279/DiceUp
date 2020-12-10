@@ -1,18 +1,10 @@
-/**
- * GamePlay.TreeNode
- *  - Dependancy of GamePlay.GameTree
- *  - TreeNode consists of a single move that is made in the game.
- *  - A collection of these TreeNodes will enable us to:
- *      > rollback the game,
- *      > undo moves,
- *      > save games,
- *      > supply to the AI for look ahead
- *
- * TODO: Implement a GameTree class that contains a collection of TreeNode objects
- * TODO: Modify current move method so that it adds move to GameTree
- *
- * Task being worked on by: { }.
- */
+// each node consists of a singele move 
+// with a tree of nodes we can
+// - back track the game
+// - undo moves
+// - save game
+// - predict the future moves 
+
 
 package GamePlay;
 
